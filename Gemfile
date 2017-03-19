@@ -32,6 +32,9 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'foundation-rails' # gem for foundation
+gem 'font-awesome-rails' # gem for font awesome icons
+
 gem 'react-rails' # gem for react.js
 gem 'webpack-rails'
 
