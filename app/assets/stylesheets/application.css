@@ -13,5 +13,43 @@
  *= require_tree .
  *= require_self
  *= require foundation_and_overrides
+ *= require font-awesome
 
  */
+.btn-linkedin{
+	padding: 0.3em 1em;
+}
+ .fntsize-25{
+ 	font-size: 25px;
+ 	vertical-align: super;
+ }
+.radius-40{
+	border-radius: 40px;
+}
+.radius-10{
+	border-radius: 10px;
+}
+.white{
+	color: #ffffff !important; 
+	font-weight: bold;
+}
+.bold{
+	font-weight: bold;
+}
+ .divider{
+    border-top: 1px solid #d9dadc;
+    display: block;
+    line-height: 1px;
+    margin: 30px 0;
+    position: relative;
+    text-align: center;
+ }
+.divider .divider-title{
+	background: #fff;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 0 20px;
+}
+.title{
+	margin: 30px 0px;
+}
