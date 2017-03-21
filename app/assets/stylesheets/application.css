@@ -53,3 +53,9 @@
 .title{
 	margin: 30px 0px;
 }
+.title-signin{
+	background-color: #169BD4;
+    border-radius: 10px;
+    color: white;
+    margin: 30px 0px;
+}
