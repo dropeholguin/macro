@@ -10,7 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170323155333) do
+ActiveRecord::Schema.define(version: 20170323163016) do
+
+  create_table "answers", force: :cascade do |t|
+    t.boolean  "is_correct"
+    t.text     "answer_markdown"
+    t.integer  "answer_value"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.text     "comment_markdown"
+    t.boolean  "is_hidden"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  create_table "identities", force: :cascade do |t|
+    t.string   "uid"
+    t.string   "provider"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string   "title"
+    t.text     "description_markdown"
+    t.text     "explanation_markdown"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
