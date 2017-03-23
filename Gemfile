@@ -34,6 +34,8 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'react-rails' # gem for react.js
 gem 'webpack-rails'
+# gem for user sign in and sign up
+gem 'devise'
 
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'
