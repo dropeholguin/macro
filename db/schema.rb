@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(version: 20170323163016) do
   create_table "answers", force: :cascade do |t|
     t.boolean  "is_correct"
     t.text     "answer_markdown"
-    t.integer  "answer_value"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
@@ -28,10 +27,12 @@ ActiveRecord::Schema.define(version: 20170323163016) do
   end
 
   create_table "identities", force: :cascade do |t|
+    t.integer  "user_id"
     t.string   "uid"
     t.string   "provider"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
   create_table "questions", force: :cascade do |t|
