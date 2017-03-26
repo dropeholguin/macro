@@ -1,0 +1,57 @@
+// Place all the styles related to the home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.blue-box{
+	background-color: #169BD4;
+    border-radius: 10px;
+    padding: 20px;
+}
+.gray-box{
+	background: #F0F0F0;
+	min-height: 50px;
+}
+.gray-box h2{
+	padding: 30px;
+}
+.gray-box-plans{
+    background: lightgray;
+    min-height: 430px;
+    padding: 35px;
+}
+.gray-box-plans:hover{
+	background: #ffffff;
+	cursor: pointer;
+}
+.plans{
+	min-height: 430px;
+    padding: 25px;
+}
+.white-title{
+	color: #ffffff;
+	margin-bottom: 0;
+	line-height: 1.1;
+}
+.background-home
+{
+	background: url("/assets/stock-2bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #292e37;
+}
+.margin-space{
+	margin: 35px 0 35px 0;
+}
+.margin-help{
+	margin-bottom: 35px;
+}
+#content-home p{
+	font-size: 15px;
+    line-height: 1.2;
+}
+#first-content{
+	margin-top: 100px;
+}
+#arrow:hover{
+	opacity: 0.7;
+}

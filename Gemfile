@@ -37,6 +37,10 @@ gem 'font-awesome-rails' # gem for font awesome icons
 
 gem 'react-rails' # gem for react.js
 gem 'webpack-rails'
+# gem for user sign in and sign up
+gem 'devise'
+gem 'omniauth'
+gem 'omniauth-linkedin'
 
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'
@@ -50,6 +54,7 @@ end
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'dotenv-rails'
 end
 
 group :development do
