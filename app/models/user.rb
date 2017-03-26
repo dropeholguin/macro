@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
 	validates :name, presence: true
 	has_many :identities
+	has_many :questions
 
 	def self.connect_to_linkedin(auth, signed_in_resource=nil)
 	    user = User.joins(:identities).where("identities.provider = ? AND identities.uid = ?", auth.provider, auth.uid).first    
