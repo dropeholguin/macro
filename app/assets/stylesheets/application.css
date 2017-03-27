@@ -59,3 +59,23 @@
     color: white;
     margin: 30px 0px;
 }
+.lightblue-box{
+    background-color: #D0EBF7;
+    border-radius: 10px 10px 0 0;
+    margin: 25px;
+    padding: 50px;
+}
+.green-btn{
+    background-color: #66CC33;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+.green-btn:hover{
+    background-color: #66CC33;
+    opacity: 0.9;
+}
+#card-container{
+    border: 1px solid #C9C9C9;
+    border-radius: 15px;
+    padding: 15px;
+}
