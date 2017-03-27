@@ -6,7 +6,20 @@ dom = React.DOM
 	render: ->
 		dom.div
 			className: "root",
-			dom.form {},
+			dom.form 
+				method: 'POST',
+				action: @props.url,	
+				dom.input
+					key: "utf8"
+					name: "utf8"
+					type: "hidden"
+					value: "✓"
+				dom.input({
+					key: "authenticity_token"
+					name: "authenticity_token"
+					type: "hidden"
+					value: @props.csrfToken
+					});	
 				dom.div
 					className: "row",
 					dom.div
@@ -18,10 +31,16 @@ dom = React.DOM
 						dom.input
 							className: "radius-10",
 							type:  "text",
+							name: "user[email]",
+							key: "email",
+							id: "user_email"
 							placeholder: "Your email",
 						dom.input
 							className: "radius-10",
 							type:  "password",
+							name: 'user[password]',
+							key: "password",
+							id: "user_password",
 							placeholder: "Your password",
 						dom.div
 							className:"text-left",	
@@ -31,9 +50,10 @@ dom = React.DOM
 							" Remember me"	
 						dom.div	
 							className: "large-8 large-centered columns",											
-							dom.a
+							dom.input
 								className: "button expanded primary radius-40 white",
-								"SIGNON"
+								type: "submit",
+								value: "SIGNON"
 							dom.a {},
 								"Forgot your password?"
 						dom.div
@@ -51,7 +71,8 @@ dom = React.DOM
 								" SIGNON with LinkedIn ",
 						dom.p {},
 							"Don't have an account?",
-						dom.a 
+						dom.a
+							href: "/users/sign_up",
 							className: "bold",
 							"SIGN UP"
 			
