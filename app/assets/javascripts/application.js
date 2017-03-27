@@ -18,6 +18,7 @@
 //= require react_ujs
 //= require components
 //= require trix
+//= require cocoon
 //= require_tree .
 
 $(function(){ $(document).foundation(); });

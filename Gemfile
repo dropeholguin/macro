@@ -44,6 +44,8 @@ gem 'omniauth'
 gem 'omniauth-linkedin'
 # gem for markdown
 gem 'trix'
+#gem for create association between questions/answers
+gem "cocoon"
 
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'
