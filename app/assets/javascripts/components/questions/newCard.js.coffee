@@ -40,8 +40,10 @@ dom = React.DOM
 									dom.label {},
 										"TITLE"
 									dom.input
+										id: "question_title",
 										type: "text"
 										placeholder: "CARD Tilte",
+										name: "question[title]",
 									dom.label {},
 										"DESCRIPTION"
 									dom.input
