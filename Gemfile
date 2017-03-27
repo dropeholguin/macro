@@ -39,8 +39,11 @@ gem 'react-rails' # gem for react.js
 gem 'webpack-rails'
 # gem for user sign in and sign up
 gem 'devise'
+# gem for sign in with linkedin
 gem 'omniauth'
 gem 'omniauth-linkedin'
+# gem for markdown
+gem 'trix'
 
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'

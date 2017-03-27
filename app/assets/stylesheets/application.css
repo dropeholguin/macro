@@ -14,7 +14,7 @@
  *= require_self
  *= require foundation_and_overrides
  *= require font-awesome
-
+ *= require trix
  */
 .btn-linkedin{
 	padding: 0.3em 1em;
