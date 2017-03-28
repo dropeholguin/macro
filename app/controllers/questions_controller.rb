@@ -61,6 +61,6 @@ class QuestionsController < ApplicationController
 		end
 
 		def question_params
-		  params.require(:question).permit(:title, :description_markdown, :explanation_markdown)
+		  params.require(:question).permit(:title, :description_markdown, :explanation_markdown, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
 		end
 end
