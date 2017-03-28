@@ -12,6 +12,9 @@ class QuestionsController < ApplicationController
 
 	def new
 		@question = Question.new
+		3.times do
+		  @question.answers.build
+		end
 	end
 
 	def edit
