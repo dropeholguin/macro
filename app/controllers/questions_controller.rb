@@ -25,7 +25,19 @@ class QuestionsController < ApplicationController
 		@user = current_user
 		@question = Question.new(question_params)
 		@question.user = @user
+		count = 0
 
+		@question.answers.each do |answer|
+			if answer.is_correct == true
+				count = count + 1 
+			end
+		end
+
+		if count > 1
+			@question.choice = "multiple"
+	  	else
+	  		@question.choice = "simple"
+	  	end
 		respond_to do |format|
 		  if @question.save
 		  	format.html { redirect_to questions_url, notice: 'Question was successfully created.' }
