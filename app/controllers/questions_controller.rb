@@ -3,11 +3,11 @@ class QuestionsController < ApplicationController
 	before_filter :authenticate_user!
  
 	def index
-		@question = Question.all.order("created_at DESC")
+		@questions = Question.all.order("created_at DESC")
 	end
 
 	def show
-
+		@answers = @question.answers
 	end
 
 	def new
