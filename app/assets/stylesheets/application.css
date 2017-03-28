@@ -74,8 +74,16 @@
     background-color: #66CC33;
     opacity: 0.9;
 }
+.margin-20{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.margin-15{
+    margin: 0 15px;
+}
 #card-container{
     border: 1px solid #C9C9C9;
     border-radius: 15px;
     padding: 15px;
 }
+

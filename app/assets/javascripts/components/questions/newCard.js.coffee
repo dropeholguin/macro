@@ -52,6 +52,115 @@ dom = React.DOM
 										name: "question[description_markdown]",
 										value: "Description",
 									React.createElement('trix-editor', input: "question_description_markdown_trix_input_question"),
+									dom.div 
+										className: "margin-20",
+										dom.label {},
+											"ANSWERS"
+										dom.div
+											className: "nested-fields",
+											dom.div
+												className: "row",
+												dom.div
+													className: "large-8 columns",
+													dom.input
+														type: "text",
+														id: "question_answers_attributes_0_answer_markdown",
+														name: "question[answers_attributes][0][answer_markdown]",
+												dom.div
+													className: "large-4 columns"
+													dom.select {},
+														dom.option
+															value: "0",
+															name: "question[answers_attributes][0][is_correct]"
+															"Incorrect",
+														dom.option
+															value: "1",
+															id: "question_answers_attributes_0_is_correct",
+															name: "question[answers_attributes][0][is_correct]",
+															"Correct",
+												dom.input
+													type: "hidden",
+													id: "question_answers_attributes_0_answer_markdown",
+													name: "question[answers_attributes][0][_destroy]",
+													value: "false",
+										dom.div
+											className: "nested-fields",
+											dom.div
+												className: "row",
+												dom.div
+													className: "large-8 columns",
+													dom.input
+														type: "text",
+														id: "question_answers_attributes_1_answer_markdown",
+														name: "question[answers_attributes][1][answer_markdown]",
+												dom.div
+													className: "large-4 columns"
+													dom.select {},
+														dom.option
+															value: "0",
+															name: "question[answers_attributes][1][is_correct]"
+															"Incorrect",
+														dom.option
+															value: "1",
+															id: "question_answers_attributes_1_is_correct",
+															name: "question[answers_attributes][1][is_correct]",
+															"Correct",
+												dom.input
+													type: "hidden",
+													id: "question_answers_attributes_1_answer_markdown",
+													name: "question[answers_attributes][1][_destroy]",
+													value: "false",
+										dom.div
+											className: "nested-fields",
+											dom.div
+												className: "row",
+												dom.div
+													className: "large-8 columns",
+													dom.input
+														type: "text",
+														id: "question_answers_attributes_2_answer_markdown",
+														name: "question[answers_attributes][2][answer_markdown]",
+												dom.div
+													className: "large-4 columns"
+													dom.select {},
+														dom.option
+															value: "0",
+															name: "question[answers_attributes][2][is_correct]"
+															"Incorrect",
+														dom.option
+															value: "1",
+															id: "question_answers_attributes_2_is_correct",
+															name: "question[answers_attributes][2][is_correct]",
+															"Correct",
+												dom.input
+													type: "hidden",
+													id: "question_answers_attributes_2_answer_markdown",
+													name: "question[answers_attributes][2][_destroy]",
+													value: "false",												
+											dom.a
+												'data-association-insertion-template': "<div class='nested-fields'>
+													<div class='row'>
+														<div class='large-8 columns'>
+															<input type='text' name='question[answers_attributes][new_answers][answer_markdown]' id='question_answers_attributes_new_answers_answer_markdown' />
+														</div>
+														<div class='large-4 columns'>
+															<select>
+																<option value='1' name='question[answers_attributes][new_answers][is_correct]' id='question_answers_attributes_new_answers_is_correct'>
+																	Correct
+																</option>
+																<option value='0' name='question[answers_attributes][new_answers][is_correct]'>
+																	Incorrect
+																</option>
+															</select>
+														</div>
+														<input type='hidden' name='question[answers_attributes][new_answers][_destroy]' id='question_answers_attributes_new_answers__destroy' value='false' /><div class='margin-15'><a class='remove_fields dynamic button small alert radius-10' href='#'>Remove</a></div>
+													</div>
+												</div>",
+												href: "#",
+												'data-association':"answer",
+												'data-associations':"answers",
+												className: "add_fields",
+												'ADD "OTHER"'
 									dom.label {},
 										"EXPLANATION"
 									dom.input

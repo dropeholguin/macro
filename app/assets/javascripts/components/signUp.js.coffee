@@ -35,6 +35,7 @@ dom = React.DOM
 								"SIGN UP"							
 						dom.a
 							className: "button expanded btn-linkedin linkedin-color radius-40",
+							href: @props.linkedin,
 							dom.i
 								className: "fa fa-linkedin-square fa-2x",
 								'aria-hidden': "true",
