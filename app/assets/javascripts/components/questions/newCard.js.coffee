@@ -70,11 +70,11 @@ dom = React.DOM
 													className: "large-4 columns"
 													dom.select {},
 														dom.option
-															value: "0",
+															value: "false",
 															name: "question[answers_attributes][0][is_correct]"
 															"Incorrect",
 														dom.option
-															value: "1",
+															value: "true",
 															id: "question_answers_attributes_0_is_correct",
 															name: "question[answers_attributes][0][is_correct]",
 															"Correct",
@@ -97,11 +97,11 @@ dom = React.DOM
 													className: "large-4 columns"
 													dom.select {},
 														dom.option
-															value: "0",
+															value: "false",
 															name: "question[answers_attributes][1][is_correct]"
 															"Incorrect",
 														dom.option
-															value: "1",
+															value: "true",
 															id: "question_answers_attributes_1_is_correct",
 															name: "question[answers_attributes][1][is_correct]",
 															"Correct",
@@ -124,11 +124,11 @@ dom = React.DOM
 													className: "large-4 columns"
 													dom.select {},
 														dom.option
-															value: "0",
+															value: "false",
 															name: "question[answers_attributes][2][is_correct]"
 															"Incorrect",
 														dom.option
-															value: "1",
+															value: "true",
 															id: "question_answers_attributes_2_is_correct",
 															name: "question[answers_attributes][2][is_correct]",
 															"Correct",
@@ -145,10 +145,10 @@ dom = React.DOM
 														</div>
 														<div class='large-4 columns'>
 															<select>
-																<option value='1' name='question[answers_attributes][new_answers][is_correct]' id='question_answers_attributes_new_answers_is_correct'>
+																<option value='true' name='question[answers_attributes][new_answers][is_correct]' id='question_answers_attributes_new_answers_is_correct'>
 																	Correct
 																</option>
-																<option value='0' name='question[answers_attributes][new_answers][is_correct]'>
+																<option value='false' name='question[answers_attributes][new_answers][is_correct]'>
 																	Incorrect
 																</option>
 															</select>

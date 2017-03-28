@@ -15,7 +15,8 @@ dom = React.DOM
 @Card = React.createClass
 	displayName: 'Card'
 	render: ->
-		dom.div {},
+		dom.div 
+			className: "answer-container",
 			dom.div {},
 				@props.card.title	
 			dom.div 
