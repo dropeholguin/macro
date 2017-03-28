@@ -68,15 +68,14 @@ dom = React.DOM
 														name: "question[answers_attributes][0][answer_markdown]",
 												dom.div
 													className: "large-4 columns"
-													dom.select {},
+													dom.select 
+														name: "question[answers_attributes][0][is_correct]",
 														dom.option
-															value: "false",
-															name: "question[answers_attributes][0][is_correct]"
+															value: "0",															
 															"Incorrect",
 														dom.option
-															value: "true",
+															value: "1",
 															id: "question_answers_attributes_0_is_correct",
-															name: "question[answers_attributes][0][is_correct]",
 															"Correct",
 												dom.input
 													type: "hidden",
@@ -95,15 +94,14 @@ dom = React.DOM
 														name: "question[answers_attributes][1][answer_markdown]",
 												dom.div
 													className: "large-4 columns"
-													dom.select {},
+													dom.select
+														name: "question[answers_attributes][1][is_correct]",
 														dom.option
 															value: "false",
-															name: "question[answers_attributes][1][is_correct]"
 															"Incorrect",
 														dom.option
 															value: "true",
 															id: "question_answers_attributes_1_is_correct",
-															name: "question[answers_attributes][1][is_correct]",
 															"Correct",
 												dom.input
 													type: "hidden",
@@ -122,15 +120,14 @@ dom = React.DOM
 														name: "question[answers_attributes][2][answer_markdown]",
 												dom.div
 													className: "large-4 columns"
-													dom.select {},
+													dom.select 
+														name: "question[answers_attributes][2][is_correct]",
 														dom.option
 															value: "false",
-															name: "question[answers_attributes][2][is_correct]"
 															"Incorrect",
 														dom.option
 															value: "true",
 															id: "question_answers_attributes_2_is_correct",
-															name: "question[answers_attributes][2][is_correct]",
 															"Correct",
 												dom.input
 													type: "hidden",
@@ -144,11 +141,11 @@ dom = React.DOM
 															<input type='text' name='question[answers_attributes][new_answers][answer_markdown]' id='question_answers_attributes_new_answers_answer_markdown' />
 														</div>
 														<div class='large-4 columns'>
-															<select>
-																<option value='true' name='question[answers_attributes][new_answers][is_correct]' id='question_answers_attributes_new_answers_is_correct'>
+															<select name='question[answers_attributes][new_answers][is_correct]'>
+																<option value='true' id='question_answers_attributes_new_answers_is_correct'>
 																	Correct
 																</option>
-																<option value='false' name='question[answers_attributes][new_answers][is_correct]'>
+																<option value='false'>
 																	Incorrect
 																</option>
 															</select>
