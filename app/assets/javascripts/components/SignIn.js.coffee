@@ -63,6 +63,7 @@ dom = React.DOM
 								"Or",
 						dom.a
 							className: "button expanded btn-linkedin linkedin-color radius-10",
+							href: @props.linkedin,
 							dom.i
 								className: "fa fa-linkedin-square fa-2x",
 								'aria-hidden': "true",
