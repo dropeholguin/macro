@@ -35,9 +35,19 @@ dom = React.DOM
 	render: ->
 		dom.div 
 			className: "answer-container",
-			dom.div {},
-				dom.h5
-					style: {color: "#07C", fontWeight: "bold"},
-					@props.card.title	
 			dom.div
-				dangerouslySetInnerHTML: __html: @props.card.description_markdown.toString()	
+				className: "row",
+				dom.div 
+					className: "small-9 columns",
+					dom.h5
+						style: {color: "#07C", fontWeight: "bold"},
+						@props.card.title	
+				dom.div
+					className: "small-3 text-right columns",
+					dom.a
+						className: "button small hollow secondary",
+						href: "/questions/#{@props.card.id}",
+						"review",
+			dom.div
+				dangerouslySetInnerHTML: __html: @props.card.description_markdown.toString()
+
