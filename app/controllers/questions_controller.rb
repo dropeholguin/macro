@@ -76,6 +76,6 @@ class QuestionsController < ApplicationController
 		end
 
 		def question_params
-		  params.require(:question).permit(:title, :description_markdown, :explanation_markdown, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
+		  params.require(:question).permit(:title, :description_markdown, :explanation_markdown, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
 		end
 end

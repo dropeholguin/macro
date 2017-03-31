@@ -1,6 +1,7 @@
 class Question < ApplicationRecord
 	include Tire::Model::Search
   	include Tire::Model::Callbacks
+  	acts_as_taggable
 	belongs_to :user
 	has_many :answers, inverse_of: :question
 
