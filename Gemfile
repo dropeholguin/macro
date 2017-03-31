@@ -46,6 +46,9 @@ gem 'omniauth-linkedin'
 gem 'trix'
 #gem for create association between questions/answers
 gem "cocoon"
+#gem for roles and permissions
+gem 'cancancan'
+gem 'rolify'
 
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'

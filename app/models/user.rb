@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  rolify
 	# Include default devise modules. Others available are:
 	# :confirmable, :lockable, :timeoutable and :omniauthable
 	devise :database_authenticatable, :registerable,
@@ -8,6 +9,11 @@ class User < ApplicationRecord
 	has_many :identities
 	has_many :questions
 
+	after_create :assign_default_role
+
+	def assign_default_role
+		self.add_role(:student) if self.roles.blank?
+	end
 	def self.connect_to_linkedin(auth, signed_in_resource=nil)
 	    user = User.joins(:identities).where("identities.provider = ? AND identities.uid = ?", auth.provider, auth.uid).first    
 
