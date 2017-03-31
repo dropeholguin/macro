@@ -39,16 +39,18 @@ gem 'react-rails' # gem for react.js
 gem 'webpack-rails'
 # gem for user sign in and sign up
 gem 'devise'
-# gem for sign in with linkedin
+# gems for sign in with linkedin
 gem 'omniauth'
 gem 'omniauth-linkedin'
 # gem for markdown
 gem 'trix'
 #gem for create association between questions/answers
 gem "cocoon"
-#gem for roles and permissions
+#gems for roles and permissions
 gem 'cancancan'
 gem 'rolify'
+#gem for search
+gem 'tire'
 
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'
