@@ -11,18 +11,24 @@ class Question < ApplicationRecord
 
 	mapping do
 	    indexes :id, index: :not_analyzed
-	    indexes :title, analyzer: 'snowball', boost: 100
+	    indexes :title, analyzer: 'keyword', boost: 100
 	    indexes :description_markdown, analyzer: 'snowball'
 	    indexes :create_at, type: 'date'
+	    indexes :tag_list, type: 'string', analyzer: 'keyword'
 	end
 
 	def self.search(params)
-	  tire.search(load: true) do
-	    query { string params[:query] } if params[:query].present?
+		tire.search(load: true) do
+			query { string params[:query] } if params[:query].present?
 
-	    sort do
-	  		by :create_at, :desc
+			filter :terms, tag_list: [params[:the_tag]] if params[:the_tag].present?
+			sort do
+					by :create_at, :desc
+			end
 		end
-	  end
 	end
+
+	def to_indexed_json
+    	to_json(methods: [:tag_list])
+  	end
 end

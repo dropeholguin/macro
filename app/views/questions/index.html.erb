@@ -4,4 +4,7 @@
     <%= submit_tag "Search", name: nil %>
   </p>
 <% end %>
+
+<li><%= link_to "Chicano", request.query_parameters.merge({the_tag: "Chicano"}), id: "button-chicano" %></li>
+
 <%= react_component 'IndexCard', {question: @questions} %>
