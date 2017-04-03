@@ -52,7 +52,9 @@ gem 'rolify'
 gem 'tire'
 #gem to help implement tags in a Rails app
 gem 'acts-as-taggable-on'
-
+#gem for autocomplete search
+gem 'elasticsearch_autocomplete'
+gem 'jquery-ui-rails'
 
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'

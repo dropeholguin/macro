@@ -1,6 +1,7 @@
 class Question < ApplicationRecord
 	include Tire::Model::Search
   	include Tire::Model::Callbacks
+  	ac_field :title
   	acts_as_taggable
 	belongs_to :user
 	has_many :answers, inverse_of: :question
@@ -9,9 +10,9 @@ class Question < ApplicationRecord
 
 	validates :title, :description_markdown, :explanation_markdown, presence: true
 
+	index_name("questions")
 	mapping do
 	    indexes :id, index: :not_analyzed
-	    indexes :title, analyzer: 'keyword', boost: 100
 	    indexes :description_markdown, analyzer: 'snowball'
 	    indexes :create_at, type: 'date'
 	    indexes :tag_list, type: 'string', analyzer: 'keyword'
@@ -23,12 +24,12 @@ class Question < ApplicationRecord
 
 			filter :terms, tag_list: [params[:the_tag]] if params[:the_tag].present?
 			sort do
-					by :create_at, :desc
+				by :create_at, :desc
 			end
 		end
 	end
 
 	def to_indexed_json
-    	to_json(methods: [:tag_list])
+    	to_json(methods: [:tag_list, :title])
   	end
 end

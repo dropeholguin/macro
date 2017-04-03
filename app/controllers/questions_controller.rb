@@ -3,7 +3,15 @@ class QuestionsController < ApplicationController
 	before_filter :authenticate_user!
  
 	def index
-		@questions = Question.search(params)
+		if params[:query].present?
+			@questions = Question.search(params)
+		elsif params[:term]
+			@questions = Question.ac_search(params[:term]).map(&:title)
+    		render json: @questions
+		else
+			@questions = Question.all
+		end
+
 	end
 
 	def show
