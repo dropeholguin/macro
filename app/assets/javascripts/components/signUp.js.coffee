@@ -10,7 +10,7 @@ dom = React.DOM
 		small: "small-9"
 	render: ->
 		dom.div
-			className: "root",
+			className: "root white-background margin-auto",
 			dom.form 
 				method: 'POST',
 				action: @props.url,	

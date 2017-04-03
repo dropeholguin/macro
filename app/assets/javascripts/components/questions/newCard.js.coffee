@@ -12,13 +12,13 @@ dom = React.DOM
 				dom.div
 					className: "large-10 large-centered columns"
 					dom.div
-						className: "row lightblue-box"
+						className: "row lightblue-box margin-auto"
 						dom.h4 {},
 							"CREATE A CARD"
 						dom.p {},
 							"Gain more CARDS by creating CARDS!"
 					dom.div
-						className: "row"
+						className: "row white-background"
 						dom.div
 							className: "large-8 columns"
 							dom.div

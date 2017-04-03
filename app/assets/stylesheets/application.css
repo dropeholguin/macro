@@ -95,3 +95,10 @@
 .weight{
     font-weight: bold;
 }
+.margin-auto{
+    margin-bottom: auto;
+}
+.white-background{
+    background: #ffffff;
+    padding: 20px;
+}

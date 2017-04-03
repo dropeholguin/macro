@@ -42,7 +42,7 @@ dom = React.DOM
 					dom.h2 {},
 						"GET STARTED..."
 			dom.div
-				className: "row",
+				className: "row expanded white-background   ",
 				dom.div
 					className: "large-4 text-center columns plans",
 					dom.h4 {},
@@ -80,7 +80,7 @@ dom = React.DOM
 					dom.h2 {},
 						"ABOUT SAS CARDS"
 			dom.div
-				className: "row margin-help",
+				className: "row expanded white-background margin-help margin-auto",
 				dom.div
 					id: "content-home",
 					className: "large-7 columns"
