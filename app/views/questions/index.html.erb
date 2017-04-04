@@ -1,10 +1,1 @@
-<%= form_tag questions_path, method: :get do %>
-  <p>
-    <%= text_field_tag :query, params[:query], id: "title_autocomplete", data: { autocomplete_source: questions_path } %>
-    <%= submit_tag "Search", name: nil %>
-  </p>
-<% end %>
-
-<li><%= link_to "Chicano", request.query_parameters.merge({the_tag: "Chicano"}), id: "button-chicano" %></li>
-
 <%= react_component 'IndexCard', {question: @questions, questions_path: questions_path, tag_path: "/questions?the_tag="} %>

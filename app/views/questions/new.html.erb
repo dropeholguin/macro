@@ -1,2 +1,13 @@
 <%= react_component 'NewCard', {csrfToken: form_authenticity_token} %>
 
+<%= form_for(@question) do |f| %>
+	<div class="field space">
+		<%= f.label :tag_list, "Categories" %>
+	</div>
+	<div class="small-10 small-push-1 medium-6 medium-push-3 text-center">
+		<%= f.text_field :tag_list,'data-delimiter' => ', ', multiple: true, value: @question.tag_list.join(", ") %>
+	</div>
+	<div class="actions">
+	<%= f.submit "Continue" %>
+	</div>
+<% end %>
