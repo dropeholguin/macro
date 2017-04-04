@@ -1,1 +1,13 @@
 <%= react_component 'NewCard', {csrfToken: form_authenticity_token} %>
+
+<%= simple_form_for(@question) do |f| %>
+  <div class="form-inputs">
+    <%= f.input :title %>
+    <%= f.input :description_markdown, as: :summernote %>
+    <%= f.input :explanation_markdown, as: :summernote %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
