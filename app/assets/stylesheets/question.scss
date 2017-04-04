@@ -52,3 +52,27 @@ input[type=checkbox]:not(old):checked + label{
 input[type=radio]:not(old):checked + label{
   background-position : 0 -48px;
 }
+
+.title-tag{
+  color: #0086BC;
+  font-weight: 700;
+}
+.margin-tag{
+  margin-top: 15px;
+}
+.title-li{
+  margin-top: 5px;
+  margin-top: 5px;
+  list-style: none;
+}
+.tag-decoration{
+  border: 1px solid #8a8a8a;
+  padding: 3px;
+  background: #E3F5FB;
+  border-radius: 5px;
+  color: #8a8a8a;
+}
+.tag-decoration:active, .tag-decoration:visited, .tag-decoration:focus{
+  background: #169BD5;
+  color: #ffffff;
+}

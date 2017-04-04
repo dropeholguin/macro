@@ -19,10 +19,12 @@ dom = React.DOM
 						className: "row white-background",
 						dom.div
 							className: "small-4 columns",
-							React.createElement SearchCard, questions_path: @props.questions_path,
-						dom.div
-							className: "small-4 columns",
-							React.createElement SearchByTag, tag_path: @props.tag_path,
+							dom.div
+								className: "row",	
+								React.createElement SearchCard, questions_path: @props.questions_path,
+							dom.div
+								className: "row",
+								React.createElement SearchByTag, tag_path: @props.tag_path,
 						dom.div
 							className: "small-8 columns",			
 							for card in @props.question
@@ -87,7 +89,51 @@ dom = React.DOM
 @SearchByTag = React.createClass
 
 	render: ->
-		dom.li {},
-			dom.a {},
-				"Chicano"
+		dom.div
+			className: "small-12 columns",
+			dom.div 
+				className: "margin-tag",
+				dom.span
+					className: "title-tag",
+					"Platform Administrator",
+				dom.li 
+					className: "title-li",
+					dom.a
+						className: "tag-decoration",
+						"SAS Management Console"
+			dom.div 
+				className: "margin-tag",
+				dom.span
+					className: "title-tag",
+					"ETL Developer",
+				dom.li 
+					className: "title-li",
+					dom.a
+						className: "tag-decoration",
+						"SAS Macro"
+				dom.li 
+					className: "title-li",
+					dom.a
+						className: "tag-decoration",
+						"DI Studio"
+			dom.div 
+				className: "margin-tag",
+				dom.span
+					className: "title-tag",
+					"Analyst",
+				dom.li 
+					className: "title-li",
+					dom.a
+						className: "tag-decoration",
+						"SAS Programming"
+				dom.li 
+					className: "title-li",
+					dom.a
+						className: "tag-decoration",
+						"Enterprise Guide"
+				dom.li 
+					className: "title-li",
+					dom.a
+						className: "tag-decoration",
+						"Workspace Management"
 
