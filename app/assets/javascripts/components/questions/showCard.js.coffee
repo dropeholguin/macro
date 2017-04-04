@@ -64,6 +64,7 @@ dom = React.DOM
 					className: "small-12 columns",
 					dom.input
 						id: "option#{@props.answer.id}",
+						name: "option",
 						type: typeOption,	
 					dom.label
 						htmlFor: "option#{@props.answer.id}",

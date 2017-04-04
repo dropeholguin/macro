@@ -4,6 +4,8 @@ dom = React.DOM
 	displayName: 'NewCard'
 	getDefaultProps: ->
 		url: '/questions'
+	componentDidMount: ->
+		$(@refs.tagsInput).tagsInput()
 	render: ->
 		dom.div
 			className: "root",
@@ -166,6 +168,15 @@ dom = React.DOM
 										name: "question[explanation_markdown]",
 										value: "Explanation of correct answers",
 									React.createElement('trix-editor', input: "question_explanation_markdown_trix_input_question"),
+									dom.div 
+										className: "margin-20",
+										dom.label {},
+											"TOPICS"
+										dom.input
+											name: "tags",
+											id: "tags",
+											className: "tagsinput",
+											ref: "tagsInput",
 									dom.input
 										className: "button large green-btn",
 										type: "submit",
