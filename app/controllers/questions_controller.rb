@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
 	before_filter :authenticate_user!
  
 	def index
-		if params[:query].present?
+		if params[:query].present? || params[:the_tag]
 			@questions = Question.search(params)
 		elsif params[:term]
 			@questions = Question.ac_search(params[:term]).map(&:title)

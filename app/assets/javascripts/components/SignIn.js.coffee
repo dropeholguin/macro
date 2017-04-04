@@ -5,7 +5,7 @@ dom = React.DOM
 	displayName: 'SignIn'
 	render: ->
 		dom.div
-			className: "root",
+			className: "root white-background margin-auto",
 			dom.form 
 				method: 'POST',
 				action: @props.url,	

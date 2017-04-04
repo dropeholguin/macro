@@ -7,4 +7,4 @@
 
 <li><%= link_to "Chicano", request.query_parameters.merge({the_tag: "Chicano"}), id: "button-chicano" %></li>
 
-<%= react_component 'IndexCard', {question: @questions} %>
+<%= react_component 'IndexCard', {question: @questions, questions_path: questions_path} %>
