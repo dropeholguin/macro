@@ -26,11 +26,28 @@ dom = React.DOM
 								@props.title,
 							dom.div
 								dangerouslySetInnerHTML: __html: @props.description.toString(),
-							dom.h5
-								className: "weight",
-								"Answers"
-							for answer in @props.answers
-								React.createElement CardAnswer, key: answer.id, answer: answer, choice: @props.choice
+							dom.div
+								className: "row",
+								dom.div 
+									className: "small-6 columns",
+									dom.img
+										className: "thumbnail", 
+										src: "/assets/submit.png",
+								dom.div 
+									className: "small-6 columns",
+									dom.h5
+										className: "weight",
+										"Answers:"
+									for answer in @props.answers
+										React.createElement CardAnswer, key: answer.id, answer: answer, choice: @props.choice
+							dom.div
+								className: "row",
+								dom.div
+									className: "small-12 columns text-right",
+									dom.a 
+										className: "button large radius-10",
+										href: "#",	
+										"RUN"
 
 @CardAnswer = React.createClass
 
@@ -44,10 +61,12 @@ dom = React.DOM
 			dom.div
 				className: "row",							
 				dom.div 
-					className: "small-5 columns",
+					className: "small-12 columns",
 					dom.input
-						type: typeOption,						
-					dom.p
+						id: "option#{@props.answer.id}",
+						type: typeOption,	
+					dom.label
+						htmlFor: "option#{@props.answer.id}",
 						@props.answer.answer_markdown					
 			
 

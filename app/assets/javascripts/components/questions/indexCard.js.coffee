@@ -19,11 +19,15 @@ dom = React.DOM
 						className: "row white-background",
 						dom.div
 							className: "small-4 columns",
-							React.createElement SearchCard, questions_path: @props.questions_path
+							React.createElement SearchCard, questions_path: @props.questions_path,
+						dom.div
+							className: "small-4 columns",
+							React.createElement SearchByTag, tag_path: @props.tag_path,
 						dom.div
 							className: "small-8 columns",			
 							for card in @props.question
 								React.createElement Card, key: card.id, card: card	
+
 
 @Card = React.createClass
 	displayName: 'Card'
@@ -48,6 +52,8 @@ dom = React.DOM
 
 @SearchCard = React.createClass
 	displayName: 'SearchCard'
+	componentDidMount: ->
+		$(@refs.autoComplete).autocomplete source: $('#title_autocomplete').data('autocomplete-source')
 	render: ->
 		dom.div
 			className: "small-12 columns",
@@ -62,10 +68,14 @@ dom = React.DOM
 				dom.p {}
 					dom.label
 						className: "weight",
-						"YOUR TOPICS",      
+						"SEARCH BY TITLE",      
 					dom.input
 						name: "query",
-						id:  "query",
+						id:  "title_autocomplete",
+						ref: "autoComplete",
+						'data-autocomplete-source': @props.questions_path,
+						autoComplete: "off",
+						className: "ui-autocomplete-input",
 						type: "text",
 						placeholder: "Start typing to search more",
 					dom.input
@@ -73,3 +83,11 @@ dom = React.DOM
 						type: "submit",
 						value: "Search",
 						'data-disable-with': "Search",	
+
+@SearchByTag = React.createClass
+
+	render: ->
+		dom.li {},
+			dom.a {},
+				"Chicano"
+
