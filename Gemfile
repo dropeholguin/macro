@@ -43,7 +43,7 @@ gem 'omniauth'
 gem 'omniauth-linkedin'
 # gem for markdown
 gem 'simplemde-rails'
-
+gem 'redcarpet'
 #gem for create association between questions/answers
 gem "cocoon"
 #gems for roles and permissions
