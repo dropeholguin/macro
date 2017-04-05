@@ -57,11 +57,6 @@ gem 'acts-as-taggable-on'
 gem 'elasticsearch_autocomplete'
 gem 'jquery-ui-rails'
 
-gem 'simple_form'
-gem 'bootstrap-sass'
-gem 'summernote-rails'
-
-
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'
     gem 'rails-assets-react-router'
