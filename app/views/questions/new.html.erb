@@ -1,6 +1,9 @@
 <%= react_component 'NewCard', {csrfToken: form_authenticity_token} %>
 
 <%= form_for(@question) do |f| %>
+	<%= f.text_field :title %>
+	<%= f.text_area :description_markdown, id: "description" %>
+	<%= f.text_area :explanation_markdown, id: "explanation" %>
 	<div class="field space">
 		<%= f.label :tag_list, "Categories" %>
 	</div>

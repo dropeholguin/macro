@@ -42,7 +42,8 @@ gem 'devise'
 gem 'omniauth'
 gem 'omniauth-linkedin'
 # gem for markdown
-gem 'trix'
+gem 'simplemde-rails'
+
 #gem for create association between questions/answers
 gem "cocoon"
 #gems for roles and permissions
