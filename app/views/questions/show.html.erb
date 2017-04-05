@@ -1,3 +1,4 @@
-<%= react_component 'ShowCard', {title: @question.title, answers: @answers, description: @question.description_markdown, choice: @question.choice} %>
+<%= react_component 'ShowCard', {title: @question.title, answers: @answers, description: @question.description_markdown, choice: @question.choice, tag_list: @question.tag_list} %>
 
 <%= markdown(@question.description_markdown) %>
+

@@ -50,12 +50,9 @@ dom = React.DOM
 										name: "question[title]",
 									dom.label {},
 										"DESCRIPTION"
-									dom.input
-										id: "question_description_markdown_trix_input_question",
-										type: "hidden",
+									dom.textarea
+										id: "description",
 										name: "question[description_markdown]",
-										value: "Description",
-									React.createElement('trix-editor', input: "question_description_markdown_trix_input_question"),
 									dom.div 
 										className: "margin-20",
 										dom.label {},
@@ -164,19 +161,16 @@ dom = React.DOM
 												'ADD "OTHER"'
 									dom.label {},
 										"EXPLANATION"
-									dom.input
-										id: "question_explanation_markdown_trix_input_question",
-										type: "hidden",
+									dom.textarea
+										id: "explanation",
 										name: "question[explanation_markdown]",
-										value: "Explanation of correct answers",
-									React.createElement('trix-editor', input: "question_explanation_markdown_trix_input_question"),
 									dom.div 
 										className: "margin-20",
 										dom.label {},
 											"TOPICS"
 										dom.input
 											'data-delimiter': ", ",
-											'multiple': "multiple",
+											multiple: "true",
 											name: "question[tag_list][]",
 											id: "question_tag_list",
 											className: "tagsinput",
@@ -188,6 +182,5 @@ dom = React.DOM
 										value: "SUBMIT",
 						dom.div
 							className: "large-4 columns"	
-		
-Components.NewCard = NewCard				
+						Components.NewCard = NewCard
 

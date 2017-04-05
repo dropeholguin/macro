@@ -43,7 +43,11 @@ dom = React.DOM
 							dom.div
 								className: "row",
 								dom.div
-									className: "small-12 columns text-right",
+									className: "small-8 columns",
+									for tag in @props.tag_list
+										React.createElement TagList, key: tag.id, tag: tag,									
+								dom.div
+									className: "small-4 columns text-right",
 									dom.a 
 										className: "button large radius-10",
 										href: "#",	
@@ -70,5 +74,13 @@ dom = React.DOM
 						htmlFor: "option#{@props.answer.id}",
 						@props.answer.answer_markdown					
 			
+@TagList = React.createClass
+
+	render: ->			
+		dom.li 
+			className: "margin-tag title-li tag-horizontal",
+			dom.a
+				className: "tag-decoration",
+				@props.tag
 
 

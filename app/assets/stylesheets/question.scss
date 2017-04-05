@@ -76,3 +76,9 @@ input[type=radio]:not(old):checked + label{
   background: #169BD5;
   color: #ffffff;
 }
+
+.tag-horizontal{
+
+  float: left;
+  margin: 5px;
+}

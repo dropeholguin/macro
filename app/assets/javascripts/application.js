@@ -23,7 +23,9 @@
 //= require components
 //= require cocoon
 //= require_tree .
-
+window.Components = {} 
+//Choose your name. Do not use React here or
+//you'll overwrite library functions
 $(function(){ $(document).foundation(); });
 $(document).on("turbolinks:load", function() {
   var simplemde = new SimpleMDE({ element: document.getElementById("description") });
