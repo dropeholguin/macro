@@ -193,6 +193,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
+    redcarpet (3.4.0)
     responders (2.3.0)
       railties (>= 4.2.0, < 5.1)
     rest-client (1.6.7)
@@ -208,6 +209,7 @@ GEM
     simple_form (3.4.0)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
+    simplemde-rails (1.10.2)
     spring (2.0.1)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
@@ -237,8 +239,6 @@ GEM
       multi_json (~> 1.3)
       rake
       rest-client (~> 1.6)
-    trix (0.10.1)
-      rails
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.0)
@@ -292,14 +292,15 @@ DEPENDENCIES
   rails-assets-moment!
   rails-assets-react-router!
   react-rails
+  redcarpet
   rolify
   sass-rails (~> 5.0)
   simple_form
+  simplemde-rails
   spring
   spring-watcher-listen (~> 2.0.0)
   summernote-rails
   tire
-  trix
   turbolinks (~> 5)
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)

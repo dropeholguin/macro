@@ -19,9 +19,13 @@
 //= require summernote
 //= require react
 //= require react_ujs
+//= require simplemde.min
 //= require components
-//= require trix
 //= require cocoon
 //= require_tree .
 
 $(function(){ $(document).foundation(); });
+$(document).on("turbolinks:load", function() {
+  var simplemde = new SimpleMDE({ element: document.getElementById("description") });
+  var simplemde = new SimpleMDE({	element: document.getElementById("explanation")});
+});
