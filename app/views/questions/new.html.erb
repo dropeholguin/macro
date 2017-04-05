@@ -1,4 +1,4 @@
-<%= react_component 'NewCard', {csrfToken: form_authenticity_token} %>
+<%= react_component 'NewCard', {csrfToken: form_authenticity_token, tag: @question.tag_list} %>
 
 <%= form_for(@question) do |f| %>
 	<div class="field space">

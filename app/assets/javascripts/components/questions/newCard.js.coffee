@@ -2,6 +2,8 @@ dom = React.DOM
 
 @NewCard = React.createClass
 	displayName: 'NewCard'
+	getInitialState: ->
+		name: 'New Card'
 	getDefaultProps: ->
 		url: '/questions'
 	componentDidMount: ->
@@ -173,8 +175,10 @@ dom = React.DOM
 										dom.label {},
 											"TOPICS"
 										dom.input
-											name: "tags",
-											id: "tags",
+											'data-delimiter': ", ",
+											'multiple': "multiple",
+											name: "question[tag_list][]",
+											id: "question_tag_list",
 											className: "tagsinput",
 											ref: "tagsInput",
 									dom.input
@@ -185,6 +189,5 @@ dom = React.DOM
 						dom.div
 							className: "large-4 columns"	
 		
-
-				
+Components.NewCard = NewCard				
 
