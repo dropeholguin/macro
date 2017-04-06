@@ -34,7 +34,7 @@
 }
 .background-home
 {
-	background: url("/assets/stock-2bg.jpg");
+	background: url(image_path(#{"stock-2bg.jpg"}));
     background-repeat: no-repeat;
     background-size: cover;
     background-color: #292e37;
@@ -71,4 +71,12 @@
 }
 .item-white{
 	background: #ffffff;
+}
+.submit-image{
+	background: transparent url(image_path(#{"submit.png"})) no-repeat left center;
+	background-size: contain;
+	display: inline-block;
+	width: 231px;
+	height: 187px;
+	margin-bottom: 30px;
 }

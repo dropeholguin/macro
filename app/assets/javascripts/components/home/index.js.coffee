@@ -33,7 +33,7 @@ dom = React.DOM
 							id: "arrow",
 							href: "#get-started",
 							dom.img
-								src: "/assets/arrow.png",
+								src: @props.arrow_img,
 			dom.div
 				className: "row expanded gray-box",
 				dom.div
@@ -52,7 +52,7 @@ dom = React.DOM
 					dom.div
 						className: "small-6 large-8 small-centered large-centered columns",
 						dom.img
-							src: "/assets/submit.png",
+							src: @props.submit_img,
 				dom.div
 					className: "large-4 text-center columns plans",
 					dom.h4 {},
@@ -62,7 +62,7 @@ dom = React.DOM
 					dom.div
 						className: "small-6 large-8 small-centered large-centered columns",
 						dom.img
-							src: "/assets/cards.png",
+							src: @props.card_img,
 				dom.div
 					className: "large-4 text-center columns plans",
 					dom.h4 {},
@@ -72,7 +72,7 @@ dom = React.DOM
 					dom.div
 						className: "small-6 large-8 small-centered large-centered columns",
 						dom.img
-							src: "/assets/session.png",
+							src: @props.session_img,
 			dom.div
 				className: "row expanded gray-box",
 				dom.div

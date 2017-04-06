@@ -39,7 +39,7 @@ input[type=radio   ]:not(old) + label{
   display      : inline-block;
   margin-left  : -28px;
   padding-left : 28px;
-  background   : url('/assets/checks.png') no-repeat 0 0;
+  background   : url(image_path(#{"checks.png"})) no-repeat 0 0;
   line-height  : 24px;
 }
 

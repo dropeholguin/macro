@@ -48,7 +48,7 @@ dom = React.DOM
 					dom.a
 						className: "button small hollow secondary",
 						href: "/questions/#{@props.card.id}",
-						"review",
+						"Run",
 			dom.div
 				dangerouslySetInnerHTML: __html: @props.card.description_markdown.toString()
 

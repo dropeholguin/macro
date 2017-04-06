@@ -32,7 +32,7 @@ dom = React.DOM
 									className: "small-6 columns",
 									dom.img
 										className: "thumbnail", 
-										src: "/assets/submit.png",
+										src: @props.submit_img,
 								dom.div 
 									className: "small-6 columns",
 									dom.h5
