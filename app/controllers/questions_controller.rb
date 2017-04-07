@@ -47,13 +47,17 @@ class QuestionsController < ApplicationController
 	  		@question.choice = "simple"
 	  	end
 		respond_to do |format|
-		  if @question.save
-		  	format.html { redirect_to questions_url, notice: 'Question was successfully created.' }
-		    format.json { render :show, status: :created, location: @question }
-		  else
-		    format.html { render :new }
-		    format.json { render json: @question.errors, status: :unprocessable_entity }
-		  end
+			if count == 0
+				format.html { render :new, notice: 'At least one question must be correct' }
+			else
+				if @question.save
+					format.html { redirect_to questions_url, notice: 'Question was successfully created.' }
+					format.json { render :show, status: :created, location: @question }
+				else
+					format.html { render :new }
+					format.json { render json: @question.errors, status: :unprocessable_entity }
+				end
+			end	  
 		end
 	end
 
