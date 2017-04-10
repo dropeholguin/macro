@@ -34,7 +34,7 @@ class QuestionsController < ApplicationController
 		@question = Question.new(question_params)
 		@question.user = @user
 		count = 0
-
+		state = false
 		@question.answers.each do |answer|
 			if answer.is_correct == true
 				count = count + 1 
@@ -46,9 +46,18 @@ class QuestionsController < ApplicationController
 	  	else
 	  		@question.choice = "simple"
 	  	end
+
+	  	@question.tag_list.each do |tag|
+	  		unless Question.tags.include?(tag)
+			   state = true
+			end
+	  	end
+
 		respond_to do |format|
 			if count == 0
 				format.html { render :new, notice: 'At least one question must be correct' }
+			elsif state == true
+				format.html { render :new, notice: 'Topic incorrect' }
 			else
 				if @question.save
 					format.html { redirect_to questions_url, notice: 'Question was successfully created.' }
