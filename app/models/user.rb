@@ -71,6 +71,7 @@ end
 								email: auth.info.email,
 								password: Devise.friendly_token[0,20],
 							)
+          user.change_points(8)
 	        Identity.create_with_omniauth_linkedin(auth, user.id)
 
 	        user
