@@ -2,6 +2,8 @@ class User < ApplicationRecord
 has_many :badges , :through => :levels 
 has_many :levels  
 
+scope :users_with_less_of_eight_cards, -> {where('points < ?', 8)}
+
 def change_points(options)
   if Gioco::Core::KINDS
     points = options[:points]
