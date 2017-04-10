@@ -56,6 +56,8 @@ gem 'acts-as-taggable-on'
 #gem for autocomplete search
 gem 'elasticsearch_autocomplete'
 gem 'jquery-ui-rails'
+#gem for gamification
+gem 'gioco'
 
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'
