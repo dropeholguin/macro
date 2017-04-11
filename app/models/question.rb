@@ -34,4 +34,8 @@ class Question < ApplicationRecord
 	def to_indexed_json
     	to_json(methods: [:tag_list, :title])
   	end
+
+  	def list_tag
+	  tags.map(&:name).join(", ")
+	end
 end
