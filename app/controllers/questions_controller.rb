@@ -14,6 +14,10 @@ class QuestionsController < ApplicationController
 
 	end
 
+	def run_question
+		
+	end
+
 	def show
 		@answers = @question.answers
 	end
