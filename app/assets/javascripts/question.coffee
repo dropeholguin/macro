@@ -4,7 +4,7 @@
 jQuery ->
   $('#title_autocomplete').autocomplete source: $('#title_autocomplete').data('autocomplete-source')
 
-initTagInput = ->
+@initTagInput = ->
   tags_array = [
     'SAS Management Console'
     'SAS Macro'
@@ -13,7 +13,7 @@ initTagInput = ->
     'SAS Programming'
     'Workspace Management'
   ]
-  $('#tags_addTag').tagsInput
+  $('#question_tag_list').tagsInput
     'defaultText': 'add...'
     'autocomplete_url': ''
     'autocomplete': 'source': tags_array

@@ -7,7 +7,7 @@ dom = React.DOM
 	getDefaultProps: ->
 		url: '/questions'
 	componentDidMount: ->
-		$(@refs.tagsInput).tagsInput()
+		$(@refs.tagsInput).autocomplete source: initTagInput
 	render: ->
 		dom.div
 			className: "root",
@@ -182,5 +182,5 @@ dom = React.DOM
 										value: "SUBMIT",
 						dom.div
 							className: "large-4 columns"	
-						Components.NewCard = NewCard
+						Components.NewCard = @NewCard
 

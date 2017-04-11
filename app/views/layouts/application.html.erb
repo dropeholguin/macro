@@ -12,7 +12,7 @@
 
   <body>
     <% if user_signed_in? %>      
-      <%= react_component 'HeaderLoggedIn', {user: current_user.email, sign_out: destroy_user_session_path} %>
+      <%= react_component 'HeaderLoggedIn', {user: current_user.email, sign_out: destroy_user_session_path,  user_points: current_user.points} %>
     <% else %>  
     <%end%>    
     <%= yield %>
