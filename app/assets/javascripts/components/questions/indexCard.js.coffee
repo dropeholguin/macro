@@ -51,6 +51,8 @@ dom = React.DOM
 						"Run",
 			dom.div
 				dangerouslySetInnerHTML: __html: @props.card.description_markdown.toString()
+			dom.h1
+				@props.card.list_tag
 
 @SearchCard = React.createClass
 	displayName: 'SearchCard'

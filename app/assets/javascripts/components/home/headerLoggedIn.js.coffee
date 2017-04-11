@@ -2,6 +2,8 @@ dom = React.DOM
 
 @HeaderLoggedIn = React.createClass
 	displayName: 'HeaderLoggedIn'
+	getDefaultProps: ->
+		points: 0
 	componentDidMount: ->
 		$(document).foundation()
 	render: ->
@@ -41,7 +43,6 @@ dom = React.DOM
 							className: "menu-item-bar",
 							dom.a 
 								className: "radius-10",
-								href: "/questions",
 								"Cards"	
 							dom.ul
 								className: "menu vertical item-white",
@@ -52,6 +53,18 @@ dom = React.DOM
 											className: "fa fa-plus",
 											'aria-hidden': "true",
 											"New Card",
+								dom.li {},
+									dom.a
+										href: "/questions",
+										dom.i
+											className: "fa fa-eye",
+											'aria-hidden': "true",
+											"Show Cards",
+						dom.li 
+							className: "menu-item-bar",
+							dom.a 
+								className: "radius-10",
+								"#{@props.points} Cards Available"
 						dom.li {},
 							dom.a
 								href: "#",
