@@ -16,7 +16,7 @@ dom = React.DOM
 		$.ajax
 	      url: '/run_question'
 	      type: 'POST'
-	      data: checkbox: selected, card_id: @props.id_card
+	      data: checkbox: selected, card_id: @props.card_id
       	console.log ("This is selected: "+selected) 
       	 $("input").prop('disabled', true)     		
 	render: ->		
