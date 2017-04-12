@@ -10,7 +10,7 @@ class Question < ApplicationRecord
 	accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
 	validates :title, :description_markdown, :explanation_markdown, presence: true
 
-	enum tags: ["SAS Programming", "SAS Macro", "DI Studio", "SAS Management Console"]
+	enum tags: ["SAS Programming", "SAS Macro", "DI Studio", "SAS Management Console", "Enterprise Guide", "Workspace Management"]
 
 	index_name("questions")
 	mapping do
