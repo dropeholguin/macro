@@ -15,7 +15,21 @@ class QuestionsController < ApplicationController
 	end
 
 	def run_question
+		@user = current_user
+		answers = params[:checkbox]
+		card = Question.find params[:card_id]
 		
+		answers_correct = card.answers.select { |answer| answer.is_correct == true }
+		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+		if is_passed == true
+			@user.update_attributes(points: @user.points + 2)
+		else
+			@user.update_attributes(points: @user.points - 2)			
+		end
+
+		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed)
+		@card.save
+		head :ok
 	end
 
 	def show
@@ -61,7 +75,7 @@ class QuestionsController < ApplicationController
 			if count == 0
 				format.html { render :new, notice: 'At least one question must be correct' }
 			elsif state == true
-				format.html { render :new, notice: 'Topic incorrect' }
+				format.html { render :new, notice: 'Incorrect Topic' }
 			else
 				if @question.save
 					format.html { redirect_to questions_url, notice: 'Question was successfully created.' }
