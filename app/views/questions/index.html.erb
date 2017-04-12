@@ -12,7 +12,7 @@
 			</div>
 			<div class="small-8 columns">
 				<% @questions.each do |question| %>
-					<%= react_component 'Card', {title: question.title, id: question.id, description: question.description_markdown, tag_list: question.tag_list,tag_path: request.url} %>
+					<%= react_component 'Card', {title: question.title, id: question.id, description: markdown(question.description_markdown), tag_list: question.tag_list,tag_path: request.url} %>
 				<% end %>
 			</div>
 		</div>

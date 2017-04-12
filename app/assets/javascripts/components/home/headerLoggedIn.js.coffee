@@ -33,7 +33,7 @@ dom = React.DOM
 						dom.li 
 							className: "menu-item-bar",
 							dom.h3 {},
-								"SAS CARDS",													
+								"MACRO PEOPLE",													
 				dom.div
 					className: "top-bar-right",
 					dom.ul

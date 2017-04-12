@@ -31,7 +31,8 @@ dom = React.DOM
 						href: "/questions/#{@props.id}",
 						"Run",
 			dom.div {},
-				@props.description
+				dom.div
+					dangerouslySetInnerHTML: __html: @props.description.toString(),
 				dom.div
 					className: "row"
 					dom.div

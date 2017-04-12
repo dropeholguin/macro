@@ -1,7 +1,15 @@
 dom = React.DOM 
 
 @ShowCard = React.createClass
-
+	displayName: 'ShowCard'
+	getInitialState: ->
+		right_answer: "0"
+	handleClick: (event) ->
+		document.getElementById('explanation-card').style.display = 'block'
+		if ($('.this-ans').length > 0)
+			$('.this-ans').addClass "right-color"
+		if ($('.this-ansn').length > 0)
+			$('.this-ansn').addClass "wrong-color"		
 	render: ->		
 		dom.div
 			className: "root",
@@ -27,19 +35,23 @@ dom = React.DOM
 							dom.div
 								dangerouslySetInnerHTML: __html: @props.description.toString(),
 							dom.div
-								className: "row",
-								dom.div 
-									className: "small-6 columns",
-									dom.img
-										className: "thumbnail", 
-										src: @props.submit_img,
+								className: "row",								
 								dom.div 
 									className: "small-6 columns",
 									dom.h5
 										className: "weight",
 										"Answers:"
 									for answer in @props.answers
-										React.createElement CardAnswer, key: answer.id, answer: answer, choice: @props.choice
+										React.createElement CardAnswer, key: answer.id, answer: answer, choice: @props.choice, right_answer: @state.right_answer
+								dom.div
+									id: "explanation-card",
+									style: {display: 'none'}
+									className: "small-6 columns margin-20",
+									dom.h5
+										className: "weight",
+										"Explanation:"
+									dom.p 
+										dangerouslySetInnerHTML: __html: @props.explanation.toString()										
 							dom.div
 								className: "row",
 								dom.div
@@ -50,18 +62,22 @@ dom = React.DOM
 									className: "small-4 columns text-right",
 									dom.a 
 										className: "button large radius-10",
-										href: "#",	
+										onClick: @handleClick,
 										"RUN"
 
 @CardAnswer = React.createClass
-
+	displayName: 'CardAnswer'
 	render: ->
 		if(@props.choice == "simple")
 			typeOption = "radio"
 		else if(@props.choice == "multiple")
 			typeOption = "checkbox"
-		dom.div 
-			className: "root margin-15",
+		if(@props.answer.is_correct)
+			rightColor = "this-ans" 
+		else
+			rightColor = "this-ansn"
+		dom.div
+			className: "root margin-15 answer-card "+rightColor,
 			dom.div
 				className: "row",							
 				dom.div 
@@ -72,10 +88,10 @@ dom = React.DOM
 						type: typeOption,	
 					dom.label
 						htmlFor: "option#{@props.answer.id}",
-						@props.answer.answer_markdown					
+						@props.answer.answer_markdown				
 			
 @TagList = React.createClass
-
+	displayName: 'TagList'
 	render: ->			
 		dom.li 
 			className: "margin-tag title-li tag-horizontal",
