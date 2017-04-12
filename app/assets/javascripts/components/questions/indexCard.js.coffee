@@ -4,31 +4,14 @@ dom = React.DOM
 	displayName: 'IndexCard'
 	render: ->
 		dom.div
-			className: "root",
+			className: "root",			
 			dom.div
-				className: "row"
-				dom.div
-					className: "large-10 large-centered columns"
-					dom.div
-						className: "row lightblue-box margin-auto"
-						dom.h4 {},
-							"CREATED CARDS"
-						dom.p {},
-							"Manage your questions: review rating, edit, delete and read comments"
-					dom.div
-						className: "row white-background",
-						dom.div
-							className: "small-4 columns",
-							dom.div
-								className: "row",	
-								React.createElement SearchCard, questions_path: @props.questions_path,
-							dom.div
-								className: "row",
-								React.createElement SearchByTag, tag_path: @props.tag_path,
-						dom.div
-							id: "cards-id",
-							className: "small-8 columns",			
-
+				className: "row lightblue-box margin-auto"
+				dom.h4 {},
+					"CREATED CARDS"
+				dom.p {},
+					"Manage your questions: review rating, edit, delete and read comments"
+					
 @Card = React.createClass
 	displayName: 'Card'
 	render: ->
@@ -51,15 +34,22 @@ dom = React.DOM
 				@props.description
 				dom.div
 					className: "row"
-					dom.div 
-						className: "margin-tag title-li tag-horizontal",
-						for topic in @props.tag_list
-							React.createElement Topics, key: topic.id, topic: topic,
+					dom.div
+						className: "small-10 columns"
+						dom.div 
+							className: "margin-tag title-li tag-horizontal",
+							for topic in @props.tag_list
+								React.createElement Topics, key: topic.id, topic: topic, tag_path: @props.tag_path
 
 @Topics = React.createClass
 	displayName: 'Topics'
 	render: ->
+		if(@props.tag_path.split("?").length-1 > 0)
+			url_tag = "&the_tag="
+		else
+			url_tag = "?&the_tag=" 
 		dom.a
+			href: "#{@props.tag_path}"+url_tag+@props.topic,
 			className: "tag-decoration",
 			@props.topic			
 
@@ -98,8 +88,12 @@ dom = React.DOM
 						'data-disable-with': "Search",	
 
 @SearchByTag = React.createClass
-
+	displayName: 'SearchByTag'
 	render: ->
+		if(@props.tag_path.split("?").length-1 > 0)
+			url_tag = "&the_tag="
+		else
+			url_tag = "?&the_tag=" 
 		dom.div
 			className: "small-12 columns",
 			dom.div 
@@ -110,6 +104,7 @@ dom = React.DOM
 				dom.li 
 					className: "title-li",
 					dom.a
+						href: "#{@props.tag_path}"+url_tag+"SAS+Management+Console",
 						className: "tag-decoration",
 						"SAS Management Console"
 			dom.div 
@@ -120,12 +115,13 @@ dom = React.DOM
 				dom.li 
 					className: "title-li",
 					dom.a
-						href: "#{@props.tag_path}?&the_tag=SAS+Macro",
+						href: "#{@props.tag_path}"+url_tag+"SAS+Macro",
 						className: "tag-decoration",
 						"SAS Macro"
 				dom.li 
 					className: "title-li",
 					dom.a
+						href: "#{@props.tag_path}"+url_tag+"DI+Studio",
 						className: "tag-decoration",
 						"DI Studio"
 			dom.div 
@@ -136,16 +132,19 @@ dom = React.DOM
 				dom.li 
 					className: "title-li",
 					dom.a
+						href: "#{@props.tag_path}"+url_tag+"SAS+Programming",
 						className: "tag-decoration",
 						"SAS Programming"
 				dom.li 
 					className: "title-li",
 					dom.a
+						href: "#{@props.tag_path}"+url_tag+"Enterprise+Guide",
 						className: "tag-decoration",
 						"Enterprise Guide"
 				dom.li 
 					className: "title-li",
 					dom.a
+						href: "#{@props.tag_path}"+url_tag+"Workspace+Management",
 						className: "tag-decoration",
 						"Workspace Management"
-
+				

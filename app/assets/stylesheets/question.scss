@@ -60,23 +60,23 @@ input[type=radio]:not(old):checked + label{
 }
 .title-li{
   margin-top: 5px;
-  margin-top: 5px;
+  margin-top: 10px;
   list-style: none;
 }
 .tag-decoration{
   border: 1px solid #8a8a8a;
-  padding: 3px;
+  padding: 5px;
   background: #E3F5FB;
   border-radius: 5px;
   color: #8a8a8a;
+  margin-left: 3px;
+  margin-right: 3px;
 }
-.tag-decoration:active, .tag-decoration:visited, .tag-decoration:focus{
+.tag-decoration:active, .tag-decoration:focus{
   background: #169BD5;
   color: #ffffff;
 }
 
 .tag-horizontal{
-
   float: left;
-  margin: 5px;
 }
