@@ -8,6 +8,8 @@ dom = React.DOM
 		url: '/questions'
 	componentDidMount: ->
 		$(@refs.tagsInput).autocomplete source: initTagInput
+		$(document).ready initTagInput
+		$(document).on 'page:load', initTagInput
 	render: ->
 		dom.div
 			className: "root",

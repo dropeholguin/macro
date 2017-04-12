@@ -2,10 +2,16 @@ dom = React.DOM
 
 @HeaderLoggedIn = React.createClass
 	displayName: 'HeaderLoggedIn'
+	getInitialState: ->
+		points: @props.points
 	getDefaultProps: ->
 		points: 0
 	componentDidMount: ->
 		$(document).foundation()
+		if(@props.points == null)
+			@setState(
+				points: 0 
+			)
 	render: ->
 		dom.div
 			className: "root",
@@ -63,8 +69,8 @@ dom = React.DOM
 						dom.li 
 							className: "menu-item-bar",
 							dom.a 
-								className: "radius-10",
-								"#{@props.points} Cards Available"
+								className: "radius-10 card-mode-btn",
+								"#{@state.points} Cards Available"
 						dom.li {},
 							dom.a
 								href: "#",
