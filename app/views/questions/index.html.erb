@@ -1,5 +1,10 @@
 <%= react_component 'IndexCard', {question: @questions, questions_path: questions_path, tag_path: request.url}%>
 
+<%= link_to "Chicano", request.query_parameters.merge({the_tag: "SAS Macro"}) %>
+
+URL: <%= request.url%>
+
 <% @questions.each do |question| %>
-	<p>Tags: <%= question.list_tag %></p>
+	<%= react_component 'Card', {title: question.title, id: question.id, description: question.description_markdown, tag_list: question.tag_list} %>
 <% end %>
+

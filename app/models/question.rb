@@ -36,6 +36,6 @@ class Question < ApplicationRecord
   	end
 
   	def list_tag
-	  tags.map(&:name).join(", ")
+	  tags.map(&:name)
 	end
 end

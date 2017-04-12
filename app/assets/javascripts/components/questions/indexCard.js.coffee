@@ -26,10 +26,8 @@ dom = React.DOM
 								className: "row",
 								React.createElement SearchByTag, tag_path: @props.tag_path,
 						dom.div
+							id: "cards-id",
 							className: "small-8 columns",			
-							for card in @props.question
-								React.createElement Card, key: card.id, card: card	
-
 
 @Card = React.createClass
 	displayName: 'Card'
@@ -42,17 +40,28 @@ dom = React.DOM
 					className: "small-9 columns",
 					dom.h5
 						style: {color: "#07C", fontWeight: "bold"},
-						@props.card.title	
+						@props.title	
 				dom.div
 					className: "small-3 text-right columns",
 					dom.a
 						className: "button small hollow secondary",
-						href: "/questions/#{@props.card.id}",
+						href: "/questions/#{@props.id}",
 						"Run",
-			dom.div
-				dangerouslySetInnerHTML: __html: @props.card.description_markdown.toString()
-			dom.h1
-				@props.card.list_tag
+			dom.div {},
+				@props.description
+				dom.div
+					className: "row"
+					dom.div 
+						className: "margin-tag title-li tag-horizontal",
+						for topic in @props.tag_list
+							React.createElement Topics, key: topic.id, topic: topic,
+
+@Topics = React.createClass
+	displayName: 'Topics'
+	render: ->
+		dom.a
+			className: "tag-decoration",
+			@props.topic			
 
 @SearchCard = React.createClass
 	displayName: 'SearchCard'
@@ -111,6 +120,7 @@ dom = React.DOM
 				dom.li 
 					className: "title-li",
 					dom.a
+						href: "#{@props.tag_path}?&the_tag=SAS+Macro",
 						className: "tag-decoration",
 						"SAS Macro"
 				dom.li 
