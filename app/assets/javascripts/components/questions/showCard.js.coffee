@@ -6,10 +6,19 @@ dom = React.DOM
 		right_answer: "0"
 	handleClick: (event) ->
 		document.getElementById('explanation-card').style.display = 'block'
+		document.getElementById('run-card').style.display = 'none'
+		document.getElementById('back-card').style.display = 'inline-block'
 		if ($('.this-ans').length > 0)
 			$('.this-ans').addClass "right-color"
 		if ($('.this-ansn').length > 0)
-			$('.this-ansn').addClass "wrong-color"		
+			$('.this-ansn').addClass "wrong-color"
+		selected = $('input[name=option]:checked').map(-> @id).get()
+		$.ajax
+	      url: '/run_question'
+	      type: 'POST'
+	      data: checkbox: selected, card_id: @props.card_id
+      	console.log ("This is selected: "+selected) 
+      	 $("input").prop('disabled', true)     		
 	render: ->		
 		dom.div
 			className: "root",
@@ -46,7 +55,7 @@ dom = React.DOM
 								dom.div
 									id: "explanation-card",
 									style: {display: 'none'}
-									className: "small-6 columns margin-20",
+									className: "small-6 columns",
 									dom.h5
 										className: "weight",
 										"Explanation:"
@@ -59,11 +68,20 @@ dom = React.DOM
 									for tag in @props.tag_list
 										React.createElement TagList, key: tag.id, tag: tag,									
 								dom.div
-									className: "small-4 columns text-right",
+									className: "small-12 columns text-right",
 									dom.a 
+										id: "run-card",
 										className: "button large radius-10",
 										onClick: @handleClick,
 										"RUN"
+								dom.div
+									className: "small-12 columns text-right",
+									dom.a 
+										id: "back-card",
+										href: "/questions",
+										style: {display: 'none'},
+										className: "button large radius-10",
+										"BACK"
 
 @CardAnswer = React.createClass
 	displayName: 'CardAnswer'
@@ -83,11 +101,11 @@ dom = React.DOM
 				dom.div 
 					className: "small-12 columns",
 					dom.input
-						id: "option#{@props.answer.id}",
+						id: "#{@props.answer.id}",
 						name: "option",
 						type: typeOption,	
 					dom.label
-						htmlFor: "option#{@props.answer.id}",
+						htmlFor: "#{@props.answer.id}",
 						@props.answer.answer_markdown				
 			
 @TagList = React.createClass
