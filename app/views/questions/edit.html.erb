@@ -1,0 +1,15 @@
+<h4>Edit Question</h4>
+<%= form_for(@question, html: { multipart: true }) do |f| %>
+  
+  	<%= f.label :title %>
+  	<%= f.text_field :title %>
+    <%= f.label :description_markdown %>
+    <%= f.text_area :description_markdown, id: "description" %>
+    <%= f.label :explanation_markdown %>
+    <%= f.text_area :explanation_markdown, id: "explanation" %>
+    <%= f.label :tag_list, "Topics" %>
+    <%= f.text_field :tag_list, 'data-delimiter' => ', ', multiple: true, value: @question.tag_list.join(", ") %>
+  <div class="actions">
+    <%= f.submit "Continue" %>
+  </div>
+<% end %>
