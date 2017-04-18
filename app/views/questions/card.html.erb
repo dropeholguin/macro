@@ -1,3 +1,1 @@
-<h1>Run Card</h1>
-<h2><%= @question.title %></h2>
-<%= link_to "Next", run_cards_path %>
+<%= react_component 'RunCard', {card_id: @question.id,title: @question.title, answers: @answers, description: markdown(@question.description_markdown), choice: @question.choice, tag_list: @question.tag_list, submit_img: image_path('submit.png'), explanation: markdown(@question.explanation_markdown), run_cards_path: run_cards_path} %>

@@ -18,6 +18,7 @@ class QuestionsController < ApplicationController
 		@user = current_user
 		if @user.points > 0
 			@question = Question.offset(rand(Question.count)).first
+			@answers = @question.answers
 		else 
 			respond_to do |format|
 				format.html { redirect_to questions_url, notice: '' }
