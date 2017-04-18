@@ -4,7 +4,11 @@ Rails.application.routes.draw do
 	devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks', registrations: "users/registrations" }
 	root to: "home#index"
 
-	resources :questions
+	resources :questions do
+		member do
+			post :vote
+		end
+	end
 
 	post "run_question", to: 'questions#run_question'
 	get "user_profile", to: 'profile#user_profile'

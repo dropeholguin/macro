@@ -58,6 +58,8 @@ gem 'elasticsearch_autocomplete'
 gem 'jquery-ui-rails'
 #gem for gamification
 gem 'gioco'
+#gem for reputation
+gem 'activerecord-reputation-system'
 
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'
