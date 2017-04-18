@@ -14,6 +14,21 @@ class QuestionsController < ApplicationController
 
 	end
 
+	def card
+		@user = current_user
+		if @user.points > 0
+			@question = Question.offset(rand(Question.count)).first
+		else 
+			respond_to do |format|
+				format.html { redirect_to questions_url, notice: '' }
+			end
+		end
+	end
+
+	def next_card
+		
+	end
+
 	def run_question
 		@user = current_user
 		answers = params[:checkbox]
@@ -22,9 +37,7 @@ class QuestionsController < ApplicationController
 		answers_correct = card.answers.select { |answer| answer.is_correct == true }
 		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
 		if is_passed == true
-			@user.update_attributes(points: @user.points + 2)
-		else
-			@user.update_attributes(points: @user.points - 2)			
+			@user.update_attributes(points: @user.points + 2)						
 		end
 
 		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed)

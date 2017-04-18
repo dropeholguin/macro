@@ -2,6 +2,7 @@ class User < ApplicationRecord
 has_many :badges , :through => :levels 
 has_many :levels
 has_many :evaluations, class_name: "RSEvaluation", as: :source
+has_many :cards
 has_reputation :votes, source: {reputation: :votes, of: :questions}, aggregated_by: :sum
 scope :users_with_less_of_eight_cards, -> {where('points < ?', 8)}
 

@@ -11,5 +11,7 @@ Rails.application.routes.draw do
 	end
 
 	post "run_question", to: 'questions#run_question'
+	post "next_card", to: 'questions#next_card'
+	get "run_cards", to: 'questions#card'
 	get "user_profile", to: 'profile#user_profile'
 end
