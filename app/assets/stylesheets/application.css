@@ -117,3 +117,11 @@
     background: #F48024;
     opacity: 0.9;
 }
+.rate-green{
+    color: #75D147;
+    font-weight: bold;
+}
+.rate-red{
+    color: #cc4b37;
+    font-weight: bold;
+}

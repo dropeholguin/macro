@@ -182,6 +182,7 @@ dom = React.DOM
 										type: "submit",
 										name: "commit",
 										value: "SUBMIT",
+										ref: "submit"
 						dom.div
 							className: "large-4 columns"	
 						Components.NewCard = @NewCard

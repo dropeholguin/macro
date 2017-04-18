@@ -4,6 +4,10 @@ dom = React.DOM
 	displayName: 'ShowCard'
 	getInitialState: ->
 		right_answer: "0"
+	handleClickVoteUp: (event) ->
+		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
+	handleClickVoteDown: (event) ->
+		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
 	handleClick: (event) ->
 		document.getElementById('explanation-card').style.display = 'block'
 		document.getElementById('run-card').style.display = 'none'
@@ -19,7 +23,16 @@ dom = React.DOM
 	      data: checkbox: selected, card_id: @props.card_id
       	console.log ("This is selected: "+selected) 
       	 $("input").prop('disabled', true)     		
-	render: ->		
+	 	 $.amaran content: {'title': 'Congratulations!','message': 'You ran a card!', 'info':'You got 2 points more', 'icon':'fa fa-flag'}, theme: 'awesome blue', delay :10000
+	render: ->	
+		if(@props.votes > 0)
+			rateColor = "rate-green"
+		if(@props.votes < 0)
+			rateColor = "rate-red"
+		if(@props.votes > 1 or @props.votes < -1)
+			numVotes = "Votes"
+		else
+			numVotes = "Vote"	
 		dom.div
 			className: "root",
 			dom.div
@@ -66,13 +79,15 @@ dom = React.DOM
 								dom.div
 									className: "small-8 columns",
 									for tag in @props.tag_list
-										React.createElement TagList, key: tag.id, tag: tag,									
+										React.createElement TagList, key: tag.id, tag: tag,
+																	
 								dom.div
 									className: "small-12 columns text-right",
 									dom.a 
 										id: "run-card",
 										className: "button large radius-10",
 										onClick: @handleClick,
+										ref: "runCard",
 										"RUN"
 								dom.div
 									className: "small-12 columns text-right",
@@ -81,7 +96,38 @@ dom = React.DOM
 										href: "/questions",
 										style: {display: 'none'},
 										className: "button large radius-10",
-										"BACK"
+										"BACK",
+								if(@props.current_user and @props.current_user_voted)		
+									dom.div
+										className: "small-12 columns",
+										dom.p
+											className: "weight",
+											style: {color: "#07C", fontWeight: "bold"},
+											"Rate this card:",
+										dom.div
+											className: "small-6 columns"
+											dom.i
+												className: "fa fa-star-o "+rateColor,	
+											dom.span
+												className: rateColor,
+												" #{@props.votes} "+numVotes,	
+										dom.div
+											className: "small-6 columns text-right"								
+											dom.a
+												style: {marginRight: "5px"},
+												className: "button hollow small secondary radius-10",
+												href: @props.vote_up,
+												onClick: @handleClickVoteUp,
+												'data-method': 'post'
+												dom.i
+													className: "fa fa-thumbs-o-up"
+											dom.a
+												className: "button hollow small secondary radius-10",
+												href: @props.vote_down,
+												onClick: @handleClickVoteDown,
+												'data-method': 'post'
+												dom.i
+													className: "fa fa-thumbs-o-down",																	
 
 @CardAnswer = React.createClass
 	displayName: 'CardAnswer'

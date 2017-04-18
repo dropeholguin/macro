@@ -1,7 +1,1 @@
-<%= react_component 'ShowCard', {card_id: @question.id,title: @question.title, answers: @answers, description: markdown(@question.description_markdown), choice: @question.choice, tag_list: @question.tag_list, submit_img: image_path('submit.png'), explanation: markdown(@question.explanation_markdown)} %>
-
-<%= pluralize @question.reputation_for(:votes).to_i, "vote" %>
-<% if current_user && !current_user.voted_for?(@question) %>
-  | <%= link_to "up", vote_question_path(@question, type: "up"), method: "post" %>
-  | <%= link_to "down", vote_question_path(@question, type: "down"), method: "post" %>
-<% end %>
+<%= react_component 'ShowCard', {card_id: @question.id,title: @question.title, answers: @answers, description: markdown(@question.description_markdown), choice: @question.choice, tag_list: @question.tag_list, submit_img: image_path('submit.png'), explanation: markdown(@question.explanation_markdown), vote_up: vote_question_path(@question, type: "up"), vote_down: vote_question_path(@question, type: "down"), votes: @question.reputation_for(:votes).to_i, current_user: current_user, current_user_voted: !current_user.voted_for?(@question)} %>

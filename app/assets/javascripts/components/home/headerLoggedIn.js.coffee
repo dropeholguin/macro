@@ -84,9 +84,12 @@ dom = React.DOM
 										'data-method': "delete",
 										rel: "nofollow",
 										href: @props.sign_out,
+										ref: "signOut",
+										onClick: @handleClick,
 										dom.i
 											className: "fa fa-sign-out",
 											'aria-hidden': "true",
 											"Log Out"
+
 
 
