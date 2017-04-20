@@ -4,26 +4,8 @@ dom = React.DOM
 	displayName: 'ShowCard'
 	getInitialState: ->
 		right_answer: "0"
-	handleClickVoteUp: (event) ->
-		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
-	handleClickVoteDown: (event) ->
-		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
-	handleClick: (event) ->
-		document.getElementById('explanation-card').style.display = 'block'
-		document.getElementById('run-card').style.display = 'none'
-		document.getElementById('back-card').style.display = 'inline-block'
-		if ($('.this-ans').length > 0)
-			$('.this-ans').addClass "right-color"
-		if ($('.this-ansn').length > 0)
-			$('.this-ansn').addClass "wrong-color"
-		selected = $('input[name=option]:checked').map(-> @id).get()
-		$.ajax
-	      url: '/run_question'
-	      type: 'POST'
-	      data: checkbox: selected, card_id: @props.card_id
-      	console.log ("This is selected: "+selected) 
-      	 $("input").prop('disabled', true)     		
-	 	 $.amaran content: {'title': 'Congratulations!','message': 'You ran a card!', 'info':'You got 2 points more', 'icon':'fa fa-flag'}, theme: 'awesome blue', delay :10000
+	componentDidMount: ->
+		$("input").prop('disabled', true)
 	render: ->	
 		if(@props.votes > 0)
 			rateColor = "rate-green"
@@ -86,17 +68,9 @@ dom = React.DOM
 									dom.a 
 										id: "run-card",
 										className: "button large radius-10",
-										onClick: @handleClick,
-										ref: "runCard",
-										"RUN"
-								dom.div
-									className: "small-12 columns text-right",
-									dom.a 
-										id: "back-card",
 										href: "/questions",
-										style: {display: 'none'},
-										className: "button large radius-10",
-										"BACK",
+										ref: "runCard",
+										"BACK"								
 								if(@props.current_user and @props.current_user_voted)		
 									dom.div
 										className: "small-12 columns",
@@ -152,7 +126,7 @@ dom = React.DOM
 						type: typeOption,	
 					dom.label
 						htmlFor: "#{@props.answer.id}",
-						@props.answer.answer_markdown				
+						dangerouslySetInnerHTML: __html: @props.answer.answer_markdown.toString()				
 			
 @TagList = React.createClass
 	displayName: 'TagList'

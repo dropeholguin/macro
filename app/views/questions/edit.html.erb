@@ -4,12 +4,13 @@
   	<%= f.label :title %>
   	<%= f.text_field :title %>
     <%= f.label :description_markdown %>
-    <%= f.text_area :description_markdown, id: "description" %>
+    <%= f.text_area :description_markdown, id: "description2" %>
     <%= f.label :explanation_markdown %>
-    <%= f.text_area :explanation_markdown, id: "explanation" %>
+    <%= f.text_area :explanation_markdown, id: "explanation2" %>
     <%= f.label :tag_list, "Topics" %>
-    <%= f.text_field :tag_list, 'data-delimiter' => ', ', multiple: true, value: @question.tag_list.join(", ") %>
   <div class="actions">
     <%= f.submit "Continue" %>
   </div>
 <% end %>
+
+<%= react_component 'EditCard', {card_id: @question.id,title: @question.title, answers: @answers, description: @question.description_markdown, choice: @question.choice, tag_list: @question.tag_list, submit_img: image_path('submit.png'), explanation: @question.explanation_markdown,csrfToken: form_authenticity_token} %>

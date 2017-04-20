@@ -1,13 +1,13 @@
 dom = React.DOM 	
 
-@NewCard = React.createClass
-	displayName: 'NewCard'
+@EditCard = React.createClass
+	displayName: 'EditCard'
 	getInitialState: ->
 		name: 'New Card'
 	getDefaultProps: ->
 		url: '/questions'
 	componentDidMount: ->
-		$(@refs.tagsInput).autocomplete source: initTagInput
+		$(@refs.tagsInputEdit).autocomplete source: initTagInput
 		$(document).ready initTagInput
 		$(document).on 'page:load', initTagInput
 	render: ->
@@ -20,9 +20,7 @@ dom = React.DOM
 					dom.div
 						className: "row lightblue-box margin-auto"
 						dom.h4 {},
-							"CREATE A CARD"
-						dom.p {},
-							"Gain more CARDS by creating CARDS!"
+							"EDIT A CARD"
 					dom.div
 						className: "row white-background"
 						dom.div
@@ -30,8 +28,11 @@ dom = React.DOM
 							dom.div
 								id: "card-container"
 								dom.form 
-									method: 'POST',
-									action: @props.url,
+									className: "edit_question",
+									id: "edit_question_#{@props.card_id}",	
+									encType: "multipart/form-data",
+									method: 'post',
+									action: "/questions/#{@props.card_id}",
 									dom.input
 										key: "utf8"
 										name: "utf8"
@@ -43,6 +44,10 @@ dom = React.DOM
 										type: "hidden"
 										value: @props.csrfToken
 										});		
+									dom.input
+										name: "_method",
+										type: "hidden",
+										method: "patch",
 									dom.label {},
 										"TITLE"
 									dom.input
@@ -50,11 +55,13 @@ dom = React.DOM
 										type: "text"
 										placeholder: "CARD Tilte",
 										name: "question[title]",
+										value: @props.title,
 									dom.label {},
 										"DESCRIPTION"
 									dom.textarea
 										id: "description",
 										name: "question[description_markdown]",
+										@props.description
 									dom.div 
 										className: "margin-20",
 										dom.label {},
@@ -168,6 +175,7 @@ dom = React.DOM
 									dom.textarea
 										id: "explanation",
 										name: "question[explanation_markdown]",
+										@props.explanation
 									dom.div 
 										className: "margin-20",
 										dom.label {},
@@ -178,14 +186,13 @@ dom = React.DOM
 											name: "question[tag_list][]",
 											id: "question_tag_list",
 											className: "tagsinput",
-											ref: "tagsInput",
+											ref: "tagsInputEdit",
+											value: @props.tag_list
 									dom.input
 										className: "button large green-btn",
 										type: "submit",
 										name: "commit",
-										value: "SUBMIT",
-										ref: "submit"
+										value: "CONTINUE",
+										'data-disable-with': "CONTINUE",
 						dom.div
 							className: "large-4 columns"	
-						Components.NewCard = @NewCard
-

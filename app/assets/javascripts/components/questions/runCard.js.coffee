@@ -17,13 +17,16 @@ dom = React.DOM
 		if ($('.this-ansn').length > 0)
 			$('.this-ansn').addClass "wrong-color"
 		selected = $('input[name=option]:checked').map(-> @id).get()
+		if ($('.this-ans').length > 0 and $('input[name=option]:checked').length > 0)
+	 		$.amaran content: {'title': 'Congratulations!','message': 'You ran a card!', 'info':'You got 2 points more', 'icon':'fa fa-flag'}, theme: 'awesome blue', delay :10000
+		if ($('.this-ansn').length > 0 and selected)
+	 		$.amaran content: {'title': 'Sorry!','message': 'You ran a card!', 'info':'You lost 2 points', 'icon':'fa fa-exclamation'}, theme: 'awesome error', delay :10000
 		$.ajax
 	      url: '/run_question'
 	      type: 'POST'
 	      data: checkbox: selected, card_id: @props.card_id
       	console.log ("This is selected: "+selected) 
       	 $("input").prop('disabled', true)     		
-	 	 $.amaran content: {'title': 'Congratulations!','message': 'You ran a card!', 'info':'You got 2 points more', 'icon':'fa fa-flag'}, theme: 'awesome blue', delay :10000
 	render: ->	
 		if(@props.votes > 0)
 			rateColor = "rate-green"

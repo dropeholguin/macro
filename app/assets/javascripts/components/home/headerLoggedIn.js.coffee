@@ -11,7 +11,9 @@ dom = React.DOM
 		if(@props.points == null)
 			@setState(
 				points: 0 
-			)
+			) 
+	componentWillReceiveProps: (nextProps) ->
+  	  @setState points: nextProps.points   
 	render: ->
 		dom.div
 			className: "root",
