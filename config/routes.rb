@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 	root to: "home#index"
 
 	resources :questions do
+		collection do
+			post :import
+		end
 		member do
 			post :vote
 		end
@@ -14,4 +17,5 @@ Rails.application.routes.draw do
 	post "next_card", to: 'questions#next_card'
 	get "run_cards", to: 'questions#card'
 	get "user_profile", to: 'profile#user_profile'
+	get "import_and_export", to: 'questions#import_and_export'
 end

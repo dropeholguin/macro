@@ -60,6 +60,8 @@ gem 'jquery-ui-rails'
 gem 'gioco'
 #gem for reputation
 gem 'activerecord-reputation-system'
+gem 'roo'
+
 
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'

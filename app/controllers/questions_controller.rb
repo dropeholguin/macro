@@ -1,7 +1,8 @@
 class QuestionsController < ApplicationController
 	before_action :set_question, only: [:show, :edit, :update, :destroy]
 	before_filter :authenticate_user!
- 
+ 	load_and_authorize_resource only: [:import_and_export]
+
 	def index
 		if params[:query].present? || params[:the_tag]
 			@questions = Question.search(params)
@@ -11,7 +12,11 @@ class QuestionsController < ApplicationController
 		else
 			@questions = Question.all
 		end
-
+		respond_to do |format|
+		  format.html
+		  format.csv { send_data @questions.to_csv }
+		  format.xls 
+		end
 	end
 
 	def card
@@ -127,6 +132,15 @@ class QuestionsController < ApplicationController
 	  @question = Question.find(params[:id])
 	  @question.add_or_update_evaluation(:votes, value, current_user)
 	  redirect_to :back, notice: "Thank you for voting"
+	end
+
+	def import_and_export
+		
+	end
+
+	def import
+		Question.import(params[:file])
+		redirect_to root_url, notice: 'Questions imported.'
 	end
 
 	private
