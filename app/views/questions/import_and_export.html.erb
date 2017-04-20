@@ -1,0 +1,11 @@
+<p>
+  Download:
+  <%= link_to "CSV", questions_path(format: "csv") %> |
+  <%= link_to "Excel", questions_path(format: "xls") %>
+</p>
+
+<h2>Import Questions</h2>
+<%= form_tag import_questions_path, multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "Import" %>
+<% end %>

@@ -1,7 +1,8 @@
 class QuestionsController < ApplicationController
 	before_action :set_question, only: [:show, :edit, :update, :destroy]
 	before_filter :authenticate_user!
- 
+ 	load_and_authorize_resource only: [:import_and_export]
+
 	def index
 		if params[:query].present? || params[:the_tag]
 			@questions = Question.search(params)
@@ -11,7 +12,11 @@ class QuestionsController < ApplicationController
 		else
 			@questions = Question.all
 		end
-
+		respond_to do |format|
+		  format.html
+		  format.csv { send_data @questions.to_csv }
+		  format.xls 
+		end
 	end
 
 	def card
@@ -19,10 +24,20 @@ class QuestionsController < ApplicationController
 		if @user.points > 0
 			@question = Question.offset(rand(Question.count)).first
 			@answers = @question.answers
+			if @user.streak >= 5
+				@user.update_attributes(points: @user.points + 2)
+			elsif @user.streak == 0
+				@user.update_attributes(points: @user.points - 2)
+			elsif @user.streak < 0
+				@user.update_attributes(streak: 0)
+				respond_to do |format|
+					format.html { redirect_to questions_url, notice: '' }				
+				end
+			end
 		else 
 			respond_to do |format|
 				format.html { redirect_to questions_url, notice: '' }
-			end
+			end		
 		end
 	end
 
@@ -38,9 +53,10 @@ class QuestionsController < ApplicationController
 		answers_correct = card.answers.select { |answer| answer.is_correct == true }
 		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
 		if is_passed == true
-			@user.update_attributes(points: @user.points + 2)						
+			@user.update_attributes(streak: @user.streak + 1)
+		else
+			@user.update_attributes(streak: -1)
 		end
-
 		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed)
 		@card.save
 		head :ok
@@ -127,6 +143,15 @@ class QuestionsController < ApplicationController
 	  @question = Question.find(params[:id])
 	  @question.add_or_update_evaluation(:votes, value, current_user)
 	  redirect_to :back, notice: "Thank you for voting"
+	end
+
+	def import_and_export
+		
+	end
+
+	def import
+		Question.import(params[:file])
+		redirect_to root_url, notice: 'Questions imported.'
 	end
 
 	private
