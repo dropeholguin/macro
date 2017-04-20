@@ -68,6 +68,13 @@ dom = React.DOM
 											className: "fa fa-eye",
 											'aria-hidden': "true",
 											"Show Cards",
+								dom.li {},
+									dom.a
+										href: "/run_cards",
+										dom.i
+											className: "fa fa-eye",
+											'aria-hidden': "true",
+											"Run Card",
 						dom.li 
 							className: "menu-item-bar",
 							dom.a 
