@@ -19,6 +19,11 @@ class QuestionsController < ApplicationController
 		end
 	end
 
+	def questions_list
+		@user = current_user
+		@questions = Question.questions_list(@user.id)
+	end
+
 	def card
 		@user = current_user
 		if @user.points > 0

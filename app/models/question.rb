@@ -14,6 +14,8 @@ class Question < ApplicationRecord
 
 	enum tags: ["SAS Programming", "SAS Macro", "DI Studio", "SAS Management Console", "Enterprise Guide", "Workspace Management"]
 
+	scope :questions_list, -> (user_id) { where(user_id: user_id) }
+
 	index_name("questions")
 	mapping do
 	    indexes :id, index: :not_analyzed

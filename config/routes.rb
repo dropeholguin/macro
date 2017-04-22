@@ -18,4 +18,5 @@ Rails.application.routes.draw do
 	get "run_cards", to: 'questions#card'
 	get "user_profile", to: 'profile#user_profile'
 	get "import_and_export", to: 'questions#import_and_export'
+	get "questions_list", to: 'questions#questions_list'
 end
