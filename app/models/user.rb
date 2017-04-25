@@ -4,6 +4,7 @@ has_many :levels
 has_many :evaluations, class_name: "RSEvaluation", as: :source
 has_many :cards
 has_many :comments
+has_many :flags, dependent: :destroy
 
 has_reputation :votes, source: {reputation: :votes, of: :questions}, aggregated_by: :sum
 has_reputation :votes, source: {reputation: :votes, of: :comments}, aggregated_by: :sum

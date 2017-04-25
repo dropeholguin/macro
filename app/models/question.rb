@@ -8,6 +8,7 @@ class Question < ApplicationRecord
 	has_many :answers, inverse_of: :question
 	has_many :cards
 	has_many :comments
+	has_many :flags, dependent: :destroy
 	
 	accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
 	validates :title, :description_markdown, :explanation_markdown, presence: true
