@@ -11,7 +11,11 @@ Rails.application.routes.draw do
 		member do
 			post :vote
 		end
-		resources :comments, only: [:create, :destroy]
+		resources :comments, only: [:create, :destroy] do
+			member do
+				post :vote
+			end
+		end
 	end
 
 	post "run_question", to: 'questions#run_question'

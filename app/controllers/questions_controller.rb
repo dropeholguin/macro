@@ -69,6 +69,7 @@ class QuestionsController < ApplicationController
 
 	def show
 		@answers = @question.answers
+		@comments = @question.comments
 	end
 
 	def new
