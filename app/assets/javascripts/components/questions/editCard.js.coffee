@@ -4,12 +4,17 @@ dom = React.DOM
 	displayName: 'EditCard'
 	getInitialState: ->
 		name: 'New Card'
+		title:  @props.title
+		description: @props.description
+		explanation: @props.explanation
+		tag_list: @props.tag_list 
 	getDefaultProps: ->
 		url: '/questions'
 	componentDidMount: ->
 		$(@refs.tagsInputEdit).autocomplete source: initTagInput
 		$(document).ready initTagInput
 		$(document).on 'page:load', initTagInput
+	handleChangeOptions: (event) ->
 	render: ->
 		dom.div
 			className: "root",
@@ -30,9 +35,9 @@ dom = React.DOM
 								dom.form 
 									className: "edit_question",
 									id: "edit_question_#{@props.card_id}",	
-									encType: "multipart/form-data",
 									method: 'post',
 									action: "/questions/#{@props.card_id}",
+									acceptCharset: "UTF-8",
 									dom.input
 										key: "utf8"
 										name: "utf8"
@@ -55,127 +60,19 @@ dom = React.DOM
 										type: "text"
 										placeholder: "CARD Tilte",
 										name: "question[title]",
-										value: @props.title,
+										value: @state.title,
 									dom.label {},
 										"DESCRIPTION"
 									dom.textarea
 										id: "description",
 										name: "question[description_markdown]",
-										@props.description
-									dom.div 
-										className: "margin-20",
-										dom.label {},
-											"ANSWERS"
-										dom.div
-											className: "nested-fields",
-											dom.div
-												className: "row",
-												dom.div
-													className: "large-8 columns",
-													dom.input
-														type: "text",
-														id: "question_answers_attributes_0_answer_markdown",
-														name: "question[answers_attributes][0][answer_markdown]",
-												dom.div
-													className: "large-4 columns"
-													dom.select 
-														name: "question[answers_attributes][0][is_correct]",
-														dom.option
-															value: "0",															
-															"Incorrect",
-														dom.option
-															value: "1",
-															id: "question_answers_attributes_0_is_correct",
-															"Correct",
-												dom.input
-													type: "hidden",
-													id: "question_answers_attributes_0_answer_markdown",
-													name: "question[answers_attributes][0][_destroy]",
-													value: "false",
-										dom.div
-											className: "nested-fields",
-											dom.div
-												className: "row",
-												dom.div
-													className: "large-8 columns",
-													dom.input
-														type: "text",
-														id: "question_answers_attributes_1_answer_markdown",
-														name: "question[answers_attributes][1][answer_markdown]",
-												dom.div
-													className: "large-4 columns"
-													dom.select
-														name: "question[answers_attributes][1][is_correct]",
-														dom.option
-															value: "false",
-															"Incorrect",
-														dom.option
-															value: "true",
-															id: "question_answers_attributes_1_is_correct",
-															"Correct",
-												dom.input
-													type: "hidden",
-													id: "question_answers_attributes_1_answer_markdown",
-													name: "question[answers_attributes][1][_destroy]",
-													value: "false",
-										dom.div
-											className: "nested-fields",
-											dom.div
-												className: "row",
-												dom.div
-													className: "large-8 columns",
-													dom.input
-														type: "text",
-														id: "question_answers_attributes_2_answer_markdown",
-														name: "question[answers_attributes][2][answer_markdown]",
-												dom.div
-													className: "large-4 columns"
-													dom.select 
-														name: "question[answers_attributes][2][is_correct]",
-														dom.option
-															value: "false",
-															"Incorrect",
-														dom.option
-															value: "true",
-															id: "question_answers_attributes_2_is_correct",
-															"Correct",
-												dom.input
-													type: "hidden",
-													id: "question_answers_attributes_2_answer_markdown",
-													name: "question[answers_attributes][2][_destroy]",
-													value: "false",		
-										dom.div		
-											className: "nested-fields",											
-											dom.a
-												'data-association-insertion-template': "<div class='nested-fields'>
-													<div class='row'>
-														<div class='large-8 columns'>
-															<input type='text' name='question[answers_attributes][new_answers][answer_markdown]' id='question_answers_attributes_new_answers_answer_markdown' />
-														</div>
-														<div class='large-4 columns'>
-															<select name='question[answers_attributes][new_answers][is_correct]'>
-																<option value='true' id='question_answers_attributes_new_answers_is_correct'>
-																	Correct
-																</option>
-																<option value='false'>
-																	Incorrect
-																</option>
-															</select>
-														</div>
-														<input type='hidden' name='question[answers_attributes][new_answers][_destroy]' id='question_answers_attributes_new_answers__destroy' value='false' /><div class='margin-15'><a class='remove_fields dynamic button small alert radius-10' href='#'>Remove</a></div>
-													</div>
-												</div>",
-												href: "#",
-												'data-association':"answer",
-												'data-associations':"answers",
-												className: "add_fields",
-												'ADD "OTHER"'
+										@state.description									
 									dom.label {},
 										"EXPLANATION"
 									dom.textarea
 										id: "explanation",
 										name: "question[explanation_markdown]",
-										@props.explanation
+										@state.explanation
 									dom.div 
 										className: "margin-20",
 										dom.label {},
@@ -187,7 +84,7 @@ dom = React.DOM
 											id: "question_tag_list",
 											className: "tagsinput",
 											ref: "tagsInputEdit",
-											value: @props.tag_list
+											value: @state.tag_list
 									dom.input
 										className: "button large green-btn",
 										type: "submit",

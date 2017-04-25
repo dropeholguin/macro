@@ -1,22 +1,11 @@
 dom = React.DOM 
 
-@ShowCard = React.createClass
-	displayName: 'ShowCard'
+@CardList = React.createClass
+	displayName: 'CardList'
 	getInitialState: ->
 		right_answer: "0"
-		votes: @props.votes
 	componentDidMount: ->
 		$("input").prop('disabled', true)
-		$(@refs.anim1).addClass('animated fadeInUp')
-		$(@refs.anim2).addClass('animated pulse')
-	voteUpClicked: (event) ->
-		$.ajax
-			url: @props.vote_up
-			type: 'post'
-		@voteChanged					
-	voteChanged: (event) ->
-		@state.votes = event.target.value
-		@forceUpdate()
 	render: ->	
 		if(@props.votes > 0)
 			rateColor = "rate-green"
@@ -42,7 +31,7 @@ dom = React.DOM
 					dom.div
 						className: "row white-background",
 						dom.div
-							className: "answer-container large-8 columns"
+							className: "answer-container large-8 large-centered columns"
 							dom.h4
 								className: "weight",
 								style: {color: "#07C", fontWeight: "bold"},
@@ -57,7 +46,7 @@ dom = React.DOM
 										className: "weight",
 										"Answers:"
 									for answer in @props.answers
-										React.createElement CardAnswer, key: answer.id, answer: answer, choice: @props.choice, right_answer: @state.right_answer
+										React.createElement CardAnswerB, key: answer.id, answer: answer, choice: @props.choice, right_answer: @state.right_answer
 								dom.div
 									id: "explanation-card",
 									style: {display: 'none'}
@@ -72,7 +61,7 @@ dom = React.DOM
 								dom.div
 									className: "small-8 columns",
 									for tag in @props.tag_list
-										React.createElement TagList, key: tag.id, tag: tag,
+										React.createElement TagListB, key: tag.id, tag: tag,
 																	
 								dom.div
 									className: "small-12 columns text-right",
@@ -95,14 +84,15 @@ dom = React.DOM
 												className: "fa fa-star-o "+rateColor,	
 											dom.span
 												className: rateColor,
-												onChange: @voteChanged,	
-												" #{@state.votes} " + numVotes,	
+												" #{@props.votes} "+numVotes,	
 										dom.div
 											className: "small-6 columns text-right"								
 											dom.a
 												style: {marginRight: "5px"},
 												className: "button hollow small secondary radius-10",
-												onClick: @voteUpClicked,
+												href: @props.vote_up,
+												onClick: @handleClickVoteUp,
+												'data-method': 'post'
 												dom.i
 													className: "fa fa-thumbs-o-up"
 											dom.a
@@ -111,24 +101,9 @@ dom = React.DOM
 												onClick: @handleClickVoteDown,
 												'data-method': 'post'
 												dom.i
-													className: "fa fa-thumbs-o-down",
-						dom.div
-							className: "small-4 columns",
-							dom.span 
-								dom.div
-									className: "large-8 large-centered columns infinite"
-									ref: "anim2",
-									dom.img
-										src: @props.img
-								dom.div
-									className: "text-center spde-mode",
-									ref: "anim1",
-									"You're on"
-									dom.div
-										className: "spde-mode-title",
-										"SPDE MODE!"	
+													className: "fa fa-thumbs-o-down",																	
 
-@CardAnswer = React.createClass
+@CardAnswerB = React.createClass
 	displayName: 'CardAnswer'
 	render: ->
 		if(@props.choice == "simple")
@@ -153,7 +128,7 @@ dom = React.DOM
 						htmlFor: "#{@props.answer.id}",
 						dangerouslySetInnerHTML: __html: @props.answer.answer_markdown.toString()				
 			
-@TagList = React.createClass
+@TagListB = React.createClass
 	displayName: 'TagList'
 	render: ->			
 		dom.li 

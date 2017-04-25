@@ -12,8 +12,12 @@ dom = React.DOM
 			@setState(
 				points: 0 
 			) 
-	componentWillReceiveProps: (nextProps) ->
-  	  @setState points: nextProps.points   
+  	pointsChanged: (event) ->
+  		@state.points = event.target.value
+  		@forceUpdate()
+	runCardClicked: (event) ->
+		if @state.points == 0
+	 		$.amaran content: {'title': 'Sorry!','message': 'You dont have enough tokens to run a card!', 'info':'!', 'icon':'fa fa-flag'}, theme: 'awesome error', delay :10000          		
 	render: ->
 		dom.div
 			className: "root",
@@ -41,7 +45,7 @@ dom = React.DOM
 						dom.li 
 							className: "menu-item-bar",
 							dom.h3 {},
-								"MACRO PEOPLE",													
+								"MACRO CARDS",													
 				dom.div
 					className: "top-bar-right",
 					dom.ul
@@ -73,13 +77,15 @@ dom = React.DOM
 										href: "/run_cards",
 										dom.i
 											className: "fa fa-eye",
+											onClick: @runCardClicked,
 											'aria-hidden': "true",
 											"Run Card",
 						dom.li 
 							className: "menu-item-bar",
 							dom.a 
 								className: "radius-10 card-mode-btn",
-								"#{@state.points} Cards Available"
+								onChange: @pointsChanged,
+								"#{@state.points} TOKENS"
 						dom.li {},
 							dom.a
 								href: "#",
@@ -94,7 +100,6 @@ dom = React.DOM
 										rel: "nofollow",
 										href: @props.sign_out,
 										ref: "signOut",
-										onClick: @handleClick,
 										dom.i
 											className: "fa fa-sign-out",
 											'aria-hidden': "true",

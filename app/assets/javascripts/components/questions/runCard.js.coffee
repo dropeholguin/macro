@@ -95,6 +95,7 @@ dom = React.DOM
 									dom.a 
 										id: "back-card",
 										href: @props.run_cards_path,
+										onClick: @nextQuestionClicked,
 										style: {display: 'none'},
 										className: "button large radius-10",
 										"NEXT",

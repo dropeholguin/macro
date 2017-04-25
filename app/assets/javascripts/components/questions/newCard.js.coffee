@@ -45,11 +45,28 @@ dom = React.DOM
 										});		
 									dom.label {},
 										"TITLE"
-									dom.input
-										id: "question_title",
-										type: "text"
-										placeholder: "CARD Tilte",
-										name: "question[title]",
+									dom.div
+										className: "row"
+										dom.div
+											className: "small-8 columns"
+											dom.input
+												id: "question_title",
+												type: "text"
+												placeholder: "CARD Tilte",
+												name: "question[title]",
+										dom.div
+											className: "small-4 columns"
+											dom.select 
+												name: "options",
+												dom.option
+													value: "0",															
+													"Single Choice",
+												dom.option
+													value: "1",															
+													"Multiple Choice",
+												dom.option
+													value: "2",															
+													"Open CARD",										
 									dom.label {},
 										"DESCRIPTION"
 									dom.textarea
