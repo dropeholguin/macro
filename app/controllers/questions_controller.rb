@@ -29,8 +29,12 @@ class QuestionsController < ApplicationController
 		if @user.points > 0
 			@question = Question.offset(rand(Question.count)).first
 			@answers = @question.answers
-			if @user.streak >= 5
+			if @user.streak == 4
 				@user.update_attributes(points: @user.points + 2)
+			elsif @user.streak < 9 && @user.streak >= 5
+				@user.update_attributes(points: @user.points + 3)
+			elsif @user.streak >= 9
+				@user.update_attributes(points: @user.points + 4)
 			elsif @user.streak == 0
 				@user.update_attributes(points: @user.points - 2)
 			elsif @user.streak < 0
@@ -70,6 +74,7 @@ class QuestionsController < ApplicationController
 	def show
 		@answers = @question.answers
 		@comments = @question.comments
+		@state = @question.evaluators_for(:votes).include?(current_user)
 	end
 
 	def new
