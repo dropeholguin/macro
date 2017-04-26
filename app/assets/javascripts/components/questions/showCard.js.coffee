@@ -6,7 +6,6 @@ dom = React.DOM
 		right_answer: "0"
 		votes: @props.votes
 	componentDidMount: ->
-		$("input").prop('disabled', true)
 		$(@refs.anim1).addClass('animated fadeInUp')
 		$(@refs.anim2).addClass('animated pulse')
 	voteUpClicked: (event) ->
