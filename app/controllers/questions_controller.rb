@@ -29,23 +29,17 @@ class QuestionsController < ApplicationController
 		if @user.points > 0
 			@question = Question.offset(rand(Question.count)).first
 			@answers = @question.answers
-			if @user.streak == 4
-				@user.update_attributes(points: @user.points + 2)
-			elsif @user.streak < 9 && @user.streak >= 5
-				@user.update_attributes(points: @user.points + 3)
-			elsif @user.streak >= 9
-				@user.update_attributes(points: @user.points + 4)
-			elsif @user.streak == 0
-				@user.update_attributes(points: @user.points - 2)
-			elsif @user.streak < 0
+			if @user.streak < 0
 				@user.update_attributes(streak: 0)
 				respond_to do |format|
-					format.html { redirect_to questions_url, notice: '' }				
-				end
+					format.html { redirect_to root_path, alert: '' }
+				end				
+			elsif @user.streak == 0
+				@user.update_attributes(points: @user.points - 2)
 			end
 		else 
 			respond_to do |format|
-				format.html { redirect_to questions_url, notice: '' }
+				format.html { redirect_to root_path, alert: '' }
 			end		
 		end
 	end
@@ -63,12 +57,22 @@ class QuestionsController < ApplicationController
 		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
 		if is_passed == true
 			@user.update_attributes(streak: @user.streak + 1)
+			if @user.streak == 4
+				@user.update_attributes(points: @user.points + 2)
+			elsif @user.streak < 9 && @user.streak >= 5
+				@user.update_attributes(points: @user.points + 3)
+			elsif @user.streak >= 9
+				@user.update_attributes(points: @user.points + 4)
+			end
 		else
 			@user.update_attributes(streak: -1)
 		end
 		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed)
 		@card.save
-		head :ok
+
+		respond_to do |format|
+		 	format.json  { render json: { is_passed: is_passed, points: @user.points } }
+		end
 	end
 
 	def show
