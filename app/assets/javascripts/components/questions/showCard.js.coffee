@@ -5,12 +5,19 @@ dom = React.DOM
 	getInitialState: ->
 		right_answer: "0"
 		votes: @props.votes
+		comments: []
 	componentDidMount: ->
 		$(@refs.anim1).addClass('animated fadeInUp')
 		$(@refs.anim2).addClass('animated pulse')
 		@props.votes
 	componentWillMount: ->
-		@forceUpdate()
+		@fetchVotes()
+		setInterval(@fetchVotes, 1000)
+	fetchVotes: ->
+		$.getJSON(
+			@props.comments,
+			(data) => @setState (votes: data)
+		)			
 	voteUpClicked: (event) ->
 		$.ajax
 			url: @props.vote_up
@@ -136,7 +143,7 @@ dom = React.DOM
 												className: "button hollow small secondary radius-10",
 												onClick: @voteDownClicked,
 												dom.i
-													className: "fa fa-thumbs-o-down",
+													className: "fa fa-thumbs-o-down",										
 						dom.div
 							className: "small-4 columns",
 							dom.span 
@@ -151,7 +158,12 @@ dom = React.DOM
 									"You're on"
 									dom.div
 										className: "spde-mode-title",
-										"SPDE MODE!"	
+										"SPDE MODE!"
+						dom.div	
+							className: "row",			
+							dom.div
+								className: "large-8 columns",
+								React.createElement Comments, csrfToken: @props.csrfToken, url: "/questions/#{@props.card_id}/comments", comments: @props.comments		
 
 @CardAnswer = React.createClass
 	displayName: 'CardAnswer'

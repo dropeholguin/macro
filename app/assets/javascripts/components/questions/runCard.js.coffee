@@ -26,15 +26,15 @@ dom = React.DOM
       	console.log ("This is selected: "+selected) 
       	 $("input").prop('disabled', true)    
   	componentDidMount: ->
-  		forceUpdate() 		
+  		@forceUpdate() 		
+	componentWillMount: ->
+		@forceUpdate()
 	nextQuestionClicked: (event) ->
 		$.ajax
 			url: @props.run_cards_path
 			type: 'GET'
-			success: () ->
-				@forceUpdate()
-				console.log ('jeejeje')
-		console.log ('it works!')
+		$(document).ajaxStop ->
+  			setTimeout location.reload(), 5000
 	render: ->	
 		if(@props.votes > 0)
 			rateColor = "rate-green"
@@ -111,6 +111,8 @@ dom = React.DOM
 								
 @RunCardAnswer = React.createClass
 	displayName: 'RunCardAnswer'
+	componentDidMount: ->
+		$(@refs.optionToSelect).addClass('animated fadeInUp')
 	render: ->
 		if(@props.choice == "simple")
 			typeOption = "radio"
@@ -121,6 +123,7 @@ dom = React.DOM
 		else
 			rightColor = "this-ansn"
 		dom.div
+			ref: "optionToSelect",
 			className: "root margin-15 answer-card "+rightColor,
 			dom.div
 				className: "row",							
