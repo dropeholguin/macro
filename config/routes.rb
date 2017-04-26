@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 	end
 
 	resources :flags, only: [:create]
+	resources :sessions, only: [:new, :create]
 	
 	post "run_question", to: 'questions#run_question'
 	post "next_card", to: 'questions#next_card'

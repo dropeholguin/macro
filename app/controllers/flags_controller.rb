@@ -3,7 +3,7 @@ class FlagsController < ApplicationController
 
 	def create
 	    @question = Question.find(params[:question_id])
-	    @flag = Flag.create(params[:reason].permit(:reason))
+	    @flag = Flag.new(reason: params[:reason])
 	    @flag.user = current_user
 	    @flag.question_id = @question.id
 

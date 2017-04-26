@@ -5,6 +5,7 @@ class Question < ApplicationRecord
   	acts_as_taggable
   	acts_as_taggable_on :tags
 	belongs_to :user
+	belongs_to :session
 	has_many :answers, inverse_of: :question
 	has_many :cards
 	has_many :comments

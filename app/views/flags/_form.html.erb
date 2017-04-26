@@ -2,7 +2,7 @@
 	<div class="field space">
 		<%= label_tag "Reason:" %>
 		<%= text_area_tag :reason, "" %>
-		<%= hidden_field_tag :question_id, question_id %>
+		<%= hidden_field_tag :question_id, @question.id %>
 	</div>
 	<div class="actions text-center">
 		<%= submit_tag "Send", class: "button" %>
