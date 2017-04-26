@@ -100,3 +100,9 @@ input[type=radio]:not(old):checked + label{
   color: #169bd4 !important;
   font-weight: bolder;
 }
+.show-hide{
+  display: none;
+}
+.show-block{
+  display: 'block';
+}

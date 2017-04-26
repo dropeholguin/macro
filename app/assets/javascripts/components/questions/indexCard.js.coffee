@@ -2,34 +2,60 @@ dom = React.DOM
 
 @IndexCard = React.createClass
 	displayName: 'IndexCard'
+	getDefaultProps: ->
+		title_page: "CREATED CARDS"
+		description_page: "Manage your cards: review rating, edit, delete and read comments"
+	getInitialState: ->
+		title_page: @props.title_page
+		description_page: @props.description_page
 	render: ->
 		dom.div
 			className: "root",			
 			dom.div
 				className: "row lightblue-box margin-auto"
 				dom.h4 {},
-					"CREATED CARDS"
+					@state.title_page
 				dom.p {},
-					"Manage your questions: review rating, edit, delete and read comments"
+					@state.description_page
 					
 @Card = React.createClass
 	displayName: 'Card'
+	getDefaultProps: ->
+		button_1: "RUN"
+		button_2: "EDIT_D"
+		button_3: "DELETE_D"
+	getInitialState: ->
+		button_1: @props.button_1
+		button_2: @props.button_2 
+		button_3: @props.button_3
 	render: ->
+		if(@state.button_2 == "EDIT_D")
+			showButton = "show-hide"
+		else
+			showButton = "show-block"
 		dom.div 
 			className: "answer-container",
 			dom.div
 				className: "row",
 				dom.div 
-					className: "small-9 columns",
+					className: "small-7 columns",
 					dom.h5
 						style: {color: "#07C", fontWeight: "bold"},
 						@props.title	
 				dom.div
-					className: "small-3 text-right columns",
+					className: "small-5 text-right columns",
 					dom.a
-						className: "button small hollow secondary",
+						className: "button small hollow secondary margin-side" ,
 						href: "/questions/#{@props.id}",
-						"Run",
+						@state.button_1,
+					dom.a
+						className: "button small hollow secondary margin-side "+ showButton,
+						href: "/questions/#{@props.id}/edit",
+						@state.button_2,
+					dom.a
+						className: "button small hollow secondary margin-side "+showButton,
+						href: "#",
+						@state.button_3,
 			dom.div {},
 				dom.div
 					dangerouslySetInnerHTML: __html: @props.description.toString(),
