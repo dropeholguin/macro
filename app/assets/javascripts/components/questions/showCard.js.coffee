@@ -6,23 +6,46 @@ dom = React.DOM
 		right_answer: "0"
 		votes: @props.votes
 	componentDidMount: ->
-		$("input").prop('disabled', true)
 		$(@refs.anim1).addClass('animated fadeInUp')
 		$(@refs.anim2).addClass('animated pulse')
+		@props.votes
+	componentWillMount: ->
+		@forceUpdate()
 	voteUpClicked: (event) ->
 		$.ajax
 			url: @props.vote_up
 			type: 'post'
-		@voteChanged					
+		@setState(
+			votes:  @state.votes + 1
+		)
+		$(@refs.voteDown).hide()
+		$(@refs.voteUp).hide()
+		$(@refs.numVotesDiv).removeClass("small-6")
+		$(@refs.numVotesDiv).addClass("small-12 text-center animated bounce")
+		$(@refs.voteTitle).text("Currently Rating:")
+		$.amaran content: {'title': "You rated +1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
+	voteDownClicked: (event) ->
+		$.ajax
+			url: @props.vote_down
+			type: 'post'		
+		@setState(
+			votes:  @state.votes - 1
+		)
+		$(@refs.voteDown).hide()
+		$(@refs.voteUp).hide()
+		$(@refs.numVotesDiv).removeClass("small-6")
+		$(@refs.numVotesDiv).addClass("small-12 text-center animated bounce")
+		$(@refs.voteTitle).text("Currently Rating:")
+		$.amaran content: {'title': "You rated -1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
 	voteChanged: (event) ->
 		@state.votes = event.target.value
 		@forceUpdate()
 	render: ->	
-		if(@props.votes > 0)
+		if(@state.votes > 0)
 			rateColor = "rate-green"
-		if(@props.votes < 0)
+		if(@state.votes < 0)
 			rateColor = "rate-red"
-		if(@props.votes > 1 or @props.votes < -1)
+		if(@state.votes > 1 or @state.votes < -1)
 			numVotes = "Votes"
 		else
 			numVotes = "Vote"	
@@ -86,10 +109,12 @@ dom = React.DOM
 									dom.div
 										className: "small-12 columns",
 										dom.p
+											ref: "voteTitle",
 											className: "weight",
 											style: {color: "#07C", fontWeight: "bold"},
 											"Rate this card:",
 										dom.div
+											ref: "numVotesDiv",
 											className: "small-6 columns"
 											dom.i
 												className: "fa fa-star-o "+rateColor,	
@@ -100,16 +125,16 @@ dom = React.DOM
 										dom.div
 											className: "small-6 columns text-right"								
 											dom.a
+												ref: "voteUp",
 												style: {marginRight: "5px"},
 												className: "button hollow small secondary radius-10",
 												onClick: @voteUpClicked,
 												dom.i
 													className: "fa fa-thumbs-o-up"
-											dom.a
+											dom.button
+												ref: "voteDown",
 												className: "button hollow small secondary radius-10",
-												href: @props.vote_down,
-												onClick: @handleClickVoteDown,
-												'data-method': 'post'
+												onClick: @voteDownClicked,
 												dom.i
 													className: "fa fa-thumbs-o-down",
 						dom.div

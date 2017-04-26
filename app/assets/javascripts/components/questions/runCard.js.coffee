@@ -24,7 +24,17 @@ dom = React.DOM
 	      type: 'POST'
 	      data: checkbox: selected, card_id: @props.card_id
       	console.log ("This is selected: "+selected) 
-      	 $("input").prop('disabled', true)     		
+      	 $("input").prop('disabled', true)    
+  	componentDidMount: ->
+  		forceUpdate() 		
+	nextQuestionClicked: (event) ->
+		$.ajax
+			url: @props.run_cards_path
+			type: 'GET'
+			success: () ->
+				@forceUpdate()
+				console.log ('jeejeje')
+		console.log ('it works!')
 	render: ->	
 		if(@props.votes > 0)
 			rateColor = "rate-green"
@@ -94,7 +104,6 @@ dom = React.DOM
 									className: "small-12 columns text-right",
 									dom.a 
 										id: "back-card",
-										href: @props.run_cards_path,
 										onClick: @nextQuestionClicked,
 										style: {display: 'none'},
 										className: "button large radius-10",
