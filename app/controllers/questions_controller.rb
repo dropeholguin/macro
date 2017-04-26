@@ -74,6 +74,7 @@ class QuestionsController < ApplicationController
 	def show
 		@answers = @question.answers
 		@comments = @question.comments
+		@state = @question.evaluators_for(:votes).include?(current_user)
 	end
 
 	def new
