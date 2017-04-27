@@ -16,7 +16,8 @@ class SessionsController < ApplicationController
 				if !params[:question][:ids].empty?
 					params[:question][:ids].each do |question_id|
 						question = Question.find question_id
-						question.update_attributes(session_id: @session.id)
+						take = Take.new(question_id: question.id, session_id: @session.id)
+						take.save
 					end
 				end	
 				format.html { redirect_to root_url, notice: 'session was successfully created.' }
