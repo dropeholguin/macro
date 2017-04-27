@@ -4,13 +4,16 @@
 		<%= f.label :title %>
 		<%= f.text_field :title %>
 	</div>
-
-	<% @questions.each do |question| %>
-		<%= check_box_tag 'question[ids][]', question.id , { checked: true } %>
-        <%= react_component 'Card', {title: question.title, id: question.id, description: markdown(question.description_markdown), tag_list: question.tag_list,tag_path: request.url} %>
-	<% end %>
-
 	<div class="actions">
 		<%= f.submit "Save", class: "button", id: "save-session" %>
 	</div>
+
+	<% @questions.each do |question| %>
+		<div>
+			<%= check_box_tag 'question[ids][]', question.id %>
+			<%= label_tag 'select', 'Select' %>
+		</div>
+        <%= react_component 'Card', {title: question.title, id: question.id, description: markdown(question.description_markdown), tag_list: question.tag_list,tag_path: request.url} %>
+	<% end %>
+
 <% end %>
