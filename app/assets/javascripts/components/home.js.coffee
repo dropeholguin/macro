@@ -77,6 +77,7 @@ dom = React.DOM
 										dom.div
 											className: "large-8 large-centered columns",
 											dom.a
+												href: "/sessions",
 												className: "button large radius-10 orange",
 												"RUN"						
 
