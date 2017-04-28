@@ -41,9 +41,12 @@ dom = React.DOM
 							name: 'user[password]',
 							key: "password",
 							id: "user_password",
-							placeholder: "Your password",
+							placeholder: "Your password",						
 						dom.div
+							id: "remember-me",
 							className:"text-left",	
+							dom.label
+								htmlFor: "remember-me",
 							dom.input
 								className: "radius-10",
 								type: "checkbox",

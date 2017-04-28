@@ -7,9 +7,7 @@ dom = React.DOM
 		$.ajax
 			url: @props.url
 			type: "POST"
-			data: $(@refs.commentForm).serialize()			
-	componentDidMount: ->
-		simplemde = new SimpleMDE(element: $(@refs.textComment)[0])
+			data: $(@refs.commentForm).serialize()
 	render: ->
 		dom.div
 			className: "root",

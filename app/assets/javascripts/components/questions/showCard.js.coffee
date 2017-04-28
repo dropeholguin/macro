@@ -6,25 +6,27 @@ dom = React.DOM
 		right_answer: "0"
 		votes: @props.votes
 		comments: []
+		state: @props.state
 	componentDidMount: ->
 		$(@refs.anim1).addClass('animated fadeInUp')
 		$(@refs.anim2).addClass('animated pulse')
 		@props.votes
+		if(@state.state)
+			$(@refs.showVotes).hide()			
+		if(@state.state == false)
+			$(@refs.showComments).hide()
 	componentWillMount: ->
-		@fetchVotes()
-		setInterval(@fetchVotes, 1000)
-	fetchVotes: ->
-		$.getJSON(
-			@props.comments,
-			(data) => @setState (votes: data)
-		)			
+		if(@state.state)
+			$(@refs.showComments).show()
 	voteUpClicked: (event) ->
 		$.ajax
 			url: @props.vote_up
 			type: 'post'
 		@setState(
-			votes:  @state.votes + 1
+			votes:  @state.votes + 1,
+			state: true
 		)
+		$(@refs.showComments).show()		
 		$(@refs.voteDown).hide()
 		$(@refs.voteUp).hide()
 		$(@refs.numVotesDiv).removeClass("small-6")
@@ -37,13 +39,17 @@ dom = React.DOM
 			type: 'post'		
 		@setState(
 			votes:  @state.votes - 1
+			state: true
 		)
+		$(@refs.showComments).show()
 		$(@refs.voteDown).hide()
 		$(@refs.voteUp).hide()
 		$(@refs.numVotesDiv).removeClass("small-6")
 		$(@refs.numVotesDiv).addClass("small-12 text-center animated bounce")
 		$(@refs.voteTitle).text("Currently Rating:")
 		$.amaran content: {'title': "You rated -1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
+	flagButtonClicked: (event)->
+		 $("#my_popup").popup()
 	voteChanged: (event) ->
 		@state.votes = event.target.value
 		@forceUpdate()
@@ -63,6 +69,7 @@ dom = React.DOM
 				dom.div
 					className: "large-10 large-centered columns"
 					dom.div
+						ref: "test",
 						className: "row lightblue-box margin-auto"
 						dom.h4 {},
 							"RUN A CARD"
@@ -73,10 +80,20 @@ dom = React.DOM
 						className: "row white-background",
 						dom.div
 							className: "answer-container large-8 columns"
-							dom.h4
-								className: "weight",
-								style: {color: "#07C", fontWeight: "bold"},
-								@props.title,
+							dom.div
+								className: "row",
+								dom.div
+									className: "large-9 columns",
+									dom.h4
+										className: "weight",
+										style: {color: "#07C", fontWeight: "bold"},
+										@props.title,
+								dom.div
+									className: "large-3 columns text-right",
+									dom.button
+										className: "button small hollow alert my_popup_open",
+										onClick: @flagButtonClicked,
+										"Report"	
 							dom.div
 								dangerouslySetInnerHTML: __html: @props.description.toString(),
 							dom.div
@@ -114,6 +131,7 @@ dom = React.DOM
 										"BACK"								
 								if(@props.current_user and @props.current_user_voted)		
 									dom.div
+										ref: "showVotes",
 										className: "small-12 columns",
 										dom.p
 											ref: "voteTitle",
@@ -160,7 +178,8 @@ dom = React.DOM
 										className: "spde-mode-title",
 										"SPDE MODE!"
 						dom.div	
-							className: "row",			
+							className: "row",
+							ref: "showComments",			
 							dom.div
 								className: "large-8 columns",
 								React.createElement Comments, csrfToken: @props.csrfToken, url: "/questions/#{@props.card_id}/comments", comments: @props.comments		

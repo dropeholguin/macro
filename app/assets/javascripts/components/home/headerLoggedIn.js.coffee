@@ -4,6 +4,7 @@ dom = React.DOM
 	displayName: 'HeaderLoggedIn'
 	getInitialState: ->
 		points: @props.points
+		current_points: []
 	getDefaultProps: ->
 		points: 0
 	componentDidMount: ->
@@ -11,7 +12,7 @@ dom = React.DOM
 		if(@props.points == null)
 			@setState(
 				points: 0 
-			) 
+			)		
   	pointsChanged: (event) ->
   		@state.points = event.target.value
   		@forceUpdate()

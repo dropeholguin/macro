@@ -32,7 +32,7 @@ dom = React.DOM
 	nextQuestionClicked: (event) ->
 		$.ajax
 			url: @props.run_cards_path
-			type: 'GET'
+			type: 'post'
 		$(document).ajaxStop ->
   			setTimeout location.reload(), 5000
 	render: ->	
