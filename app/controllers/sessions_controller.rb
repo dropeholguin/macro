@@ -1,9 +1,20 @@
 class SessionsController < ApplicationController
 	before_filter :authenticate_user!
 
+	def index
+		@sessions = Session.all.order('created_at desc')
+	end
+
  	def new
  		@session = Session.new
- 		@questions = Question.all.order('created_at desc')
+ 		if params[:query].present? || params[:the_tag]
+			@questions = Question.search(params)
+		elsif params[:term]
+			@questions = Question.ac_search(params[:term]).map(&:title)
+    		render json: @questions
+		else
+			@questions = Question.all.order('created_at desc')
+		end
  	end
 
  	def create
@@ -20,7 +31,7 @@ class SessionsController < ApplicationController
 						take.save
 					end
 				end	
-				format.html { redirect_to root_url, notice: 'session was successfully created.' }
+				format.html { redirect_to sessions_path, notice: 'session was successfully created.' }
 				format.json { render :show, status: :created, location: @session }
 			else
 				format.html { render :new }
@@ -28,6 +39,19 @@ class SessionsController < ApplicationController
 			end
 		end
  	end
+
+ 	def run_sessions
+		@user = current_user
+		@session = Session.find params[:session_id]
+		@questions = []
+		@session.takes.each do |take|
+			@questions << take.question
+		end
+	end
+
+	def run_card
+		
+	end
 
  	private
  		def session_params

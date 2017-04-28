@@ -19,11 +19,13 @@ Rails.application.routes.draw do
 	end
 
 	resources :flags, only: [:create]
-	resources :sessions, only: [:new, :create]
+	resources :sessions, only: [:new, :create, :index]
 	
 	post "run_question", to: 'questions#run_question'
 	post "next_card", to: 'questions#next_card'
+	post "run_card", to: 'sessions#run_card'
 	get "run_cards", to: 'questions#card'
+	get "run_sessions", to: 'sessions#run_sessions'
 	get "user_profile", to: 'profile#user_profile'
 	get "import_and_export", to: 'questions#import_and_export'
 	get "questions_list", to: 'questions#questions_list'

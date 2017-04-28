@@ -1,5 +1,5 @@
 <%= form_for(@session, html: { multipart: true }) do |f| %>
-
+	<%= react_component 'IndexCard', {question: @questions, questions_path: questions_path, tag_path: request.url}%>
 	<div class="field">
 		<%= f.label :title %>
 		<%= f.text_field :title %>
@@ -7,6 +7,7 @@
 	<div class="actions">
 		<%= f.submit "Save", class: "button", id: "save-session" %>
 	</div>
+	<%= react_component 'SearchCard', {questions_path: questions_path}%>
 
 	<% @questions.each do |question| %>
 		<div>
