@@ -1,0 +1,9 @@
+<h2>List Sessions</h2>
+<% @sessions.each do |session| %>
+    <%= session.title %>
+    <p>
+    	Cards: <%= session.takes.count %>
+    </p>
+  	<%= link_to "Run session", run_sessions_path(session_id: session.id), class: "button" %>
+  	<br/>
+<% end %>

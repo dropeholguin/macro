@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170426153731) do
+ActiveRecord::Schema.define(version: 20170427191339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -177,6 +177,15 @@ ActiveRecord::Schema.define(version: 20170426153731) do
     t.string  "name"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
+  end
+
+  create_table "takes", force: :cascade do |t|
+    t.integer  "session_id"
+    t.integer  "question_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["question_id"], name: "index_takes_on_question_id", using: :btree
+    t.index ["session_id"], name: "index_takes_on_session_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|

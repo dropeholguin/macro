@@ -57,12 +57,10 @@ class QuestionsController < ApplicationController
 		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
 		if is_passed == true
 			@user.update_attributes(streak: @user.streak + 1)
-			if @user.streak == 4
-				@user.update_attributes(points: @user.points + 2)
-			elsif @user.streak < 9 && @user.streak >= 5
-				@user.update_attributes(points: @user.points + 3)
+			if @user.streak < 9 && @user.streak >= 5
+				@user.update_attributes(points: @user.points + 1)
 			elsif @user.streak >= 9
-				@user.update_attributes(points: @user.points + 4)
+				@user.update_attributes(points: @user.points + 2)
 			end
 		else
 			@user.update_attributes(streak: -1)
