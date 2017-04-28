@@ -1,9 +1,12 @@
-<h2>List Sessions</h2>
-<% @sessions.each do |session| %>
-    <%= session.title %>
-    <p>
-    	Cards: <%= session.takes.count %>
-    </p>
-  	<%= link_to "Run session", run_sessions_path(session_id: session.id), class: "button" %>
-  	<br/>
-<% end %>
+<div class="row">
+	<div class="large-10 large-centered columns">		
+		<%= react_component 'IndexCard', {title_page: "RUN A SESSION"} %> 
+		<div class="row">
+		<% @sessions.each do |session| %>
+			<div class="large-4 columns">
+				<%= react_component 'SessionIndex', {title: session.title, run_sessions_path: run_sessions_path(session_id: session.id), count: session.takes.count,session_img: image_path('session.png')} %> 
+			</div>   
+		<% end %>
+		</div>
+	</div>
+</div>
