@@ -50,7 +50,15 @@ class SessionsController < ApplicationController
 	end
 
 	def run_card
+		@user = current_user
+		answers = params[:checkbox]
+		card = Question.find params[:card_id]
 		
+		answers_correct = card.answers.select { |answer| answer.is_correct == true }
+		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+
+		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed)
+		@card.save
 	end
 
  	private
