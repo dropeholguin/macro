@@ -1,7 +1,6 @@
 class QuestionsController < ApplicationController
 	before_action :set_question, only: [:show, :edit, :update, :destroy]
 	before_filter :authenticate_user!
- 	load_and_authorize_resource only: [:import_and_export]
 
 	def index
 		if params[:query].present? || params[:the_tag]
@@ -155,15 +154,6 @@ class QuestionsController < ApplicationController
 	  value = params[:type] == "up" ? 1 : -1
 	  @question = Question.find(params[:id])
 	  @question.add_or_update_evaluation(:votes, value, current_user)
-	end
-
-	def import_and_export
-		
-	end
-
-	def import
-		Question.import(params[:file])
-		redirect_to root_url, notice: 'Questions imported.'
 	end
 
 	private
