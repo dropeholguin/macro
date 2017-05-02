@@ -11,5 +11,34 @@ ActiveAdmin.register Question do
 #   permitted << :other if params[:action] == 'create' && current_user.admin?
 #   permitted
 # end
+permit_params :title, :user_id, :description_markdown, :explanation_markdown, :choice
 
+show do
+  attributes_table do
+ 	row :user
+ 	row :title
+	row :description_markdown
+	row :explanation_markdown
+    row :choice
+    row :created_at
+  end
+  active_admin_comments
+end
+
+index do
+	selectable_column
+	id_column
+	column :user
+	column :title
+	column :description_markdown
+	column :explanation_markdown
+	column "Create Date", :created_at
+	column :choice
+	actions defaults: false do |question|
+    	link_to 'View', admin_question_path(question), class: 'button'
+  	end
+end
+
+filter :title
+filter :created_at
 end

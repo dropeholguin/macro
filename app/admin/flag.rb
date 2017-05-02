@@ -11,15 +11,13 @@ ActiveAdmin.register Flag do
 #   permitted << :other if params[:action] == 'create' && current_user.admin?
 #   permitted
 # end
-permit_params :reason
+permit_params :reason, :user_id, :question_id
 
 show do
   attributes_table do
     row :reason
     row :user
-    row :question do |flag|
-      link_to(flag.question.title, admin_question_path(flag.question))
-    end
+    row :question
     row :created_at
   end
   active_admin_comments
@@ -40,6 +38,9 @@ index do
 	end
 end
 
+filter :question
+filter :user
+filter :reason
 filter :created_at
 
 end
