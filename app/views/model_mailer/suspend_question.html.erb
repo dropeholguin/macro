@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Welcome to Macro-SAS, <%= @question.user.full_name %></h1>
+    <p>
+      Your question was suspended
+    </p>
+    <p>
+      Flag Comments: 
+        <% @question.flags.each do |flag| %>
+          <tr>
+            <td>- <%= flag.reason %></td>
+          </tr>
+        <% end %>
+    </p>
+  </body>
+</html>
