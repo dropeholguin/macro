@@ -24,6 +24,7 @@ dom = React.DOM
 		button_1: "RUN"
 		button_2: "EDIT_D"
 		button_3: "DELETE_D"
+		small: "small-10 columns"
 	getInitialState: ->
 		button_1: @props.button_1
 		button_2: @props.button_2 
@@ -62,11 +63,12 @@ dom = React.DOM
 				dom.div
 					className: "row"
 					dom.div
-						className: "small-10 columns"
+						className: @props.small
 						dom.div 
 							className: "margin-tag title-li tag-horizontal",
+							style: {float: @props.float},
 							for topic in @props.tag_list
-								React.createElement Topics, key: topic.id, topic: topic, tag_path: @props.tag_path
+								React.createElement Topics, key: topic.id, topic: topic, tag_path: @props.tag_path, display: @props.display, marginTop: @props.marginTop
 
 @Topics = React.createClass
 	displayName: 'Topics'
@@ -76,6 +78,7 @@ dom = React.DOM
 		else
 			url_tag = "?&the_tag=" 
 		dom.a
+			style: {display: @props.display, marginTop: @props.marginTop},
 			href: "#{@props.tag_path}"+url_tag+@props.topic,
 			className: "tag-decoration",
 			@props.topic			
@@ -98,7 +101,7 @@ dom = React.DOM
 				dom.p {}
 					dom.label
 						className: "weight",
-						"SEARCH BY TITLE",      
+						"SEARCH A CARD",      
 					dom.input
 						name: "query",
 						id:  "title_autocomplete",

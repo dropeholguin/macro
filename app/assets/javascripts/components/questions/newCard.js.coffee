@@ -9,7 +9,35 @@ dom = React.DOM
 	componentDidMount: ->
 		$(@refs.tagsInput).autocomplete source: initTagInput
 		$(document).ready initTagInput
-		$(document).on 'page:load', initTagInput
+		$(document).on 'page:load', initTagInput		
+	tutoForTitleClicked: (event) ->
+		$(@refs.descriptionTuto).hide()
+		$(@refs.answerTuto).hide()
+		$(@refs.explanationTuto).hide()
+		$(@refs.titleTuto).show()
+		$(@refs.titleTuto).addClass('animated fadeInDown')
+	tutoForDescriptionClicked: (event) ->
+		$(@refs.titleTuto).hide()
+		$(@refs.answerTuto).hide()
+		$(@refs.explanationTuto).hide()
+		$(@refs.descriptionTuto).show()
+		$(@refs.descriptionTuto).addClass('animated fadeInDown')
+	tutoForExplanationClicked: (event) ->
+		$(@refs.titleTuto).hide()
+		$(@refs.descriptionTuto).hide()
+		$(@refs.answerTuto).hide()
+		$(@refs.explanationTuto).show()
+		$(@refs.explanationTuto).addClass('animated fadeInDown')
+	tutoForAnswerClicked: (event) ->
+		$(@refs.titleTuto).hide()
+		$(@refs.descriptionTuto).hide()
+		$(@refs.explanationTuto).hide()
+		$(@refs.answerTuto).show()
+		$(@refs.answerTuto).addClass('animated fadeInDown')		
+	tutoForTagClicked: (event) ->
+		$(@refs.titleTuto).hide()
+		$(@refs.descriptionTuto).hide()
+		$(@refs.explanationTuto).hide()				
 	render: ->
 		dom.div
 			className: "root",
@@ -54,6 +82,8 @@ dom = React.DOM
 												type: "text"
 												placeholder: "CARD Tilte",
 												name: "question[title]",
+												onClick: @tutoForTitleClicked,
+												required: true
 										dom.div
 											className: "small-4 columns"
 											dom.select 
@@ -67,7 +97,8 @@ dom = React.DOM
 												dom.option
 													value: "2",															
 													"Open CARD",										
-									dom.label {},
+									dom.label 
+										onClick: @tutoForDescriptionClicked,
 										"DESCRIPTION"
 									dom.textarea
 										id: "description",
@@ -83,7 +114,9 @@ dom = React.DOM
 												dom.div
 													className: "large-8 columns",
 													dom.input
+														onClick: @tutoForAnswerClicked
 														type: "text",
+														required: true,
 														id: "question_answers_attributes_0_answer_markdown",
 														name: "question[answers_attributes][0][answer_markdown]",
 												dom.div
@@ -110,6 +143,7 @@ dom = React.DOM
 													className: "large-8 columns",
 													dom.input
 														type: "text",
+														required: true,
 														id: "question_answers_attributes_1_answer_markdown",
 														name: "question[answers_attributes][1][answer_markdown]",
 												dom.div
@@ -136,6 +170,7 @@ dom = React.DOM
 													className: "large-8 columns",
 													dom.input
 														type: "text",
+														required: true,		
 														id: "question_answers_attributes_2_answer_markdown",
 														name: "question[answers_attributes][2][answer_markdown]",
 												dom.div
@@ -180,22 +215,25 @@ dom = React.DOM
 												'data-associations':"answers",
 												className: "add_fields",
 												'ADD "OTHER"'
-									dom.label {},
+									dom.label 
+										onClick: @tutoForExplanationClicked,
 										"EXPLANATION"
 									dom.textarea
 										id: "explanation",
 										name: "question[explanation_markdown]",
 									dom.div 
 										className: "margin-20",
-										dom.label {},
-											"TOPICS"
+										dom.label 
+											onClick: @tutoForTagClicked,
+											"TOPICS"																						
 										dom.input
 											'data-delimiter': ", ",
 											multiple: "true",
 											name: "question[tag_list][]",
 											id: "question_tag_list",
 											className: "tagsinput",
-											ref: "tagsInput",
+											ref: "tagsInput",		
+											required: true,									
 									dom.input
 										className: "button large green-btn",
 										type: "submit",
@@ -203,6 +241,102 @@ dom = React.DOM
 										value: "SUBMIT",
 										ref: "submit"
 						dom.div
-							className: "large-4 columns"	
+							className: "large-4 columns"
+							dom.div
+								style: {minHeight: "112px"},
+								dom.div 
+									ref: "titleTuto",
+									style: {display: "none"}
+									className: "tutorial-container",
+									dom.h5 
+										className: "bold",
+										"How to create CARDS?",
+									dom.h6
+										className: "bold",
+										"Is your question about SAS?",
+									dom.p {},	
+										"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget."
+							dom.div
+								style: {minHeight: "457px"},
+								dom.div 
+									ref: "descriptionTuto",
+									style: {display: "none"}
+									className: "tutorial-container",
+									dom.h5 
+										className: "bold",
+										"How to Format",
+									dom.h6
+										className: "bold",
+										"Markdown only"
+									dom.div {},	
+										"• put returns between paragraphs"
+									dom.div {},	
+										"• for linebreak add 2 spaces at end"
+									dom.div {},	
+										"•  _italic_ or **bold**"
+									dom.div {},	
+										"• for linebreak add 2 spaces at end"
+									dom.div {},
+										"• indent code by 4 spaces" 
+									dom.div {},
+										"• backtick escapes `like _so_`" 
+									dom.div {},
+										"• quote by placing > at start of line" 
+									dom.div {},
+										"• to make links" 
+									dom.div {},
+										"• <http://foo.com>" 
+									dom.div {},
+										"• [foo](http://foo.com)"
+							dom.div
+								style: {minHeight: "236px"},
+								dom.div 
+									ref: "answerTuto",
+									style: {display: "none"}
+									className: "tutorial-container",
+									dom.h5 
+										className: "bold",
+										"Possible Answers",
+									dom.h6
+										className: "bold",
+										"Be precise"
+									dom.div {},	
+										"• For multiple choices questions there must be only 1 correct answer."
+									dom.div {},	
+										"• Avoid doublemeaning"
+									dom.div {},	
+										"•  Recheck answers after typing"
+							dom.div 
+								ref: "explanationTuto",
+								style: {display: "none"}
+								className: "tutorial-container",
+								dom.h5 
+									className: "bold",
+									"Explain clearly",
+								dom.h6
+									className: "bold",
+									"Every answer counts"
+								dom.div {},	
+									"• Refer to the answer by typing 1, 2, 3 etc."
+								dom.div {},	
+									"• Explain every thing in detail."
+								dom.div {},	
+									"•  Be cool!"
+							dom.div 
+								ref: "tagsTuto",
+								style: {display: "none"}
+								className: "tutorial-container",
+								dom.h5 
+									className: "bold",
+									"Explain clearly",
+								dom.h6
+									className: "bold",
+									"Every answer counts"
+								dom.div {},	
+									"• Refer to the answer by typing 1, 2, 3 etc."
+								dom.div {},	
+									"• Explain every thing in detail."
+								dom.div {},	
+									"•  Be cool!"
 						Components.NewCard = @NewCard
 

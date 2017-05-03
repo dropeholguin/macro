@@ -1,20 +1,33 @@
-<%= form_for(@session, html: { multipart: true }) do |f| %>
-	<%= react_component 'IndexCard', {question: @questions, questions_path: questions_path, tag_path: request.url}%>
-	<div class="field">
-		<%= f.label :title %>
-		<%= f.text_field :title %>
+<div class="row">
+	<div class="large-10 large-centered columns">	
+		<%= form_for(@session, html: { multipart: true }) do |f| %>
+			<%= react_component 'IndexCard', {question: @questions, questions_path: questions_path, tag_path: request.url, title_page: "CREATE A SESSION",		description_page: "Manage your sessions: review rating, edit, delete and read comments"
+}%>
+			<div class="container-session row">
+				<div class="large-8 columns">
+					<div class="field">
+					<%= f.label :title %>
+					<%= f.text_field :title, placeholder: "Start typing a title for new session" %>
+					</div>
+				</div>
+				<div class="large-4 columns">										
+					<div class="actions">
+						<%= f.submit "Save", class: "button large radius-10 expanded", id: "save-session" %>
+					</div>
+				</div>
+			</div>
+			<%= react_component 'SearchCard', {questions_path: questions_path}%>
+			<div id="card-container-session" class="row container-session">
+				<% @questions.each do |question| %>
+					<div class="small-4 columns"> 
+						<div class="select-card">
+							<%= check_box_tag 'question[ids][]', question.id %>
+							<%= label_tag 'select', 'Select' %>
+						</div>
+				        <%= react_component 'Card', {title: question.title, id: question.id, description: markdown(question.description_markdown), tag_list: question.tag_list,tag_path: request.url, float: "none", small: "small-12 columns text-center", display: "block", marginTop: "3px", button_1: "VIEW"} %>
+			        </div>
+				<% end %>
+			</div>
+		<% end %>
 	</div>
-	<div class="actions">
-		<%= f.submit "Save", class: "button", id: "save-session" %>
-	</div>
-	<%= react_component 'SearchCard', {questions_path: questions_path}%>
-
-	<% @questions.each do |question| %>
-		<div>
-			<%= check_box_tag 'question[ids][]', question.id %>
-			<%= label_tag 'select', 'Select' %>
-		</div>
-        <%= react_component 'Card', {title: question.title, id: question.id, description: markdown(question.description_markdown), tag_list: question.tag_list,tag_path: request.url} %>
-	<% end %>
-
-<% end %>
+</div>

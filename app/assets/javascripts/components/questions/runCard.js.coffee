@@ -3,7 +3,7 @@ dom = React.DOM
 @RunCard = React.createClass
 	displayName: 'RunCard'
 	getInitialState: ->
-		right_answer: "0"
+		right_answer: 0
 	handleClickVoteUp: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	handleClickVoteDown: (event) ->
@@ -26,15 +26,15 @@ dom = React.DOM
       	console.log ("This is selected: "+selected) 
       	 $("input").prop('disabled', true)    
   	componentDidMount: ->
-  		@forceUpdate() 		
-	componentWillMount: ->
-		@forceUpdate()
+  		$(@refs.mode).addClass('animated fadeInUp')		
 	nextQuestionClicked: (event) ->
 		$.ajax
 			url: @props.run_cards_path
 			type: 'post'
 		$(document).ajaxStop ->
   			setTimeout location.reload(), 5000
+	flagButtonCardClicked: (event)->
+		 $("#my_popup_flag").popup()  			
 	render: ->	
 		if(@props.votes > 0)
 			rateColor = "rate-green"
@@ -44,6 +44,24 @@ dom = React.DOM
 			numVotes = "Votes"
 		else
 			numVotes = "Vote"	
+		if(@props.streak <= 0)
+			streakRemains = "5"
+			msgSPDE = "TO START SPDE MODE!"
+		else if(@props.streak > 0 and @props.streak <= 1)
+			streakRemains = "4"
+			msgSPDE = "TO START SPDE MODE!"
+		else if(@props.streak > 1 and @props.streak <= 2)
+			streakRemains = "3"	
+			msgSPDE = "TO START SPDE MODE!"
+		else if(@props.streak > 2 and @props.streak <= 3)
+			streakRemains = "2"	
+			msgSPDE = "TO START SPDE MODE!"
+		else if(@props.streak > 3 and @props.streak <= 4)
+			streakRemains = "1"
+			msgSPDE = "TO START SPDE MODE!"
+		else if(@props.streak > 4)	
+			streakRemains = "You are on"
+			msgSPDE = "SPDE MODE!" 					
 		dom.div
 			className: "root",
 			dom.div
@@ -60,11 +78,21 @@ dom = React.DOM
 					dom.div
 						className: "row white-background",
 						dom.div
-							className: "answer-container large-8 large-centered columns"
-							dom.h4
-								className: "weight",
-								style: {color: "#07C", fontWeight: "bold"},
-								@props.title,
+							className: "answer-container large-8 columns"
+							dom.div
+								className: "row",
+								dom.div
+									className: "large-9 columns",								
+									dom.h4
+										className: "weight",
+										style: {color: "#07C", fontWeight: "bold"},
+										@props.title,
+								dom.div
+									className: "large-3 columns text-right",
+									dom.button
+										className: "button small hollow alert my_popup_open",
+										onClick: @flagButtonCardClicked,
+										"Report"										
 							dom.div
 								dangerouslySetInnerHTML: __html: @props.description.toString(),
 							dom.div
@@ -108,6 +136,25 @@ dom = React.DOM
 										style: {display: 'none'},
 										className: "button large radius-10",
 										"NEXT",
+						dom.div	
+							className: "large-4 columns",	
+							dom.div
+								className: "small-12 columns",
+								dom.span 
+									dom.div
+										className: "large-8 large-centered columns infinite"
+										ref: "anim2",
+										dom.img
+											src: @props.img
+									dom.div
+										ref: "mode",
+										className: "text-center spde-mode",																			
+										dom.h2 																					
+											className: "spde-mode",
+											streakRemains,
+										dom.div
+											className: "spde-mode-title",
+											msgSPDE,								
 								
 @RunCardAnswer = React.createClass
 	displayName: 'RunCardAnswer'

@@ -1,1 +1,4 @@
-<%= react_component 'RunCard', {card_id: @question.id,title: @question.title, answers: @answers, description: markdown(@question.description_markdown), choice: @question.choice, tag_list: @question.tag_list, submit_img: image_path('submit.png'), explanation: markdown(@question.explanation_markdown), run_cards_path: run_cards_path} %>
+<%= react_component 'RunCard', {card_id: @question.id,title: @question.title, answers: @answers, description: markdown(@question.description_markdown), choice: @question.choice, tag_list: @question.tag_list, submit_img: image_path('submit.png'), explanation: markdown(@question.explanation_markdown), run_cards_path: run_cards_path, streak: @user.streak, img: image_path('SPDEMODE/Allanbowe-Anim-01.svg')} %>
+<div id="my_popup_flag" style="background: #ffffff; padding: 15px; border-radius: 10px; display: none;">
+	<%= react_component 'FlagForm', {card_id: @question.id, csrfToken: form_authenticity_token} %>
+</div>

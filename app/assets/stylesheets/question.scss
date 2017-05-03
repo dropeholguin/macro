@@ -106,3 +106,10 @@ input[type=radio]:not(old):checked + label{
 .show-block{
   display: 'block';
 }
+.tutorial-container{
+  background: #FFF8DC;
+  padding: 15px;
+  color: #000000;
+  border: 1px solid #FFFF33; 
+  margin-bottom: 10px; 
+}
