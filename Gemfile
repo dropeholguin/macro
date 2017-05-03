@@ -61,6 +61,8 @@ gem 'gioco'
 #gem for reputation
 gem 'activerecord-reputation-system'
 gem 'roo'
+gem 'activeadmin', github: 'activeadmin'
+gem "active_admin_import" , '3.0.0'
 
 
 source 'https://rails-assets.org' do
