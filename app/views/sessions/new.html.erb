@@ -16,7 +16,7 @@
 					</div>
 				</div>
 			</div>
-			<%= react_component 'SearchCard', {questions_path: questions_path}%>
+			<%= react_component 'SearchCard', {questions_path: new_session_path}%>
 			<div id="card-container-session" class="row container-session">
 				<% @questions.each do |question| %>
 					<div class="small-4 columns"> 

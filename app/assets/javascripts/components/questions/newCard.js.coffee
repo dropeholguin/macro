@@ -9,35 +9,43 @@ dom = React.DOM
 	componentDidMount: ->
 		$(@refs.tagsInput).autocomplete source: initTagInput
 		$(document).ready initTagInput
-		$(document).on 'page:load', initTagInput		
+		$(document).on 'page:load', initTagInput	
+		$(@refs.labelDescription).addClass('animated bounceIn')	
 	tutoForTitleClicked: (event) ->
 		$(@refs.descriptionTuto).hide()
 		$(@refs.answerTuto).hide()
 		$(@refs.explanationTuto).hide()
+		$(@refs.tagsTuto).hide()
 		$(@refs.titleTuto).show()
 		$(@refs.titleTuto).addClass('animated fadeInDown')
 	tutoForDescriptionClicked: (event) ->
 		$(@refs.titleTuto).hide()
 		$(@refs.answerTuto).hide()
 		$(@refs.explanationTuto).hide()
+		$(@refs.tagsTuto).hide()
 		$(@refs.descriptionTuto).show()
 		$(@refs.descriptionTuto).addClass('animated fadeInDown')
 	tutoForExplanationClicked: (event) ->
 		$(@refs.titleTuto).hide()
 		$(@refs.descriptionTuto).hide()
 		$(@refs.answerTuto).hide()
+		$(@refs.tagsTuto).hide()
 		$(@refs.explanationTuto).show()
 		$(@refs.explanationTuto).addClass('animated fadeInDown')
 	tutoForAnswerClicked: (event) ->
 		$(@refs.titleTuto).hide()
 		$(@refs.descriptionTuto).hide()
 		$(@refs.explanationTuto).hide()
+		$(@refs.tagsTuto).hide()
 		$(@refs.answerTuto).show()
 		$(@refs.answerTuto).addClass('animated fadeInDown')		
 	tutoForTagClicked: (event) ->
 		$(@refs.titleTuto).hide()
 		$(@refs.descriptionTuto).hide()
-		$(@refs.explanationTuto).hide()				
+		$(@refs.explanationTuto).hide()		
+		$(@refs.answerTuto).hide()
+		$(@refs.tagsTuto).show()
+		$(@refs.tagsTuto).addClass('animated fadeInDown')			
 	render: ->
 		dom.div
 			className: "root",
@@ -71,8 +79,12 @@ dom = React.DOM
 										type: "hidden"
 										value: @props.csrfToken
 										});		
-									dom.label {},
-										"TITLE"
+									dom.div
+										className: "row"
+										dom.div
+											className: "small-9 columns"									
+											dom.label 												
+												"TITLE"
 									dom.div
 										className: "row"
 										dom.div
@@ -96,17 +108,31 @@ dom = React.DOM
 													"Multiple Choice",
 												dom.option
 													value: "2",															
-													"Open CARD",										
-									dom.label 
-										onClick: @tutoForDescriptionClicked,
-										"DESCRIPTION"
+													"Open CARD",	
+									dom.div
+										className: "row"
+										dom.div
+											className: "small-9 columns"									
+											dom.label												
+												"DESCRIPTION"
+										dom.div
+											className: "small-3 columns text-right"
+											dom.label
+												ref: "labelDescription",
+												onClick: @tutoForDescriptionClicked,
+												className: "button small radius-40",
+												"CLick me"	
 									dom.textarea
 										id: "description",
 										name: "question[description_markdown]",
 									dom.div 
 										className: "margin-20",
-										dom.label {},
-											"ANSWERS"
+										dom.div
+											className: "row"
+											dom.div
+												className: "small-9 columns"									
+												dom.label 												
+													"ANSWERS"
 										dom.div
 											className: "nested-fields",
 											dom.div
@@ -215,17 +241,35 @@ dom = React.DOM
 												'data-associations':"answers",
 												className: "add_fields",
 												'ADD "OTHER"'
-									dom.label 
-										onClick: @tutoForExplanationClicked,
-										"EXPLANATION"
+									dom.div
+										className: "row"
+										dom.div
+											className: "small-9 columns"									
+											dom.label 												
+												"EXPLANATION"
+										dom.div
+											className: "small-3 columns text-right"
+											dom.label
+												onClick: @tutoForExplanationClicked,
+												className: "button small radius-40",
+												"CLick me"
 									dom.textarea
 										id: "explanation",
 										name: "question[explanation_markdown]",
 									dom.div 
 										className: "margin-20",
-										dom.label 
-											onClick: @tutoForTagClicked,
-											"TOPICS"																						
+										dom.div
+											className: "row"
+											dom.div
+												className: "small-9 columns"									
+												dom.label 												
+													"TOPICS"
+											dom.div
+												className: "small-3 columns text-right"
+												dom.label
+													onClick: @tutoForTagClicked,
+													className: "button small radius-40",
+													"CLick me"																						
 										dom.input
 											'data-delimiter': ", ",
 											multiple: "true",
@@ -306,37 +350,76 @@ dom = React.DOM
 										"• Avoid doublemeaning"
 									dom.div {},	
 										"•  Recheck answers after typing"
-							dom.div 
-								ref: "explanationTuto",
-								style: {display: "none"}
-								className: "tutorial-container",
-								dom.h5 
-									className: "bold",
-									"Explain clearly",
-								dom.h6
-									className: "bold",
-									"Every answer counts"
-								dom.div {},	
-									"• Refer to the answer by typing 1, 2, 3 etc."
-								dom.div {},	
-									"• Explain every thing in detail."
-								dom.div {},	
-									"•  Be cool!"
+							dom.div
+								style: {minHeight: "374px"},
+								dom.div 
+									ref: "explanationTuto",
+									style: {display: "none"}
+									className: "tutorial-container",
+									dom.h5 
+										className: "bold",
+										"Explain clearly",
+									dom.h6
+										className: "bold",
+										"Every answer counts"
+									dom.div {},	
+										"• Refer to the answer by typing 1, 2, 3 etc."
+									dom.div {},	
+										"• Explain every thing in detail."
+									dom.div {},	
+										"•  Be cool!"
 							dom.div 
 								ref: "tagsTuto",
 								style: {display: "none"}
 								className: "tutorial-container",
 								dom.h5 
 									className: "bold",
-									"Explain clearly",
-								dom.h6
-									className: "bold",
-									"Every answer counts"
-								dom.div {},	
-									"• Refer to the answer by typing 1, 2, 3 etc."
-								dom.div {},	
-									"• Explain every thing in detail."
-								dom.div {},	
-									"•  Be cool!"
+									"HOT TOPICS",
+								dom.div {},									
+									dom.div 
+										className: "margin-tag",
+										dom.span
+											className: "title-tag",
+											"Platform Administrator",
+										dom.li 
+											className: "title-li",
+											dom.a
+												className: "tag-decoration",
+												"SAS Management Console"
+									dom.div 
+										className: "margin-tag",
+										dom.span
+											className: "title-tag",
+											"ETL Developer",
+										dom.li 
+											className: "title-li",
+											dom.a
+												className: "tag-decoration",
+												"SAS Macro"
+										dom.li 
+											className: "title-li",
+											dom.a
+												className: "tag-decoration",
+												"DI Studio"
+									dom.div 
+										className: "margin-tag",
+										dom.span
+											className: "title-tag",
+											"Analyst",
+										dom.li 
+											className: "title-li",
+											dom.a
+												className: "tag-decoration",
+												"SAS Programming"
+										dom.li 
+											className: "title-li",
+											dom.a
+												className: "tag-decoration",
+												"Enterprise Guide"
+										dom.li 
+											className: "title-li",
+											dom.a
+												className: "tag-decoration",
+												"Workspace Management"
 						Components.NewCard = @NewCard
 
