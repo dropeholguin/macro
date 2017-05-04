@@ -158,6 +158,26 @@ class QuestionsController < ApplicationController
 	  @question.add_or_update_evaluation(:votes, value, current_user)
 	end
 
+	def suspend
+        @question = Question.find(params[:id])
+        @question.update_attributes(suspended: true)
+        respond_to do |format|
+            ModelMailer.suspend_question(@question).deliver
+            format.html { redirect_to admin_questions_path, notice: 'question was suspended.' }
+            format.json { head :no_content }
+        end
+    end
+
+    def approve
+        @question = Question.find(params[:id])
+        @question.update_attributes(suspended: false)
+        respond_to do |format|
+            ModelMailer.approve_question(@question).deliver
+            format.html { redirect_to admin_questions_path, notice: 'question was Approved.' }
+            format.json { head :no_content }
+        end
+    end
+
 	private
 
 		def set_question
@@ -165,6 +185,6 @@ class QuestionsController < ApplicationController
 		end
 
 		def question_params
-		  params.require(:question).permit(:title, :description_markdown, :explanation_markdown, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
+		  params.require(:question).permit(:title, :description_markdown, :explanation_markdown, :choice, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
 		end
 end

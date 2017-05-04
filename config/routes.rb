@@ -30,4 +30,6 @@ Rails.application.routes.draw do
 	get "run_sessions", to: 'sessions#run_sessions'
 	get "user_profile", to: 'profile#user_profile'
 	get "questions_list", to: 'questions#questions_list'
+	patch "questions/suspend_question/:id", to: 'questions#suspend', as: :suspend
+ 	patch "questions/approve_question/:id", to: 'questions#approve', as: :approve
 end
