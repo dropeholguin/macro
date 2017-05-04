@@ -8,12 +8,22 @@ dom = React.DOM
 		comments: []
 		state: @props.state
 	componentDidMount: ->
-  		$(@refs.mode).addClass('animated pulse infinite')	
+		$(@refs.showVotes).hide()
+		if(@state.state)
+			$(@refs.showVotes).hide()
+		if(@state.state == false)
+			$(@refs.showComments).hide()		
 	handleClickVoteUp: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	handleClickVoteDown: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
 	handleClick: (event) ->
+		if(@state.state == false)
+			$(@refs.showVotes).show()
+		$(@refs.votesDiv).show()
+		$(@refs.votesDiv).addClass("small-12 text-center animated bounce")
+		$(@refs.flagButton).show()
+		$(@refs.flagButton).addClass('animated bounceIn')
 		document.getElementById('explanation-card').style.display = 'block'
 		document.getElementById('run-card').style.display = 'none'
 		document.getElementById('back-card').style.display = 'inline-block'
@@ -38,6 +48,7 @@ dom = React.DOM
 		$("#my_popup").popup() 
 		console.log ("It Works!")
 	voteUpClicked: (event) ->
+		$(@refs.showVotes).hide()
 		$.ajax
 			url: @props.vote_up
 			type: 'post'
@@ -53,6 +64,7 @@ dom = React.DOM
 		$(@refs.voteTitle).text("Currently Rating:")
 		$.amaran content: {'title': "You rated +1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	voteDownClicked: (event) ->
+		$(@refs.showVotes).hide()
 		$.ajax
 			url: @props.vote_down
 			type: 'post'		
@@ -68,11 +80,11 @@ dom = React.DOM
 		$(@refs.voteTitle).text("Currently Rating:")
 		$.amaran content: {'title': "You rated -1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
 	render: ->	
-		if(@props.votes > 0)
+		if(@state.votes > 0)
 			rateColor = "rate-green"
-		if(@props.votes < 0)
+		if(@state.votes < 0)
 			rateColor = "rate-red"
-		if(@props.votes > 1 or @props.votes < -1)
+		if(@state.votes > 1 or @state.votes < -1)
 			numVotes = "Votes"
 		else
 			numVotes = "Vote"	
@@ -122,6 +134,8 @@ dom = React.DOM
 								dom.div
 									className: "large-3 columns text-right",
 									dom.button
+										ref: "flagButton",
+										style: {display: "none"},
 										className: "button small hollow alert my_popup_open",
 										onClick: @flagButtonClicked,
 										"Report"										
@@ -159,7 +173,33 @@ dom = React.DOM
 										className: "button large radius-10",
 										onClick: @handleClick,
 										ref: "runCard",
-										"RUN"
+										"RUN"																	
+								dom.div
+									className: "small-12 columns text-right",
+									dom.a 
+										id: "back-card",
+										onClick: @nextQuestionClicked,
+										style: {display: 'none'},
+										className: "button large radius-10",
+										"NEXT",
+								dom.div
+									style: {display: "none"}
+									ref: "votesDiv",
+									className: "small-12 columns",
+									dom.p
+										ref: "voteTitle",
+										className: "weight",
+										style: {color: "#07C", fontWeight: "bold"},
+										"Currently rating for this card:",
+									dom.div
+										className: "small-12 columns text-center"
+										dom.i
+											className: "fa fa-star-o "+rateColor,	
+										dom.span
+											className: rateColor,
+											onChange: @voteChanged,	
+											" #{@state.votes} " + numVotes,
+
 								if(@props.current_user and @props.current_user_voted)		
 									dom.div
 										ref: "showVotes",
@@ -193,14 +233,6 @@ dom = React.DOM
 												onClick: @voteDownClicked,
 												dom.i
 													className: "fa fa-thumbs-o-down",
-								dom.div
-									className: "small-12 columns text-right",
-									dom.a 
-										id: "back-card",
-										onClick: @nextQuestionClicked,
-										style: {display: 'none'},
-										className: "button large radius-10",
-										"NEXT",
 						dom.div	
 							className: "large-4 columns",	
 							dom.div
