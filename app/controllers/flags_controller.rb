@@ -10,14 +10,19 @@ class FlagsController < ApplicationController
 	    respond_to do |format|
 			if @question.user != current_user
 				if @flag.save
-					format.html { redirect_to root_path, notice: 'flag was successfully created.' }
+					@question.update_attributes(count_flags: @question.count_flags + 1)
+		            if @question.count_flags >= 2
+		              @question.update_attributes(suspended: true)
+		              ModelMailer.suspend_question(@question).deliver
+		            end
+					format.html { redirect_to @question, notice: 'flag was successfully created.' }
 					format.json { render :show, status: :created, location: @flag}
 				else
 					format.html { redirect_to root_path, alert: 'Complete the Reason' }
 					format.json { render json: @flag.errors, status: :unprocessable_entity }  
 				end
 			else
-				format.html { redirect_to root_path, alert: "You can't flag your own photo" }
+				format.html { redirect_to root_path, alert: "You can't flag your own question" }
 			end
 	    end
 	end
