@@ -13,19 +13,25 @@ ActiveAdmin.register Question do
 # end
 active_admin_import validate: true,
             template_object: ActiveAdminImport::Model.new(
-                hint: "file will be imported with such header format: 'title','description_markdown', 'explanation_markdown', 'choice'",
-                csv_headers: ["title","description_markdown","explanation_markdown", "choice"]
-            )
+                hint: "file will be imported with such header format: 'id',title','description_markdown', 'explanation_markdown', 'choice'",
+                csv_headers: ["id","title","description_markdown","explanation_markdown", "choice"]
+            ),
+            after_batch_import: ->(importer) {
+              questions = Question.find importer.values_at('id')
+              questions.each do |question|
+                question.update_attributes user_id: 1
+              end
+              
+            }
 
 permit_params :title, :user_id, :description_markdown, :explanation_markdown, :choice
 
-csv do
+csv column_names: false do
 	column :id
 	column :title
 	column :description_markdown
 	column :explanation_markdown
-    column :choice
-    column :created_at
+  column :choice
 end
 
 show do
