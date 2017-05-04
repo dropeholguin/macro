@@ -351,7 +351,7 @@ dom = React.DOM
 									dom.div {},	
 										"•  Recheck answers after typing"
 							dom.div
-								style: {minHeight: "374px"},
+								style: {minHeight: "258px"},
 								dom.div 
 									ref: "explanationTuto",
 									style: {display: "none"}

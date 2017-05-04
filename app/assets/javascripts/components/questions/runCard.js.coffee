@@ -3,7 +3,12 @@ dom = React.DOM
 @RunCard = React.createClass
 	displayName: 'RunCard'
 	getInitialState: ->
-		right_answer: 0
+		right_answer: "0"
+		votes: @props.votes
+		comments: []
+		state: @props.state
+	componentDidMount: ->
+  		$(@refs.mode).addClass('animated pulse infinite')	
 	handleClickVoteUp: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	handleClickVoteDown: (event) ->
@@ -17,24 +22,51 @@ dom = React.DOM
 		if ($('.this-ansn').length > 0)
 			$('.this-ansn').addClass "wrong-color"
 		selected = $('input[name=option]:checked').map(-> @id).get()
-		if ($('.this-ans').length > 0 and $('input[name=option]:checked').length > 0)
-	 		$.amaran content: {'title': 'Congratulations!','message': 'You ran a card!', 'info':'You got 2 points more', 'icon':'fa fa-flag'}, theme: 'awesome blue', delay :10000          		
 		$.ajax
 	      url: '/run_question'
 	      type: 'POST'
 	      data: checkbox: selected, card_id: @props.card_id
       	console.log ("This is selected: "+selected) 
-      	 $("input").prop('disabled', true)    
-  	componentDidMount: ->
-  		$(@refs.mode).addClass('animated fadeInUp')		
+      	 $("input").prop('disabled', true)  		
 	nextQuestionClicked: (event) ->
 		$.ajax
 			url: @props.run_cards_path
 			type: 'post'
 		$(document).ajaxStop ->
   			setTimeout location.reload(), 5000
-	flagButtonCardClicked: (event)->
-		 $("#my_popup_flag").popup()  			
+	flagButtonClicked: (event)->
+		$("#my_popup").popup() 
+		console.log ("It Works!")
+	voteUpClicked: (event) ->
+		$.ajax
+			url: @props.vote_up
+			type: 'post'
+		@setState(
+			votes:  @state.votes + 1,
+			state: true
+		)
+		$(@refs.showComments).show()		
+		$(@refs.voteDown).hide()
+		$(@refs.voteUp).hide()
+		$(@refs.numVotesDiv).removeClass("small-6")
+		$(@refs.numVotesDiv).addClass("small-12 text-center animated bounce")
+		$(@refs.voteTitle).text("Currently Rating:")
+		$.amaran content: {'title': "You rated +1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
+	voteDownClicked: (event) ->
+		$.ajax
+			url: @props.vote_down
+			type: 'post'		
+		@setState(
+			votes:  @state.votes - 1
+			state: true
+		)
+		$(@refs.showComments).show()
+		$(@refs.voteDown).hide()
+		$(@refs.voteUp).hide()
+		$(@refs.numVotesDiv).removeClass("small-6")
+		$(@refs.numVotesDiv).addClass("small-12 text-center animated bounce")
+		$(@refs.voteTitle).text("Currently Rating:")
+		$.amaran content: {'title': "You rated -1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
 	render: ->	
 		if(@props.votes > 0)
 			rateColor = "rate-green"
@@ -91,7 +123,7 @@ dom = React.DOM
 									className: "large-3 columns text-right",
 									dom.button
 										className: "button small hollow alert my_popup_open",
-										onClick: @flagButtonCardClicked,
+										onClick: @flagButtonClicked,
 										"Report"										
 							dom.div
 								dangerouslySetInnerHTML: __html: @props.description.toString(),
@@ -128,6 +160,39 @@ dom = React.DOM
 										onClick: @handleClick,
 										ref: "runCard",
 										"RUN"
+								if(@props.current_user and @props.current_user_voted)		
+									dom.div
+										ref: "showVotes",
+										className: "small-12 columns",
+										dom.p
+											ref: "voteTitle",
+											className: "weight",
+											style: {color: "#07C", fontWeight: "bold"},
+											"Rate this card:",
+										dom.div
+											ref: "numVotesDiv",
+											className: "small-6 columns"
+											dom.i
+												className: "fa fa-star-o "+rateColor,	
+											dom.span
+												className: rateColor,
+												onChange: @voteChanged,	
+												" #{@state.votes} " + numVotes,	
+										dom.div
+											className: "small-6 columns text-right"								
+											dom.a
+												ref: "voteUp",
+												style: {marginRight: "5px"},
+												className: "button hollow small secondary radius-10",
+												onClick: @voteUpClicked,
+												dom.i
+													className: "fa fa-thumbs-o-up"
+											dom.button
+												ref: "voteDown",
+												className: "button hollow small secondary radius-10",
+												onClick: @voteDownClicked,
+												dom.i
+													className: "fa fa-thumbs-o-down",
 								dom.div
 									className: "small-12 columns text-right",
 									dom.a 
@@ -143,19 +208,24 @@ dom = React.DOM
 								dom.span 
 									dom.div
 										className: "large-8 large-centered columns infinite"
-										ref: "anim2",
 										dom.img
 											src: @props.img
-									dom.div
-										ref: "mode",
+									dom.div										
 										className: "text-center spde-mode",																			
-										dom.h2 																					
+										dom.h2 			
+											ref: "mode",																		
 											className: "spde-mode",
 											streakRemains,
 										dom.div
 											className: "spde-mode-title",
-											msgSPDE,								
-								
+											msgSPDE,
+						dom.div	
+							className: "row",
+							ref: "showComments",			
+							dom.div
+								className: "large-8 columns",
+								React.createElement Comments, csrfToken: @props.csrfToken, url: "/questions/#{@props.card_id}/comments", comments: @props.comments		
+						
 @RunCardAnswer = React.createClass
 	displayName: 'RunCardAnswer'
 	componentDidMount: ->

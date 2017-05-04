@@ -28,6 +28,8 @@ class QuestionsController < ApplicationController
 		if @user.points > 0
 			@question = Question.offset(rand(Question.count)).first
 			@answers = @question.answers
+			@comments = @question.comments	
+			@state = @question.evaluators_for(:votes).include?(current_user)		
 			if @user.streak < 0
 				@user.update_attributes(streak: 0)
 				respond_to do |format|

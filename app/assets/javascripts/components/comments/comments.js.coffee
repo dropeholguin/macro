@@ -33,6 +33,7 @@ dom = React.DOM
 						id: "comment_comment_markdown",
 						type: "text",
 						name: "comment[comment_markdown]",
+						placeholder: "Write a comment..."
 				dom.div
 					className: "actions",
 					dom.button
