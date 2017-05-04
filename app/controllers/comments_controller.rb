@@ -7,10 +7,11 @@ class CommentsController < ApplicationController
     	@comment.user = current_user
 
 		if @comment.save
-			redirect_to @question, notice: "Comment added"
+			flash[:notice] = "Comment added"
 	    else
-	     	redirect_to @question, error: "Something went wrong"
+	     	flash[:error] = "Something went wrong"
 	    end
+	    head :ok
 	end
 
 	def vote

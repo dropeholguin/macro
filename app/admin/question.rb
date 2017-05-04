@@ -13,8 +13,8 @@ ActiveAdmin.register Question do
 # end
 active_admin_import validate: true,
             template_object: ActiveAdminImport::Model.new(
-                hint: "file will be imported with such header format: 'title','user id','description_markdown', 'explanation_markdown', 'choice'",
-                csv_headers: ["title","user_id","description_markdown","explanation_markdown", "choice"]
+                hint: "file will be imported with such header format: 'title','description_markdown', 'explanation_markdown', 'choice'",
+                csv_headers: ["title","description_markdown","explanation_markdown", "choice"]
             )
 
 permit_params :title, :user_id, :description_markdown, :explanation_markdown, :choice
@@ -22,7 +22,6 @@ permit_params :title, :user_id, :description_markdown, :explanation_markdown, :c
 csv do
 	column :id
 	column :title
-	column (:user) {|question| question.user.name }
 	column :description_markdown
 	column :explanation_markdown
     column :choice
@@ -52,6 +51,9 @@ index do
 	column :choice
 	actions defaults: false do |question|
     	link_to 'View', admin_question_path(question), class: 'button'
+  	end
+  	actions defaults: false do |question|
+    	link_to 'Edit', edit_admin_question_path(question), class: 'button'
   	end
 end
 
