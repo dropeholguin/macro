@@ -32,4 +32,5 @@ Rails.application.routes.draw do
 	get "questions_list", to: 'questions#questions_list'
 	patch "questions/suspend_question/:id", to: 'questions#suspend', as: :suspend
  	patch "questions/approve_question/:id", to: 'questions#approve', as: :approve
+ 	post "sessions/next_card", to: 'sessions#next_card'
 end
