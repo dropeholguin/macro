@@ -19,6 +19,8 @@ dom = React.DOM
 	runCardClicked: (event) ->
 		if @state.points == 0
 	 		$.amaran content: {'title': 'Sorry!','message': 'You dont have enough tokens to run a card!', 'info':'!', 'icon':'fa fa-flag'}, theme: 'awesome error', delay :10000          		
+		else
+	 		$.amaran content: {'title': 'News!','message': 'You have spent 2 tokens to run a card!', 'info':"", 'icon':'fa fa-flag'}, theme: 'awesome ok', delay :10000          		
 	render: ->
 		dom.div
 			className: "root",
