@@ -41,11 +41,29 @@ class SessionsController < ApplicationController
  	end
 
  	def run_sessions
-		@user = current_user
-		@session = Session.find params[:session_id]
-		@questions = []
-		@session.takes.each do |take|
-			@questions << take.question
+		session = Session.find params[:session_id]
+		questions = []
+		session.takes.each do |take|
+			questions << take.question
+		end
+		question_ids_array = questions.pluck(:id)
+        first_question_id = question_ids_array.shift
+        question_array_string = question_ids_array.join("-")
+        cookies[:questions] = { value: question_array_string, expires: 23.hours.from_now }
+
+		@question = Question.find first_question_id.to_i
+	end
+
+	def next_card
+		question_ids_array = cookies[:questions].split("-")
+        question_id = question_ids_array.shift
+        question_array_string = question_ids_array.join("-")
+        cookies[:import_queue] = { value: question_array_string, expires: 23.hours.from_now }
+
+        @question = Question.find question_id.to_i
+
+		respond_to do |format|
+		 	format.json  { render json: { question: @question } }
 		end
 	end
 

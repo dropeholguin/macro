@@ -13,28 +13,25 @@ ActiveAdmin.register Answer do
 # end
 active_admin_import validate: true,
             template_object: ActiveAdminImport::Model.new(
-                hint: "file will be imported with such header format: 'question Id','Is correct', 'answer_markdown'",
-                csv_headers: ["question_id","is_correct","answer_markdown"]
+                hint: "file will be imported with such header format: 'Id','question Id','Is correct', 'answer_markdown'",
+                csv_headers: ["id","question_id","is_correct","answer_markdown"]
             )
 
 permit_params :question_id, :is_correct, :answer_markdown
 
-csv do
+csv column_names: false do
 	column :id
-	column (:question) {|answer| answer.question.title }
+	column :question_id
 	column :is_correct
 	column :answer_markdown
-    column :created_at
 end
 
 show do
   attributes_table do
- 	row :user
- 	row :title
-	row :description_markdown
-	row :explanation_markdown
-    row :choice
-    row :created_at
+ 	row :question
+ 	row :is_correct
+	row :answer_markdown
+	row :created_at
   end
   active_admin_comments
 end

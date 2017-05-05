@@ -27,17 +27,24 @@ class QuestionsController < ApplicationController
 		@user = current_user
 		if @user.points > 0
 			@question = Question.offset(rand(Question.count)).first
-			@answers = @question.answers
-			@comments = @question.comments.order("created_at desc")	
-			@state = @question.evaluators_for(:votes).include?(current_user)		
-			if @user.streak < 0
-				@user.update_attributes(streak: 0)
+			if !@question.nil?
+				@answers = @question.answers
+				@comments = @question.comments.order("created_at desc")	
+				@state = @question.evaluators_for(:votes).include?(current_user)
+				if @user.streak < 0
+					@user.update_attributes(streak: 0)
+					respond_to do |format|
+						format.html { redirect_to root_path, alert: '' }
+					end				
+				elsif @user.streak == 0
+					@user.update_attributes(points: @user.points - 2)
+				end
+			else
 				respond_to do |format|
 					format.html { redirect_to root_path, alert: '' }
-				end				
-			elsif @user.streak == 0
-				@user.update_attributes(points: @user.points - 2)
+				end
 			end
+			
 		else 
 			respond_to do |format|
 				format.html { redirect_to root_path, alert: '' }

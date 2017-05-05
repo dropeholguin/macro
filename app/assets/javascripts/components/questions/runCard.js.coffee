@@ -37,7 +37,11 @@ dom = React.DOM
 	      type: 'POST'
 	      data: checkbox: selected, card_id: @props.card_id
       	console.log ("This is selected: "+selected) 
-      	 $("input").prop('disabled', true)  		
+      	 $("input").prop('disabled', true) 
+    testClicked: (event)-> 
+    	$.ajax
+	      url: '/run_question'
+	      type: 'POST' 	  		
 	nextQuestionClicked: (event) ->
 		$.ajax
 			url: @props.run_cards_path
