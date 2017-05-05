@@ -1,7 +1,7 @@
 dom = React.DOM 
 
-@RunCard = React.createClass
-	displayName: 'RunCard'
+@RunSession = React.createClass
+	displayName: 'RunSession'
 	getInitialState: ->
 		right_answer: "0"
 		votes: @props.votes
@@ -39,21 +39,17 @@ dom = React.DOM
 	      data: checkbox: selected, card_id: @props.card_id
       	console.log ("This is selected: "+selected) 
       	 $("input").prop('disabled', true) 
-    testClicked: (event)-> 
-    	$.ajax
-	      url: @props.test_1
-	      type: 'POST' 	
-	      dataType: 'json'
-		  data: quest: @state.quest
-		  success: (data) ->
-		    r = $.parseJSON(data)
-		    console.log r.quest  		
+    handleTestClicked: (event) ->
+    	console.log ("It Works")	
 	nextQuestionClicked: (event) ->
 		$.ajax
-			url: @props.run_cards_path
-			type: 'post'
-		$(document).ajaxStop ->
-  			setTimeout location.reload(), 5000
+			url: @props.sessions_next_card_path
+			type: "POST"
+			dataType: "JSON"
+			contentType: "application/json"
+			processData: false
+			data: JSON.stringify({quest: @state.quest})
+		console.log (@props.sessions_next_card_path)		
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
 		console.log ("It Works!")
@@ -183,15 +179,7 @@ dom = React.DOM
 										className: "button large radius-10",
 										onClick: @handleClick,
 										ref: "runCard",
-										"RUN"	
-								dom.div
-									className: "small-12 columns text-right",
-									dom.a 
-										id: "run-card",
-										className: "button large radius-10",
-										onClick: @testClicked,
-										ref: "runCard",
-										"Test"																	
+										"RUN"																							
 								dom.div
 									className: "small-12 columns text-right",
 									dom.a 
@@ -200,6 +188,12 @@ dom = React.DOM
 										style: {display: 'none'},
 										className: "button large radius-10",
 										"NEXT",
+								dom.div
+									className: "small-12 columns text-right",
+									dom.a 
+										className: "button large radius-10",
+										onClick: @handleTestClicked,
+										"Test"		
 								dom.div
 									style: {display: "none"}
 									ref: "votesDiv",
@@ -268,49 +262,6 @@ dom = React.DOM
 											streakRemains,
 										dom.div
 											className: "spde-mode-title",
-											msgSPDE,
-						dom.div	
-							className: "row",
-							ref: "showComments",			
-							dom.div
-								className: "large-8 columns",
-								React.createElement Comments, csrfToken: @props.csrfToken, url: "/questions/#{@props.card_id}/comments", comments: @props.comments		
 						
-@RunCardAnswer = React.createClass
-	displayName: 'RunCardAnswer'
-	componentDidMount: ->
-		$(@refs.optionToSelect).addClass('animated fadeInUp')
-	render: ->
-		if(@props.choice == "simple")
-			typeOption = "radio"
-		else if(@props.choice == "multiple")
-			typeOption = "checkbox"
-		if(@props.answer.is_correct)
-			rightColor = "this-ans" 
-		else
-			rightColor = "this-ansn"
-		dom.div
-			ref: "optionToSelect",
-			className: "root margin-15 answer-card "+rightColor,
-			dom.div
-				className: "row",							
-				dom.div 
-					className: "small-12 columns",
-					dom.input
-						id: "#{@props.answer.id}",
-						name: "option",
-						type: typeOption,	
-					dom.label
-						htmlFor: "#{@props.answer.id}",
-						@props.answer.answer_markdown				
-			
-@RunTagList = React.createClass
-	displayName: 'RunTagList'
-	render: ->			
-		dom.li 
-			className: "margin-tag title-li tag-horizontal",
-			dom.a
-				className: "tag-decoration",
-				@props.tag
 
 
