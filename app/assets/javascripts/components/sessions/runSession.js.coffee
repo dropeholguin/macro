@@ -8,6 +8,7 @@ dom = React.DOM
 		comments: []
 		state: @props.state
 		quest: []
+		title: @props.title
 	componentDidMount: ->
 		$(@refs.showVotes).hide()
 		if(@state.state)
@@ -40,16 +41,15 @@ dom = React.DOM
       	console.log ("This is selected: "+selected) 
       	 $("input").prop('disabled', true) 
     handleTestClicked: (event) ->
-    	console.log ("It Works")	
+    	console.log ("It Works")  	
 	nextQuestionClicked: (event) ->
-		$.ajax
-			url: @props.sessions_next_card_path
-			type: "POST"
-			dataType: "JSON"
-			contentType: "application/json"
-			processData: false
-			data: JSON.stringify({quest: @state.quest})
-		console.log (@props.sessions_next_card_path)		
+		$.ajax '/sessions_next_card',
+        type: 'POST',
+        dataType: 'json',
+        error: ->
+            console.log("AJAX Error:")
+        success: (data) ->
+            console.log(data.question.title)
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
 		console.log ("It Works!")
@@ -136,7 +136,7 @@ dom = React.DOM
 									dom.h4
 										className: "weight",
 										style: {color: "#07C", fontWeight: "bold"},
-										@props.title,
+										@state.title,
 								dom.div
 									className: "large-3 columns text-right",
 									dom.button

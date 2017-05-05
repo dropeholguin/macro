@@ -10,6 +10,7 @@ dom = React.DOM
 		quest: []
 	componentDidMount: ->
 		$(@refs.showVotes).hide()
+		$(@refs.showComments).hide()
 		if(@state.state)
 			$(@refs.showVotes).hide()
 		if(@state.state == false)
@@ -21,6 +22,8 @@ dom = React.DOM
 	handleClick: (event) ->
 		if(@state.state == false)
 			$(@refs.showVotes).show()
+		if(@state.state == true)
+			$(@refs.showComments).show()			
 		$(@refs.votesDiv).show()
 		$(@refs.votesDiv).addClass("small-12 text-center animated bounce")
 		$(@refs.flagButton).show()
@@ -39,15 +42,7 @@ dom = React.DOM
 	      data: checkbox: selected, card_id: @props.card_id
       	console.log ("This is selected: "+selected) 
       	 $("input").prop('disabled', true) 
-    testClicked: (event)-> 
-    	$.ajax
-	      url: @props.test_1
-	      type: 'POST' 	
-	      dataType: 'json'
-		  data: quest: @state.quest
-		  success: (data) ->
-		    r = $.parseJSON(data)
-		    console.log r.quest  		
+      	 $("#comment_comment_markdown").prop('disabled', false)     		
 	nextQuestionClicked: (event) ->
 		$.ajax
 			url: @props.run_cards_path
@@ -183,15 +178,7 @@ dom = React.DOM
 										className: "button large radius-10",
 										onClick: @handleClick,
 										ref: "runCard",
-										"RUN"	
-								dom.div
-									className: "small-12 columns text-right",
-									dom.a 
-										id: "run-card",
-										className: "button large radius-10",
-										onClick: @testClicked,
-										ref: "runCard",
-										"Test"																	
+										"RUN"																	
 								dom.div
 									className: "small-12 columns text-right",
 									dom.a 

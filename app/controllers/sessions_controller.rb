@@ -58,7 +58,7 @@ class SessionsController < ApplicationController
 		question_ids_array = cookies[:questions].split("-")
         question_id = question_ids_array.shift
         question_array_string = question_ids_array.join("-")
-        cookies[:import_queue] = { value: question_array_string, expires: 23.hours.from_now }
+        cookies[:questions] = { value: question_array_string, expires: 23.hours.from_now }
 
         @question = Question.find question_id.to_i
 
