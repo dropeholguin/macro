@@ -9,12 +9,23 @@ dom = React.DOM
 		state: @props.state
 		quest: []
 		title: @props.title
+		description: @props.description
+		explanation: @props.explanation
+		card_id: @props.card_id	
 	componentDidMount: ->
 		$(@refs.showVotes).hide()
 		if(@state.state)
 			$(@refs.showVotes).hide()
 		if(@state.state == false)
-			$(@refs.showComments).hide()		
+			$(@refs.showComments).hide()
+	infoUpdate: (data) ->	
+		console.log (data)		
+		@setState({title: data.question.title, description: data.question.description_markdown, explanation: data.question.explanation_markdown, card_id: data.question.id})
+		$(@refs.runCard).show()		
+		$(@refs.explanationDiv).hide()
+		$(@refs.nextCard).hide()	
+		$(@refs.flagButton).hide()	
+		$(@refs.votesDiv).hide()
 	handleClickVoteUp: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	handleClickVoteDown: (event) ->
@@ -37,19 +48,19 @@ dom = React.DOM
 		$.ajax
 	      url: '/run_question'
 	      type: 'POST'
-	      data: checkbox: selected, card_id: @props.card_id
-      	console.log ("This is selected: "+selected) 
-      	 $("input").prop('disabled', true) 
-    handleTestClicked: (event) ->
-    	console.log ("It Works")  	
+	      data: checkbox: selected, card_id: @state.card_id
+      	console.log ("This is selected: "+selected+@state.card_id) 
+      	 $("input").prop('disabled', true)     
 	nextQuestionClicked: (event) ->
 		$.ajax '/sessions_next_card',
         type: 'POST',
         dataType: 'json',
         error: ->
             console.log("AJAX Error:")
-        success: (data) ->
-            console.log(data.question.title)
+        success: (data) =>
+            console.log(data)
+            @setState({quest: data}) 
+            @infoUpdate(data) 
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
 		console.log ("It Works!")
@@ -146,7 +157,7 @@ dom = React.DOM
 										onClick: @flagButtonClicked,
 										"Report"										
 							dom.div
-								dangerouslySetInnerHTML: __html: @props.description.toString(),
+								dangerouslySetInnerHTML: __html: @state.description.toString(),
 							dom.div
 								className: "row",								
 								dom.div 
@@ -158,13 +169,14 @@ dom = React.DOM
 										React.createElement CardAnswer, key: answer.id, answer: answer, choice: @props.choice, right_answer: @state.right_answer
 								dom.div
 									id: "explanation-card",
+									ref: "explanationDiv",										
 									style: {display: 'none'}
 									className: "small-6 columns",
 									dom.h5
 										className: "weight",
 										"Explanation:"
 									dom.p 
-										dangerouslySetInnerHTML: __html: @props.explanation.toString()										
+										dangerouslySetInnerHTML: __html: @state.explanation.toString()										
 							dom.div
 								className: "row",
 								dom.div
@@ -184,16 +196,11 @@ dom = React.DOM
 									className: "small-12 columns text-right",
 									dom.a 
 										id: "back-card",
+										ref: "nextCard",											
 										onClick: @nextQuestionClicked,
 										style: {display: 'none'},
 										className: "button large radius-10",
-										"NEXT",
-								dom.div
-									className: "small-12 columns text-right",
-									dom.a 
-										className: "button large radius-10",
-										onClick: @handleTestClicked,
-										"Test"		
+										"NEXT",								
 								dom.div
 									style: {display: "none"}
 									ref: "votesDiv",
