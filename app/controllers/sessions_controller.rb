@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
 	before_filter :authenticate_user!
+	include ApplicationHelper
 
 	def index
 		@sessions = Session.all.order('created_at desc')
@@ -61,9 +62,10 @@ class SessionsController < ApplicationController
         cookies[:questions] = { value: question_array_string, expires: 23.hours.from_now }
 
         @question = Question.find question_id.to_i
+        @description = markdown(@question.description_markdown)
 
 		respond_to do |format|
-		 	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list } }
+		 	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list, description: @description, remaining_card: (question_ids_array.size + 1) } }
 		end
 	end
 
