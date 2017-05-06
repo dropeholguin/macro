@@ -9,8 +9,6 @@ Things you may want to cover:
 
 * System dependencies
 
-* Configuration
-
 * Database creation
 
 * Database initialization
@@ -22,3 +20,23 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+
+## Configuration
+
+Install the following:
+ * Ruby
+ * Rails
+ * Git
+ * Postgresql
+
+clone the repo
+
+    cd [repo]
+    bundle install
+    cp config/database.yml.example config/database.yml
+    rails db:create db:migrate
+    brew install elasticsearch
+    rails s
+
+then navigate to localhost:3000!
