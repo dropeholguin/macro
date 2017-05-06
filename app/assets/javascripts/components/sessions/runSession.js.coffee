@@ -26,6 +26,7 @@ dom = React.DOM
 		$(@refs.nextCard).hide()	
 		$(@refs.flagButton).hide()	
 		$(@refs.votesDiv).hide()
+		$("input").prop('disabled', false)
 	handleClickVoteUp: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	handleClickVoteDown: (event) ->
