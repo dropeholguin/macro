@@ -63,7 +63,7 @@ class SessionsController < ApplicationController
         @question = Question.find question_id.to_i
 
 		respond_to do |format|
-		 	format.json  { render json: { question: @question } }
+		 	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list } }
 		end
 	end
 
@@ -73,10 +73,14 @@ class SessionsController < ApplicationController
 		card = Question.find params[:card_id]
 		
 		answers_correct = card.answers.select { |answer| answer.is_correct == true }
-		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+		@is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
 
-		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed)
+		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: @is_passed)
 		@card.save
+
+		respond_to do |format|
+		 	format.json  { render json: { is_passed: @is_passed, tokens: @user.points } }
+		end
 	end
 
  	private
