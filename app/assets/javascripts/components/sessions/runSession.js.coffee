@@ -12,6 +12,9 @@ dom = React.DOM
 		description: @props.description
 		explanation: @props.explanation
 		card_id: @props.card_id	
+		answers: @props.answers
+		tag_list: @props.tag_list
+		choice: @props.choice
 	componentDidMount: ->
 		$(@refs.showVotes).hide()
 		if(@state.state)
@@ -27,6 +30,11 @@ dom = React.DOM
 		$(@refs.flagButton).hide()	
 		$(@refs.votesDiv).hide()
 		$("input").prop('disabled', false)
+	answersUpdate: (data) ->
+		console.log ("Answers: "+data.answers[0].id)
+		@setState({answers: data.answers, choice: data.question.choice})
+	tagsUpdate: (data) ->
+		@setState({tag_list: data.tag_list})
 	handleClickVoteUp: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	handleClickVoteDown: (event) ->
@@ -67,6 +75,8 @@ dom = React.DOM
             console.log(data)
             @setState({quest: data}) 
             @infoUpdate(data) 
+            @answersUpdate(data)
+            @tagsUpdate(data)
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
 		console.log ("It Works!")
@@ -171,8 +181,8 @@ dom = React.DOM
 									dom.h5
 										className: "weight",
 										"Answers:"
-									for answer in @props.answers
-										React.createElement CardAnswer, key: answer.id, answer: answer, choice: @props.choice, right_answer: @state.right_answer
+									for answer in @state.answers
+										React.createElement CardAnswer, key: answer.id, answer: answer, choice: @state.choice, right_answer: @state.right_answer
 								dom.div
 									id: "explanation-card",
 									ref: "explanationDiv",										
@@ -187,7 +197,7 @@ dom = React.DOM
 								className: "row",
 								dom.div
 									className: "small-8 columns",
-									for tag in @props.tag_list
+									for tag in @state.tag_list
 										React.createElement TagList, key: tag.id, tag: tag,
 																	
 								dom.div
