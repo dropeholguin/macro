@@ -1,2 +1,1 @@
-<h2>Session</h2>
 <%= react_component 'RunSession', {card_id: @question.id,title: @question.title, answers: @question.answers, description: markdown(@question.description_markdown), choice: @question.choice, tag_list: @question.tag_list, submit_img: image_path('submit.png'), explanation: markdown(@question.explanation_markdown), run_cards_path: run_card_path, sessions_next_card_path: sessions_next_card_path} %>
