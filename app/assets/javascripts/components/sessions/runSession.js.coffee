@@ -15,7 +15,10 @@ dom = React.DOM
 		answers: @props.answers
 		tag_list: @props.tag_list
 		choice: @props.choice
+		animate_tag: "animated fadeInRight"
 	componentDidMount: ->
+		$(@refs.animateTitle).addClass('animated fadeInLeft')
+		$(@refs.animateDescription).addClass('animated fadeInRight')
 		$(@refs.showVotes).hide()
 		if(@state.state)
 			$(@refs.showVotes).hide()
@@ -40,17 +43,21 @@ dom = React.DOM
 	handleClickVoteDown: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
 	handleClick: (event) ->
+		@setState({animate_tag: "none"})   
 		if(@state.state == false)
 			$(@refs.showVotes).show()
-		$(@refs.votesDiv).show()
+		$(@refs.votesDiv).hide()
 		$(@refs.votesDiv).addClass("small-12 text-center animated bounce")
 		$(@refs.flagButton).show()
 		$(@refs.flagButton).addClass('animated bounceIn')
 		document.getElementById('explanation-card').style.display = 'block'
 		document.getElementById('run-card').style.display = 'none'
 		document.getElementById('back-card').style.display = 'inline-block'
+		$(@refs.explanationDiv).addClass('animated slideInUp')
+		$(@refs.animateTitle).removeClass('animated fadeInLeft')
+		$(@refs.animateDescription).removeClass('animated fadeInRight')
 		if ($('.this-ans').length > 0)
-			$('.this-ans').addClass "right-color"
+			$('.this-ans').addClass "right-color animated bounceIn"
 		if ($('.this-ansn').length > 0)
 			$('.this-ansn').addClass "wrong-color"
 		selected = $('input[name=option]:checked').map(-> @id).get()
@@ -63,9 +70,15 @@ dom = React.DOM
 				console.log("AJAX Error:")
 			success: (data) =>
 			    console.log(data)
+			    if data.is_passed
+			    	$.amaran content: {'title': "Congratulations!", 'message': "", 'info': "You have answered #{@state.title} correctly", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
+		    	else
+		    		$.amaran content: {'title': "Sorry!", 'message': "", 'info': "You have answered #{@state.title} wrong", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
       	console.log ("This is selected: "+selected+@state.card_id) 
-      	$("input").prop('disabled', true)     
+      	$("input").prop('disabled', true)       	 
 	nextQuestionClicked: (event) ->
+		$(@refs.animateTitle).addClass('animated fadeInLeft')
+		$(@refs.animateDescription).addClass('animated fadeInRight')
 		$.ajax '/sessions_next_card',
         type: 'POST',
         dataType: 'json',
@@ -77,6 +90,7 @@ dom = React.DOM
             @infoUpdate(data) 
             @answersUpdate(data)
             @tagsUpdate(data)
+        @setState(animate_tag: "animated fadeInRight")
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
 		console.log ("It Works!")
@@ -148,9 +162,9 @@ dom = React.DOM
 					dom.div
 						className: "row lightblue-box margin-auto"
 						dom.h4 {},
-							"RUN A CARD"
+							"RUN A SESSION"
 						dom.p {},
-							"Choose a topic, take questions one by one and get bonuses for 4 in a row."
+							"Choose a topic, take sessions one by one and get bonuses for 4 in a row."
 					
 					dom.div
 						className: "row white-background",
@@ -161,6 +175,7 @@ dom = React.DOM
 								dom.div
 									className: "large-9 columns",								
 									dom.h4
+										ref: "animateTitle",
 										className: "weight",
 										style: {color: "#07C", fontWeight: "bold"},
 										@state.title,
@@ -173,6 +188,7 @@ dom = React.DOM
 										onClick: @flagButtonClicked,
 										"Report"										
 							dom.div
+								ref: "animateDescription",
 								dangerouslySetInnerHTML: __html: @state.description.toString(),
 							dom.div
 								className: "row",								
@@ -198,7 +214,7 @@ dom = React.DOM
 								dom.div
 									className: "small-8 columns",
 									for tag in @state.tag_list
-										React.createElement TagList, key: tag.id, tag: tag,
+										React.createElement TagList, key: tag.id, tag: tag, animate_tag: @state.animate_tag,
 																	
 								dom.div
 									className: "small-12 columns text-right",
@@ -207,7 +223,7 @@ dom = React.DOM
 										className: "button large radius-10",
 										onClick: @handleClick,
 										ref: "runCard",
-										"RUN"																							
+										"SUBMIT"																							
 								dom.div
 									className: "small-12 columns text-right",
 									dom.a 

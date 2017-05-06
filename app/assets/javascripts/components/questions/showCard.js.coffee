@@ -186,6 +186,8 @@ dom = React.DOM
 
 @CardAnswer = React.createClass
 	displayName: 'CardAnswer'
+	componentDidMount: ->
+		$(@refs.divAnswer).addClass('animated fadeInLeft')
 	render: ->
 		if(@props.choice == "simple")
 			typeOption = "radio"
@@ -200,6 +202,7 @@ dom = React.DOM
 			dom.div
 				className: "row",							
 				dom.div 
+					ref: "divAnswer",
 					className: "small-12 columns",
 					dom.input
 						id: "#{@props.answer.id}",
@@ -213,7 +216,8 @@ dom = React.DOM
 	displayName: 'TagList'
 	render: ->			
 		dom.li 
-			className: "margin-tag title-li tag-horizontal",
+			ref: "liTag",
+			className: "margin-tag title-li tag-horizontal #{@props.animate_tag}",
 			dom.a
 				className: "tag-decoration",
 				@props.tag

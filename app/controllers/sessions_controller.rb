@@ -63,7 +63,7 @@ class SessionsController < ApplicationController
         @question = Question.find question_id.to_i
 
 		respond_to do |format|
-		 	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list } }
+		 	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list} }
 		end
 	end
 
