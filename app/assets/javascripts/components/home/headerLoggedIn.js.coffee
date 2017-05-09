@@ -106,7 +106,7 @@ dom = React.DOM
 										dom.i
 											className: "fa fa-sign-out",
 											'aria-hidden': "true",
-											"Log Out"
+											"SIGNOFF"
 
 
 
