@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
 	before_action :set_question, only: [:show, :edit, :update, :destroy]
 	before_filter :authenticate_user!
+	include ApplicationHelper
 
 	def index
 		if params[:query].present? || params[:the_tag]
@@ -21,7 +22,13 @@ class QuestionsController < ApplicationController
 	def card
 		@user = current_user
 		if @user.points > 0
-			@question = Question.offset(rand(Question.count)).first
+			questions = Question.all.sort_by{rand}
+			question_ids_array = questions.pluck(:id)
+	        first_question_id = question_ids_array.shift
+	        question_array_string = question_ids_array.join("-")
+	        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+
+	        @question = Question.find first_question_id.to_i
 			if !@question.nil?
 				@answers = @question.answers
 				@comments = @question.comments.order("created_at desc")	
@@ -38,8 +45,7 @@ class QuestionsController < ApplicationController
 				respond_to do |format|
 					format.html { redirect_to root_path, alert: '' }
 				end
-			end
-			
+			end	
 		else 
 			respond_to do |format|
 				format.html { redirect_to root_path, alert: '' }
@@ -48,7 +54,18 @@ class QuestionsController < ApplicationController
 	end
 
 	def next_card
-		
+		question_ids_array = cookies[:cards].split("-")
+        question_id = question_ids_array.shift
+        question_array_string = question_ids_array.join("-")
+        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+
+        @question = Question.find question_id.to_i
+        @description = markdown(@question.description_markdown)
+        @explanation = markdown(@question.explanation_markdown)
+
+		respond_to do |format|
+		 	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list, description: @description, explanation: @explanation } }
+		end
 	end
 
 	def run_question

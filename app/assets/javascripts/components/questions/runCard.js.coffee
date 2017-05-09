@@ -51,9 +51,12 @@ dom = React.DOM
 	nextQuestionClicked: (event) ->
 		$.ajax
 			url: @props.run_cards_path
-			type: 'post'
-		$(document).ajaxStop ->
-  			setTimeout location.reload(), 5000
+			type: 'POST'
+			dataType: 'json'
+			error: ->
+				console.log("AJAX Error:")
+			success: (data) =>
+			    console.log(data)
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
 		console.log ("It Works!")
