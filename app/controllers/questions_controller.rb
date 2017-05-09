@@ -72,7 +72,7 @@ class QuestionsController < ApplicationController
 		@card.save
 
 		@creator = card.user
-		@created_at = card.created_at
+		@created_at = card.created_at.strftime("%b %d, %Y")
 		@people_number = 0
 
 		Card.question_cards(card.id).each do |card|
@@ -89,7 +89,11 @@ class QuestionsController < ApplicationController
 				people = people + 1
 			end
 		end
-		@percentage_people =  (people.to_f / cards_count)*100
+		@percentage_people =  ((people.to_f / cards_count) * 100).round(2)
+
+		respond_to do |format|
+		 	format.json  { render json: { creator: @creator, created_at: @created_at, people_number: @people_number, percentage_people: @percentage_people } }
+		end
 	end
 
 	def show
