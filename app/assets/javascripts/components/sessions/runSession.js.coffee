@@ -75,6 +75,7 @@ dom = React.DOM
         dataType: 'json',
         error: ->
             console.log("AJAX Error:")
+            window.location.replace("/sessions")
         success: (data) =>
             console.log(data)
             @setState({quest: data}) 
