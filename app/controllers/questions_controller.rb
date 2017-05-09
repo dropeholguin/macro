@@ -72,6 +72,7 @@ class QuestionsController < ApplicationController
 		@user = current_user
 		answers = params[:checkbox]
 		card = Question.find params[:card_id]
+		@comments = card.comments
 		
 		answers_correct = card.answers.select { |answer| answer.is_correct == true }
 		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
@@ -109,7 +110,7 @@ class QuestionsController < ApplicationController
 		@percentage_people =  ((people.to_f / cards_count) * 100).round(2)
 
 		respond_to do |format|
-		 	format.json  { render json: { creator: @creator, created_at: @created_at, people_number: @people_number, percentage_people: @percentage_people } }
+		 	format.json  { render json: { creator: @creator, created_at: @created_at, people_number: @people_number, percentage_people: @percentage_people, comments: @comments } }
 		end
 	end
 
