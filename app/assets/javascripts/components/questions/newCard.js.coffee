@@ -99,16 +99,14 @@ dom = React.DOM
 										dom.div
 											className: "small-4 columns"
 											dom.select 
-												name: "options",
+												id: "choice"
+												name: "choice",
 												dom.option
-													value: "0",															
-													"Single Choice",
+													value: "multiple",															
+													"Multiple choice",
 												dom.option
-													value: "1",															
-													"Multiple Choice",
-												dom.option
-													value: "2",															
-													"Open CARD",	
+													value: "user input",															
+													"User Input",	
 									dom.div
 										className: "row"
 										dom.div

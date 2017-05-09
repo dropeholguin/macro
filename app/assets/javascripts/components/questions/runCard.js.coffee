@@ -36,13 +36,18 @@ dom = React.DOM
 		if ($('.this-ansn').length > 0)
 			$('.this-ansn').addClass "wrong-color"
 		selected = $('input[name=option]:checked').map(-> @id).get()
-		$.ajax
-	      url: '/run_question'
-	      type: 'POST'
-	      data: checkbox: selected, card_id: @props.card_id
+		$.ajax 
+			url: '/run_question'
+			type: 'POST'
+			dataType: 'json'
+			data: checkbox: selected, card_id: @props.card_id
+			error: ->
+				console.log("AJAX Error:")
+			success: (data) =>
+			    console.log(data)     
       	console.log ("This is selected: "+selected) 
-      	 $("input").prop('disabled', true) 
-      	 $("#comment_comment_markdown").prop('disabled', false)     		
+		$("input").prop('disabled', true) 
+		$("#comment_comment_markdown").prop('disabled', false)    		
 	nextQuestionClicked: (event) ->
 		$.ajax
 			url: @props.run_cards_path
