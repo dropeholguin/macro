@@ -29,10 +29,6 @@ dom = React.DOM
 					className: "row",
 					dom.div
 						className: "#{@props.small} #{@props.medium} #{@props.large} small-centered medium-centered large-centered columns text-center",
-						dom.div
-							className: "title",
-							dom.h3 {},
-								"SIGN UP"							
 						dom.a
 							className: "button expanded btn-linkedin linkedin-color radius-40",
 							href: @props.linkedin,
@@ -41,7 +37,7 @@ dom = React.DOM
 								'aria-hidden': "true",
 							dom.span 
 								className: "fntsize-25",
-								" Sign Up with LinkedIn ",	
+								" SIGNON with LinkedIn ",	
 						dom.div
 							className: "divider",
 							dom.strong

@@ -14,7 +14,7 @@ dom = React.DOM
 						"JOIN OUR COMMUNITY OF SAS PROFESSIONALS"
 					dom.h2 
 						className: "white-title",
-						"WITH SAS CARDS"
+						"WITH MACRO CARDS"
 					dom.h5 {},
 						"Our platform gives you the tools to learn new things, share your expertise and further your career."
 					dom.div
@@ -24,7 +24,7 @@ dom = React.DOM
 							dom.a
 								className: "button expanded primary white blue-box",
 								href: "/users/sign_up",
-								"Sign Up To SAS Cards »"
+								"Sign Up To Macro Cards »"
 					dom.p {},
 						"*We respect your privacy and have ZERO TOLERANCE for spam"
 					dom.div
@@ -78,7 +78,7 @@ dom = React.DOM
 				dom.div
 					className: "large-12 text-center columns",
 					dom.h2 {},
-						"ABOUT SAS CARDS"
+						"ABOUT MACRO CARDS"
 			dom.div
 				className: "row expanded white-background margin-help margin-auto",
 				dom.div
@@ -108,7 +108,7 @@ dom = React.DOM
 							dom.h4 {},
 								"Put Your Technical Knowledge to the Test",
 							dom.p {},
-								"Challenge yourself by setting questions for other users, you’ll be creating accessible training for others and you’ll gain reputation points for good questions. Or answers questions that other users have set in order to prove your knowledge."
+								"Challenge yourself by setting questions for other users. You’ll be creating accessible training for others and will gain reputation points for good questions. But first, you will have to answer questions that other users have set in order to prove your knowledge."
 					dom.div
 						className: "row",
 						dom.div
@@ -118,9 +118,9 @@ dom = React.DOM
 						dom.div
 							className: "small-10 medium-10 large-10 columns",
 							dom.h4 {},
-								"Belong to a Community of Experts",
+								"Maximise Performance",
 							dom.p {},
-								"Interact with other SAS professionals in order to learn new things, share your expertise and further your career."
+								"Whether you’re a programmer or an administrator, our cards are an engaging way to learn more about the capabilities of SAS.  Macro Cards will give you the expertise to simplify, automate and maximise the performance of SAS within your organisation."
 
 				dom.div
 					className: "large-5 columns"
