@@ -36,7 +36,7 @@ clone the repo
     bundle install
     cp config/database.yml.example config/database.yml
     rails db:create db:migrate
-    brew install elasticsearch
+    brew install elasticsearch@2.4
     rails s
 
 then navigate to localhost:3000!
