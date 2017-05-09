@@ -76,9 +76,25 @@ class QuestionsController < ApplicationController
 		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed)
 		@card.save
 
-		respond_to do |format|
-		 	format.json  { render json: { is_passed: is_passed, points: @user.points } }
+		@creator = card.user
+		@created_at = card.created_at
+		@people_number = 0
+
+		Card.question_cards(card.id).each do |card|
+			if card.user.present?
+				@people_number = @people_number + 1
+			end
 		end
+
+		people = 0
+		cards_count = Card.question_cards(card.id).count
+
+		Card.questions_right(card.id).each do |card|
+			if card.user.present?
+				people = people + 1
+			end
+		end
+		@percentage_people =  (people.to_f / cards_count)*100
 	end
 
 	def show
