@@ -6,6 +6,7 @@ has_many :cards
 has_many :comments
 has_many :flags, dependent: :destroy
 has_many :sessions
+has_many :session_cards
 
 has_reputation :votes, source: {reputation: :votes, of: :questions}, aggregated_by: :sum
 has_reputation :votes, source: {reputation: :votes, of: :comments}, aggregated_by: :sum

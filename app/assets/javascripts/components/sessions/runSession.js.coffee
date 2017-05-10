@@ -11,7 +11,8 @@ dom = React.DOM
 		title: @props.title
 		description: @props.description
 		explanation: @props.explanation
-		card_id: @props.card_id	
+		card_id: @props.card_id
+		session_id: @props.session_id
 		answers: @props.answers
 		tag_list: @props.tag_list
 		choice: @props.choice
@@ -65,7 +66,7 @@ dom = React.DOM
 			url: @props.run_cards_path
 			type: 'POST'
 			dataType: 'json'
-			data: checkbox: selected, card_id: @state.card_id
+			data: checkbox: selected, session: @state.session_id, card_id: @state.card_id
 			error: ->
 				console.log("AJAX Error:")
 			success: (data) =>

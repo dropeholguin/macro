@@ -45,9 +45,9 @@ class SessionsController < ApplicationController
  	end
 
  	def run_sessions
-		session = Session.find params[:session_id]
+		@session = Session.find params[:session_id]
 		questions = []
-		session.takes.each do |take|
+		@session.takes.each do |take|
 			questions << take.question
 		end
 		question_ids_array = questions.pluck(:id)
@@ -76,12 +76,13 @@ class SessionsController < ApplicationController
 		@user = current_user
 		answers = params[:checkbox]
 		card = Question.find params[:card_id]
-		
+		session = Session.find params[:session]
+
 		answers_correct = card.answers.select { |answer| answer.is_correct == true }
 		@is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
 
-		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: @is_passed)
-		@card.save
+		@session_card = SessionCard.new(user_id: @user.id, question_id: card.id, is_passed: @is_passed, session_id: session.id )
+		@session_card.save
 
 		respond_to do |format|
 		 	format.json  { render json: { is_passed: @is_passed, tokens: @user.points } }

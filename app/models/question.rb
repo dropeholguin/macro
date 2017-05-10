@@ -8,6 +8,7 @@ class Question < ApplicationRecord
 	has_many :takes
 	has_many :answers, inverse_of: :question
 	has_many :cards
+	has_many :session_cards
 	has_many :comments
 	has_many :flags, dependent: :destroy
 	
