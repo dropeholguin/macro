@@ -24,18 +24,21 @@ class SessionsController < ApplicationController
 		@session.user = @user
 
 		respond_to do |format|
-			if @session.save
-				if !params[:question][:ids].empty?
+			if !params[:question].nil? && params[:question][:ids].size == 16
+				if @session.save
 					params[:question][:ids].each do |question_id|
 						question = Question.find question_id
 						take = Take.new(question_id: question.id, session_id: @session.id)
 						take.save
 					end
-				end	
-				format.html { redirect_to sessions_path, notice: 'session was successfully created.' }
-				format.json { render :show, status: :created, location: @session }
+					format.html { redirect_to sessions_path, notice: 'session was successfully created.' }
+					format.json { render :show, status: :created, location: @session }
+				else
+					format.html { redirect_to new_session_path }
+					format.json { render json: @session.errors, status: :unprocessable_entity }
+				end
 			else
-				format.html { render :new }
+				format.html { redirect_to new_session_path }
 				format.json { render json: @session.errors, status: :unprocessable_entity }
 			end
 		end
@@ -83,6 +86,10 @@ class SessionsController < ApplicationController
 		respond_to do |format|
 		 	format.json  { render json: { is_passed: @is_passed, tokens: @user.points } }
 		end
+	end
+
+	def sessions_stats
+		
 	end
 
  	private
