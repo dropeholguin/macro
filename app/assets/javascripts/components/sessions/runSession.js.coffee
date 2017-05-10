@@ -26,7 +26,7 @@ dom = React.DOM
 			$(@refs.showComments).hide()
 	infoUpdate: (data) ->	
 		console.log (data)		
-		@setState({title: data.question.title, description: data.question.description_markdown, explanation: data.question.explanation_markdown, card_id: data.question.id})
+		@setState({title: data.question.title, description: data.description, explanation: data.question.explanation_markdown, card_id: data.question.id})
 		$(@refs.runCard).show()		
 		$(@refs.explanationDiv).hide()
 		$(@refs.nextCard).hide()	
@@ -82,6 +82,7 @@ dom = React.DOM
             @infoUpdate(data) 
             @answersUpdate(data)
             @tagsUpdate(data)
+            $.amaran content: {'title': 'Info:', 'message': '', 'info': "#{data.remaining_card} CARDS left", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
         @setState(animate_tag: "animated fadeInRight")
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
