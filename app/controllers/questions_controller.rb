@@ -98,14 +98,14 @@ class QuestionsController < ApplicationController
 
 		@creator = card.user
 		@created_at = card.created_at.strftime("%b %d, %Y")
-		@people_number = 0
+		@peoples_number = []
 
 		Card.question_cards(card.id).each do |card|
-			if card.user.present?
-				@people_number = @people_number + 1
+			if !@peoples_number.include?(card.user.id)
+				@peoples_number << card.user.id
 			end
 		end
-
+		@people_number = @peoples_number.count
 		people = 0
 		cards_count = Card.question_cards(card.id).count
 
@@ -117,7 +117,7 @@ class QuestionsController < ApplicationController
 		@percentage_people =  ((people.to_f / cards_count) * 100).round(2)
 
 		respond_to do |format|
-		 	format.json  { render json: { creator: @creator, created_at: @created_at, people_number: @people_number, percentage_people: @percentage_people, comments: @comments, streak: @user.streak, state: @state, is_passed: is_passed} }
+		 	format.json  { render json: { creator: @creator, created_at: @created_at, percentage_people: @percentage_people, people_number: @people_number, comments: @comments, streak: @user.streak, state: @state, is_passed: is_passed} }
 		end
 	end
 
