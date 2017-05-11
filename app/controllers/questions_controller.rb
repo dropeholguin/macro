@@ -16,7 +16,14 @@ class QuestionsController < ApplicationController
 
 	def questions_list
 		@user = current_user
-		@questions = Question.questions_list(@user.id)
+		@questions = Question.questions_list(@user.id).order("created_at desc")
+	end
+
+	def tokens_wallet
+		@user = current_user
+		respond_to do |format|
+		 	format.json  { render json: { tokens: @user.points } }
+		end
 	end
 
 	def card
