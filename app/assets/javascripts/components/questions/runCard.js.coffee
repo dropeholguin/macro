@@ -91,6 +91,7 @@ dom = React.DOM
 			dataType: 'json'
 			error: ->
 				console.log("AJAX Error:")
+				window.location.replace("/")
 			success: (data) =>
 			    console.log(data)
 			    @setState({quest: data}) 
