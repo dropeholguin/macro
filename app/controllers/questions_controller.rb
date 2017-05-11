@@ -78,8 +78,9 @@ class QuestionsController < ApplicationController
 		@user = current_user
 		answers = params[:checkbox]
 		card = Question.find params[:card_id]
-		@comments = card.comments.order("created_at desc")
-		@state = card.evaluators_for(:votes).include?(@user)
+		comments = card.comments.order("created_at desc")
+		state = card.evaluators_for(:votes).include?(@user)
+		votes = card.reputation_for(:votes).to_i
 
 		answers_correct = card.answers.select { |answer| answer.is_correct == true }
 		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
@@ -109,15 +110,10 @@ class QuestionsController < ApplicationController
 		people = 0
 		cards_count = Card.question_cards(card.id).count
 
-		Card.questions_right(card.id).each do |card|
-			if card.user.present?
-				people = people + 1
-			end
-		end
-		@percentage_people =  ((people.to_f / cards_count) * 100).round(2)
+		@percentage_people =  ((@people_number.to_f / cards_count) * 100).round(2)
 
 		respond_to do |format|
-		 	format.json  { render json: { creator: @creator, created_at: @created_at, percentage_people: @percentage_people, people_number: @people_number, comments: @comments, streak: @user.streak, state: @state, is_passed: is_passed} }
+		 	format.json  { render json: { creator: @creator, created_at: @created_at, percentage_people: @percentage_people, people_number: @people_number, comments: comments, streak: @user.streak, state: state, is_passed: is_passed, votes: votes } }
 		end
 	end
 
