@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
 	before_action :set_question, only: [:show, :edit, :update, :destroy]
 	before_filter :authenticate_user!
+	include ApplicationHelper
 
 	def index
 		if params[:query].present? || params[:the_tag]
@@ -15,17 +16,29 @@ class QuestionsController < ApplicationController
 
 	def questions_list
 		@user = current_user
-		@questions = Question.questions_list(@user.id)
+		@questions = Question.questions_list(@user.id).order("created_at desc")
+	end
+
+	def tokens_wallet
+		@user = current_user
+		respond_to do |format|
+		 	format.json  { render json: { tokens: @user.points } }
+		end
 	end
 
 	def card
 		@user = current_user
 		if @user.points > 0
-			@question = Question.offset(rand(Question.count)).first
+			questions = Question.all.sort_by{rand}
+			question_ids_array = questions.pluck(:id)
+	        first_question_id = question_ids_array.shift
+	        question_array_string = question_ids_array.join("-")
+	        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+
+	        @question = Question.find first_question_id.to_i
 			if !@question.nil?
 				@answers = @question.answers
 				@comments = @question.comments.order("created_at desc")	
-				@state = @question.evaluators_for(:votes).include?(current_user)
 				if @user.streak < 0
 					@user.update_attributes(streak: 0)
 					respond_to do |format|
@@ -38,8 +51,7 @@ class QuestionsController < ApplicationController
 				respond_to do |format|
 					format.html { redirect_to root_path, alert: '' }
 				end
-			end
-			
+			end	
 		else 
 			respond_to do |format|
 				format.html { redirect_to root_path, alert: '' }
@@ -48,14 +60,27 @@ class QuestionsController < ApplicationController
 	end
 
 	def next_card
-		
+		question_ids_array = cookies[:cards].split("-")
+        question_id = question_ids_array.shift
+        question_array_string = question_ids_array.join("-")
+        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+
+        @question = Question.find question_id.to_i
+        @description = markdown(@question.description_markdown)
+        @explanation = markdown(@question.explanation_markdown)
+
+		respond_to do |format|
+		 	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list, description: @description, explanation: @explanation } }
+		end
 	end
 
 	def run_question
 		@user = current_user
 		answers = params[:checkbox]
 		card = Question.find params[:card_id]
-		
+		@comments = card.comments.order("created_at desc")
+		@state = card.evaluators_for(:votes).include?(@user)
+
 		answers_correct = card.answers.select { |answer| answer.is_correct == true }
 		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
 		if is_passed == true
@@ -92,7 +117,7 @@ class QuestionsController < ApplicationController
 		@percentage_people =  ((people.to_f / cards_count) * 100).round(2)
 
 		respond_to do |format|
-		 	format.json  { render json: { creator: @creator, created_at: @created_at, people_number: @people_number, percentage_people: @percentage_people } }
+		 	format.json  { render json: { creator: @creator, created_at: @created_at, people_number: @people_number, percentage_people: @percentage_people, comments: @comments, streak: @user.streak, state: @state, is_passed: is_passed} }
 		end
 	end
 

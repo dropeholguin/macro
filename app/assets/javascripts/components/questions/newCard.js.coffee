@@ -7,6 +7,8 @@ dom = React.DOM
 	getDefaultProps: ->
 		url: '/questions'
 	componentDidMount: ->
+		$(@refs.multipleChoice).show()
+		$(@refs.userInput).hide()
 		$(@refs.tagsInput).autocomplete source: initTagInput
 		$(document).ready initTagInput
 		$(document).on 'page:load', initTagInput	
@@ -17,6 +19,7 @@ dom = React.DOM
 		$(@refs.explanationTuto).hide()
 		$(@refs.tagsTuto).hide()
 		$(@refs.titleTuto).show()
+		$(@refs.answerTutoUserInput).hide()
 		$(@refs.titleTuto).addClass('animated fadeInDown')
 	tutoForDescriptionClicked: (event) ->
 		$(@refs.titleTuto).hide()
@@ -24,6 +27,7 @@ dom = React.DOM
 		$(@refs.explanationTuto).hide()
 		$(@refs.tagsTuto).hide()
 		$(@refs.descriptionTuto).show()
+		$(@refs.answerTutoUserInput).hide()
 		$(@refs.descriptionTuto).addClass('animated fadeInDown')
 	tutoForExplanationClicked: (event) ->
 		$(@refs.titleTuto).hide()
@@ -31,6 +35,7 @@ dom = React.DOM
 		$(@refs.answerTuto).hide()
 		$(@refs.tagsTuto).hide()
 		$(@refs.explanationTuto).show()
+		$(@refs.answerTutoUserInput).hide()
 		$(@refs.explanationTuto).addClass('animated fadeInDown')
 	tutoForAnswerClicked: (event) ->
 		$(@refs.titleTuto).hide()
@@ -38,6 +43,7 @@ dom = React.DOM
 		$(@refs.explanationTuto).hide()
 		$(@refs.tagsTuto).hide()
 		$(@refs.answerTuto).show()
+		$(@refs.answerTutoUserInput).hide()
 		$(@refs.answerTuto).addClass('animated fadeInDown')		
 	tutoForTagClicked: (event) ->
 		$(@refs.titleTuto).hide()
@@ -45,7 +51,23 @@ dom = React.DOM
 		$(@refs.explanationTuto).hide()		
 		$(@refs.answerTuto).hide()
 		$(@refs.tagsTuto).show()
-		$(@refs.tagsTuto).addClass('animated fadeInDown')			
+		$(@refs.answerTutoUserInput).hide()
+		$(@refs.tagsTuto).addClass('animated fadeInDown')	
+	selectOptionOnChange: (event) ->
+		if $(@refs.choiceSelected).val() == "multiple"
+			$(@refs.multipleChoice).show()
+			$(@refs.userInput).hide()
+		if $(@refs.choiceSelected).val() == "user input"
+			$(@refs.multipleChoice).hide()
+			$(@refs.userInput).show()
+	userInputClicked: (event) ->
+		$(@refs.titleTuto).hide()
+		$(@refs.descriptionTuto).hide()
+		$(@refs.explanationTuto).hide()		
+		$(@refs.answerTuto).hide()
+		$(@refs.tagsTuto).hide()
+		$(@refs.answerTutoUserInput).show()
+		$(@refs.answerTutoUserInput).addClass('animated fadeInDown')
 	render: ->
 		dom.div
 			className: "root",
@@ -99,8 +121,10 @@ dom = React.DOM
 										dom.div
 											className: "small-4 columns"
 											dom.select 
+												ref: "choiceSelected",
 												id: "choice"
 												name: "choice",
+												onChange: @selectOptionOnChange,
 												dom.option
 													value: "multiple",															
 													"Multiple choice",
@@ -124,6 +148,23 @@ dom = React.DOM
 										id: "description",
 										name: "question[description_markdown]",
 									dom.div 
+										ref: "userInput",
+										className: "margin-20",
+										dom.div
+											className: "row"
+											dom.div
+												className: "small-9 columns"									
+												dom.label 												
+													"ANSWER"
+										dom.div											
+											className: "row",
+											dom.div
+												className: "large-12 columns",
+												dom.input
+													type: "text",
+													onClick: @userInputClicked,
+									dom.div 
+										ref: "multipleChoice",
 										className: "margin-20",
 										dom.div
 											className: "row"
@@ -332,6 +373,22 @@ dom = React.DOM
 										"• [foo](http://foo.com)"
 							dom.div
 								style: {minHeight: "236px"},
+								dom.div 
+									ref: "answerTutoUserInput",
+									style: {display: "none"}
+									className: "tutorial-container",
+									dom.h5 
+										className: "bold",
+										"Possible Answers",
+									dom.h6
+										className: "bold",
+										"Be precise"
+									dom.div {},	
+										"• Please provide the answer *exactly* as the user should provide it."
+									dom.div {},	
+										"• Comparisons will not be case sensitive."
+									dom.div {},	
+										"•  Maximum 20 characters."
 								dom.div 
 									ref: "answerTuto",
 									style: {display: "none"}

@@ -11,7 +11,8 @@ dom = React.DOM
 		title: @props.title
 		description: @props.description
 		explanation: @props.explanation
-		card_id: @props.card_id	
+		card_id: @props.card_id
+		session_id: @props.session_id
 		answers: @props.answers
 		tag_list: @props.tag_list
 		choice: @props.choice
@@ -26,7 +27,7 @@ dom = React.DOM
 			$(@refs.showComments).hide()
 	infoUpdate: (data) ->	
 		console.log (data)		
-		@setState({title: data.question.title, description: data.question.description_markdown, explanation: data.question.explanation_markdown, card_id: data.question.id})
+		@setState({title: data.question.title, description: data.description, explanation: data.question.explanation_markdown, card_id: data.question.id})
 		$(@refs.runCard).show()		
 		$(@refs.explanationDiv).hide()
 		$(@refs.nextCard).hide()	
@@ -48,32 +49,23 @@ dom = React.DOM
 			$(@refs.showVotes).show()
 		$(@refs.votesDiv).hide()
 		$(@refs.votesDiv).addClass("small-12 text-center animated bounce")
-		$(@refs.flagButton).show()
+		$(@refs.flagButton).hide()
 		$(@refs.flagButton).addClass('animated bounceIn')
-		document.getElementById('explanation-card').style.display = 'block'
 		document.getElementById('run-card').style.display = 'none'
 		document.getElementById('back-card').style.display = 'inline-block'
-		$(@refs.explanationDiv).addClass('animated slideInUp')
 		$(@refs.animateTitle).removeClass('animated fadeInLeft')
 		$(@refs.animateDescription).removeClass('animated fadeInRight')
-		if ($('.this-ans').length > 0)
-			$('.this-ans').addClass "right-color animated bounceIn"
-		if ($('.this-ansn').length > 0)
-			$('.this-ansn').addClass "wrong-color"
+		
 		selected = $('input[name=option]:checked').map(-> @id).get()
 		$.ajax 
 			url: @props.run_cards_path
 			type: 'POST'
 			dataType: 'json'
-			data: checkbox: selected, card_id: @state.card_id
+			data: checkbox: selected, session: @state.session_id, card_id: @state.card_id
 			error: ->
 				console.log("AJAX Error:")
 			success: (data) =>
-			    console.log(data)
-			    if data.is_passed
-			    	$.amaran content: {'title': "Congratulations!", 'message': "", 'info': "You have answered #{@state.title} correctly", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
-		    	else
-		    		$.amaran content: {'title': "Sorry!", 'message': "", 'info': "You have answered #{@state.title} wrong", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
+			    console.log(data.answers)
       	console.log ("This is selected: "+selected+@state.card_id) 
       	$("input").prop('disabled', true)       	 
 	nextQuestionClicked: (event) ->
@@ -91,6 +83,7 @@ dom = React.DOM
             @infoUpdate(data) 
             @answersUpdate(data)
             @tagsUpdate(data)
+            $.amaran content: {'title': 'Info:', 'message': '', 'info': "#{data.remaining_card} CARDS left", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
         @setState(animate_tag: "animated fadeInRight")
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
@@ -224,7 +217,7 @@ dom = React.DOM
 										className: "button large radius-10",
 										onClick: @handleClick,
 										ref: "runCard",
-										"SUBMIT"																							
+										"ANSWER"																							
 								dom.div
 									className: "small-12 columns text-right",
 									dom.a 

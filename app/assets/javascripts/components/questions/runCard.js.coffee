@@ -8,22 +8,48 @@ dom = React.DOM
 		comments: []
 		state: @props.state
 		quest: []
+		title: @props.title
+		description: @props.description
+		explanation: @props.explanation
+		card_id: @props.card_id	
+		answers: @props.answers
+		tag_list: @props.tag_list
+		choice: @props.choice
+		animate_tag: "animated fadeInRight"
 	componentDidMount: ->
 		$(@refs.showVotes).hide()
 		$(@refs.showComments).hide()
+		$(@refs.cardStats).hide()
 		if(@state.state)
-			$(@refs.showVotes).hide()
-		if(@state.state == false)
-			$(@refs.showComments).hide()		
+			$(@refs.showVotes).hide()					
+	infoUpdate: (data) ->	
+		console.log (data)		
+		@setState({title: data.question.title, description: data.description, explanation: data.explanation, card_id: data.question.id})
+		$(@refs.runCard).show()		
+		$(@refs.explanationDiv).hide()
+		$(@refs.nextCard).hide()	
+		$(@refs.flagButton).hide()	
+		$(@refs.votesDiv).hide()
+		$("input").prop('disabled', false)
+	answersUpdate: (data) ->
+		console.log ("Answers: "+data.answers[0].id)
+		@setState({answers: data.answers, choice: data.question.choice})
+	tagsUpdate: (data) ->
+		@setState({tag_list: data.tag_list})		
 	handleClickVoteUp: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	handleClickVoteDown: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
 	handleClick: (event) ->
+		@setState({animate_tag: "none"})
 		if(@state.state == false)
 			$(@refs.showVotes).show()
+			$(@refs.cardStats).hide()
+			$(@refs.cardStats).removeClass('animated fadeInDown')
 		if(@state.state == true)
-			$(@refs.showComments).show()			
+			$(@refs.showComments).show()
+			$(@refs.cardStats).show()
+			$(@refs.cardStats).addClass('animated fadeInDown')			
 		$(@refs.votesDiv).show()
 		$(@refs.votesDiv).addClass("small-12 text-center animated bounce")
 		$(@refs.flagButton).show()
@@ -31,8 +57,11 @@ dom = React.DOM
 		document.getElementById('explanation-card').style.display = 'block'
 		document.getElementById('run-card').style.display = 'none'
 		document.getElementById('back-card').style.display = 'inline-block'
+		$(@refs.animateTitle).removeClass('animated fadeInLeft')
+		$(@refs.animateDescription).removeClass('animated fadeInRight')
+		$(@refs.explanationDiv).addClass('animated fadeInDown')
 		if ($('.this-ans').length > 0)
-			$('.this-ans').addClass "right-color"
+			$('.this-ans').addClass "right-color animated bounceIn"
 		if ($('.this-ansn').length > 0)
 			$('.this-ansn').addClass "wrong-color"
 		selected = $('input[name=option]:checked').map(-> @id).get()
@@ -40,25 +69,42 @@ dom = React.DOM
 			url: '/run_question'
 			type: 'POST'
 			dataType: 'json'
-			data: checkbox: selected, card_id: @props.card_id
+			data: checkbox: selected, card_id: @state.card_id
 			error: ->
 				console.log("AJAX Error:")
 			success: (data) =>
-			    console.log(data)     
+			    console.log(data)
+			    @setState({creator: data.creator.name, created_at: data.created_at, people_number: data.people_number, percentage_people: data.percentage_people})     
       	console.log ("This is selected: "+selected) 
 		$("input").prop('disabled', true) 
 		$("#comment_comment_markdown").prop('disabled', false)    		
 	nextQuestionClicked: (event) ->
+		$(@refs.showComments).hide()
+		$(@refs.cardStats).removeClass('animated fadeInDown')
+		$(@refs.cardStats).hide()
+		@setState(animate_tag: "animated fadeInRight")
+		$(@refs.animateTitle).addClass('animated fadeInLeft')
+		$(@refs.animateDescription).addClass('animated fadeInRight')
 		$.ajax
 			url: @props.run_cards_path
-			type: 'post'
-		$(document).ajaxStop ->
-  			setTimeout location.reload(), 5000
+			type: 'POST'
+			dataType: 'json'
+			error: ->
+				console.log("AJAX Error:")
+				window.location.replace("/")
+			success: (data) =>
+			    console.log(data)
+			    @setState({quest: data}) 
+			    @infoUpdate(data)
+			    @answersUpdate(data)
+			    @tagsUpdate(data)            
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
 		console.log ("It Works!")
 	voteUpClicked: (event) ->
 		$(@refs.showVotes).hide()
+		$(@refs.cardStats).show()
+		$(@refs.cardStats).addClass('animated fadeInDown')
 		$.ajax
 			url: @props.vote_up
 			type: 'post'
@@ -75,6 +121,8 @@ dom = React.DOM
 		$.amaran content: {'title': "You rated +1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	voteDownClicked: (event) ->
 		$(@refs.showVotes).hide()
+		$(@refs.cardStats).show()
+		$(@refs.cardStats).addClass('animated fadeInDown')
 		$.ajax
 			url: @props.vote_down
 			type: 'post'		
@@ -138,9 +186,10 @@ dom = React.DOM
 								dom.div
 									className: "large-9 columns",								
 									dom.h4
+										ref: "animateTitle",
 										className: "weight",
 										style: {color: "#07C", fontWeight: "bold"},
-										@props.title,
+										@state.title,
 								dom.div
 									className: "large-3 columns text-right",
 									dom.button
@@ -150,7 +199,8 @@ dom = React.DOM
 										onClick: @flagButtonClicked,
 										"Report"										
 							dom.div
-								dangerouslySetInnerHTML: __html: @props.description.toString(),
+								ref: "animateDescription",
+								dangerouslySetInnerHTML: __html: @state.description.toString(),
 							dom.div
 								className: "row",								
 								dom.div 
@@ -158,23 +208,24 @@ dom = React.DOM
 									dom.h5
 										className: "weight",
 										"Answers:"
-									for answer in @props.answers
-										React.createElement CardAnswer, key: answer.id, answer: answer, choice: @props.choice, right_answer: @state.right_answer
+									for answer in @state.answers
+										React.createElement CardAnswer, key: answer.id, answer: answer, choice: @state.choice, right_answer: @state.right_answer
 								dom.div
 									id: "explanation-card",
+									ref: "explanationDiv",
 									style: {display: 'none'}
 									className: "small-6 columns",
 									dom.h5
 										className: "weight",
 										"Explanation:"
 									dom.p 
-										dangerouslySetInnerHTML: __html: @props.explanation.toString()										
+										dangerouslySetInnerHTML: __html: @state.explanation.toString()										
 							dom.div
 								className: "row",
 								dom.div
 									className: "small-8 columns",
-									for tag in @props.tag_list
-										React.createElement TagList, key: tag.id, tag: tag,
+									for tag in @state.tag_list
+										React.createElement TagList, key: tag.id, tag: tag, animate_tag: @state.animate_tag,
 																	
 								dom.div
 									className: "small-12 columns text-right",
@@ -188,6 +239,7 @@ dom = React.DOM
 									className: "small-12 columns text-right",
 									dom.a 
 										id: "back-card",
+										ref: "nextCard",
 										onClick: @nextQuestionClicked,
 										style: {display: 'none'},
 										className: "button large radius-10",
@@ -243,6 +295,10 @@ dom = React.DOM
 												onClick: @voteDownClicked,
 												dom.i
 													className: "fa fa-thumbs-o-down",
+									dom.div
+										ref: "cardStats",
+										className: "large-12 columns",
+										React.createElement CardStats, creator: @state.creator, created_at: @state.created_at, people_number: @state.people_number, percentage_people: @state.percentage_people,				
 						dom.div	
 							className: "large-4 columns",	
 							dom.div
@@ -304,5 +360,56 @@ dom = React.DOM
 			dom.a
 				className: "tag-decoration",
 				@props.tag
+
+@CardStats = React.createClass
+	displayName: 'CardStats'
+	getDefaultProps: ->
+		creator: "No info"
+		created_at: "No info"
+		people_number: "0"
+		percentage_people: "0"
+	render: ->
+		dom.div
+			className: "root text-center",
+			dom.div
+				className: "row",
+				dom.div
+					className: "large-12 columns",
+					dom.h5
+						style: {color: "#cc4b37"},
+						className: "bold",
+						"Statistical Analysis Section",	
+			dom.div
+				className: "row",
+				dom.div
+					className: "large-6 columns",	
+					dom.h5 {},	
+						dom.li
+							className: "fa fa-user",
+							" Created by: #{@props.creator}"
+				dom.div
+					className: "large-6 columns",	
+					dom.h5 {},	
+						dom.li
+							className: "fa fa-calendar",
+							" Created at: #{@props.created_at}"
+			dom.div
+				className: "row",
+				dom.div
+					className: "large-6 columns",	
+					dom.h5 {},	
+						dom.li
+							className: "fa fa-users",
+							" Taken by: #{@props.people_number} Users"
+				dom.div
+					className: "large-6 columns",	
+					dom.h5 {},	
+						dom.li
+							className: "fa fa-check",
+							" Well answered by: #{@props.percentage_people} %"
+					
+
+
+
 
 

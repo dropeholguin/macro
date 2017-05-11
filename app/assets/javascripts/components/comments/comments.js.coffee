@@ -2,12 +2,18 @@ dom = React.DOM
 
 @Comments = React.createClass
 	displayName: 'Comments'
+	getInitialState: ->
+		load_comment: []
 	formSubmitted: (event) ->
 		event.preventDefault()
 		$.ajax
 			url: @props.url
 			type: "POST"
 			data: $(@refs.commentForm).serialize()
+	componentDidMount: ->
+	loadCommentsClicked: (event) ->
+		event.preventDefault()
+		@setState({load_comment: "div:hidden"})
 	render: ->
 		dom.div
 			className: "root",
@@ -35,7 +41,7 @@ dom = React.DOM
 						name: "comment[comment_markdown]",
 						placeholder: "Write a comment..."
 				dom.div
-					className: "actions",
+					className: "actions comments",
 					dom.button
 						'data-no-turbolink': true,
 						className: "button large radius-10",
@@ -43,13 +49,27 @@ dom = React.DOM
 						name: "button",	
 						"Comment"	
 				for comment in @props.comments
-					React.createElement ShowComments, key: comment.id, comment: comment,
+					React.createElement ShowComments, key: comment.id, comment: comment, load_comment: @state.load_comment,
+				dom.div
+					className: "small-12 text-center columns",
+					dom.button
+						onClick: @loadCommentsClicked,
+						className: "button large radius-10",
+						"Load more..."
 
 @ShowComments = React.createClass
 	displayName: 'ShowComments'
+	componentDidMount: ->	
+		console.log (@props.load_comment)
+		$(@refs.showComment).slice(1, 2).show()		
+	componentWillUpdate: ->
+		console.log (@props.load_comment)	
+		$(@refs.showComment).slice(0, 5).show()
 	render: ->
 	 	dom.div
-	 		className: "row comment-box", 
+	 		ref: "showComment",
+	 		className: "row comment-box",
+	 		style: {display: "none"}, 
  			dom.h4 {},
  				@props.comment.user_id,
  			dom.div
