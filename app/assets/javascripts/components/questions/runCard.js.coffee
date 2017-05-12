@@ -86,28 +86,31 @@ dom = React.DOM
       	console.log ("This is selected: "+selected) 
 		$("input").prop('disabled', true) 
 		$("#comment_comment_markdown").prop('disabled', false)    		
-	nextQuestionClicked: (event) ->		
-		$(@refs.timer).countdown('destroy')
-		$(@refs.showComments).hide()
-		$(@refs.cardStats).removeClass('animated fadeInDown')
-		$(@refs.cardStats).hide()
-		@setState(animate_tag: "animated fadeInRight")
-		$(@refs.animateTitle).addClass('animated fadeInLeft')
-		$(@refs.animateDescription).addClass('animated fadeInRight')
-		$.ajax
-			url: @props.run_cards_path
-			type: 'POST'
-			dataType: 'json'
-			error: ->
-				console.log("AJAX Error:")
-				window.location.replace("/")
-			success: (data) =>
-			    console.log(data)
-			    @setState({quest: data, timeLeft: +120})
-	    		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', expiryUrl: @props.root_path})   		
-			    @infoUpdate(data)
-			    @answersUpdate(data)
-			    @tagsUpdate(data)            
+	nextQuestionClicked: (event) ->	
+		if(@state.is_passed == false)
+			window.location.replace("/")	
+		else
+			$(@refs.timer).countdown('destroy')
+			$(@refs.showComments).hide()
+			$(@refs.cardStats).removeClass('animated fadeInDown')
+			$(@refs.cardStats).hide()
+			@setState(animate_tag: "animated fadeInRight")
+			$(@refs.animateTitle).addClass('animated fadeInLeft')
+			$(@refs.animateDescription).addClass('animated fadeInRight')
+			$.ajax
+				url: @props.run_cards_path
+				type: 'POST'
+				dataType: 'json'
+				error: ->
+					console.log("AJAX Error:")
+					window.location.replace("/")
+				success: (data) =>
+				    console.log(data)
+				    @setState({quest: data, timeLeft: +120})
+		    		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', expiryUrl: @props.root_path})   		
+				    @infoUpdate(data)
+				    @answersUpdate(data)
+				    @tagsUpdate(data)            
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
 		console.log ("It Works!")
