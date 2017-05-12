@@ -162,6 +162,8 @@ dom = React.DOM
 												className: "large-12 columns",
 												dom.input
 													type: "text",
+													name: "user_input",
+													id: "user_input",
 													onClick: @userInputClicked,
 									dom.div 
 										ref: "multipleChoice",

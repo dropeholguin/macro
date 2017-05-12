@@ -171,6 +171,7 @@ class QuestionsController < ApplicationController
 		  		@question.choice = "simple"
 		  	end
 		else
+			
 			@question.choice = "user input"
 		end
 		
