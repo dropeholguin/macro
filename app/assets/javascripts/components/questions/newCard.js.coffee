@@ -162,20 +162,7 @@ dom = React.DOM
 												className: "large-12 columns",
 												dom.input
 													type: "text",
-													onClick: @userInputClicked,
-													id: "question_answers_attributes_4_answer_markdown",
-													name: "question[answers_attributes][4][answer_markdown]",
-												dom.div
-													className: "large-4 columns"
-													dom.select 
-														name: "question[answers_attributes][4][is_correct]",
-														dom.option
-															value: "1",
-															id: "question_answers_attributes_4_is_correct",
-															"Correct",
-														dom.option
-															value: "0",															
-															"Incorrect",														
+													onClick: @userInputClicked,																										
 									dom.div 
 										ref: "multipleChoice",
 										className: "margin-20",

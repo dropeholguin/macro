@@ -21,6 +21,7 @@
 //= require components
 //= require cocoon
 //= require_tree .
+//= require jquery.countdown
 window.Components = {} 
 //Choose your name. Do not use React here or
 //you'll overwrite library functions

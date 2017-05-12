@@ -12,7 +12,7 @@
 
   <body>
     <% if user_signed_in? %>      
-      <%= react_component 'HeaderLoggedIn', {user: current_user.email, sign_out: destroy_user_session_path,  points: current_user.points} %>
+      <%= react_component 'HeaderLoggedIn', {user: current_user.email, sign_out: destroy_user_session_path,  points: current_user.points, img: image_path('SPDEMODE/Allanbowe-Anim-01.svg'), root_path: root_path, tokens_wallet_path: tokens_wallet_path} %>
     <% else %>  
     <%end%>    
     <%= yield %>

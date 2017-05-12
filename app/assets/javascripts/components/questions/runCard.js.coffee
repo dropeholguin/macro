@@ -16,12 +16,15 @@ dom = React.DOM
 		tag_list: @props.tag_list
 		choice: @props.choice
 		animate_tag: "animated fadeInRight"
+		timeLeft: +120
+		streak: @props.streak
 	componentDidMount: ->
+		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', expiryUrl: @props.root_path})
 		$(@refs.showVotes).hide()
 		$(@refs.showComments).hide()
 		$(@refs.cardStats).hide()
 		if(@state.state)
-			$(@refs.showVotes).hide()					
+			$(@refs.showVotes).hide()	
 	infoUpdate: (data) ->	
 		console.log (data)		
 		@setState({title: data.question.title, description: data.description, explanation: data.explanation, card_id: data.question.id})
@@ -41,15 +44,8 @@ dom = React.DOM
 	handleClickVoteDown: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
 	handleClick: (event) ->
-		@setState({animate_tag: "none"})
-		if(@state.state == false)
-			$(@refs.showVotes).show()
-			$(@refs.cardStats).hide()
-			$(@refs.cardStats).removeClass('animated fadeInDown')
-		if(@state.state == true)
-			$(@refs.showComments).show()
-			$(@refs.cardStats).show()
-			$(@refs.cardStats).addClass('animated fadeInDown')			
+		@setState({animate_tag: "none", timeLeft: 0})
+		$(@refs.timer).countdown('toggle')				
 		$(@refs.votesDiv).show()
 		$(@refs.votesDiv).addClass("small-12 text-center animated bounce")
 		$(@refs.flagButton).show()
@@ -74,11 +70,24 @@ dom = React.DOM
 				console.log("AJAX Error:")
 			success: (data) =>
 			    console.log(data)
-			    @setState({creator: data.creator.name, created_at: data.created_at, people_number: data.people_number, percentage_people: data.percentage_people, state: data.state})     
+			    @setState({creator: data.creator.name, created_at: data.created_at, people_number: data.people_number, percentage_people: data.percentage_people, state: data.state, streak: data.streak, votes: data.votes, is_passed: data.is_passed }) 
+			    if(@state.state == false)
+			    	$(@refs.showVotes).show()
+			    	$(@refs.cardStats).hide()
+			    	$(@refs.cardStats).removeClass('animated fadeInDown')
+		    	if (data.is_passed)
+            		$.amaran content: {'title': 'Well done!', 'message': '', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
+		    	if (data.is_passed == false)
+		    		$.amaran content: {'title': 'Sorry!', 'message': '', 'info': "You have answered wrong #{@state.title}", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
+		    	if (@state.state == true)
+		    		$(@refs.showVotes).hide()
+		    		$(@refs.cardStats).show()
+					$(@refs.cardStats).addClass('animated fadeInDown')
       	console.log ("This is selected: "+selected) 
 		$("input").prop('disabled', true) 
 		$("#comment_comment_markdown").prop('disabled', false)    		
-	nextQuestionClicked: (event) ->
+	nextQuestionClicked: (event) ->		
+		$(@refs.timer).countdown('destroy')
 		$(@refs.showComments).hide()
 		$(@refs.cardStats).removeClass('animated fadeInDown')
 		$(@refs.cardStats).hide()
@@ -94,7 +103,8 @@ dom = React.DOM
 				window.location.replace("/")
 			success: (data) =>
 			    console.log(data)
-			    @setState({quest: data}) 
+			    @setState({quest: data, timeLeft: +120})
+	    		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', expiryUrl: @props.root_path})   		
 			    @infoUpdate(data)
 			    @answersUpdate(data)
 			    @tagsUpdate(data)            
@@ -106,7 +116,7 @@ dom = React.DOM
 		$(@refs.cardStats).show()
 		$(@refs.cardStats).addClass('animated fadeInDown')
 		$.ajax
-			url: @props.vote_up
+			url: "/questions/#{@state.card_id}/vote?type=up"
 			type: 'post'
 		@setState(
 			votes:  @state.votes + 1,
@@ -124,7 +134,7 @@ dom = React.DOM
 		$(@refs.cardStats).show()
 		$(@refs.cardStats).addClass('animated fadeInDown')
 		$.ajax
-			url: @props.vote_down
+			url: "/questions/#{@state.card_id}/vote?type=down"
 			type: 'post'		
 		@setState(
 			votes:  @state.votes - 1
@@ -146,22 +156,22 @@ dom = React.DOM
 			numVotes = "Votes"
 		else
 			numVotes = "Vote"	
-		if(@props.streak <= 0)
+		if(@state.streak <= 0)
 			streakRemains = "5"
 			msgSPDE = "TO START SPDE MODE!"
-		else if(@props.streak > 0 and @props.streak <= 1)
+		else if(@state.streak > 0 and @state.streak <= 1)
 			streakRemains = "4"
 			msgSPDE = "TO START SPDE MODE!"
-		else if(@props.streak > 1 and @props.streak <= 2)
+		else if(@state.streak > 1 and @state.streak <= 2)
 			streakRemains = "3"	
 			msgSPDE = "TO START SPDE MODE!"
-		else if(@props.streak > 2 and @props.streak <= 3)
+		else if(@state.streak > 2 and @state.streak <= 3)
 			streakRemains = "2"	
 			msgSPDE = "TO START SPDE MODE!"
-		else if(@props.streak > 3 and @props.streak <= 4)
+		else if(@state.streak > 3 and @state.streak <= 4)
 			streakRemains = "1"
 			msgSPDE = "TO START SPDE MODE!"
-		else if(@props.streak > 4)	
+		else if(@state.streak > 4)	
 			streakRemains = "You are on"
 			msgSPDE = "SPDE MODE!" 					
 		dom.div
@@ -182,7 +192,17 @@ dom = React.DOM
 						dom.div
 							className: "answer-container large-8 columns"
 							dom.div
-								className: "row",
+								className: "row text-right",
+								dom.div
+									className: "large-12 columns"
+									dom.i
+										className: "fa fa-clock-o",
+									dom.span {},
+										" ",	
+									dom.span
+										ref: "timer",	
+							dom.div								
+								className: "row",								
 								dom.div
 									className: "large-9 columns",								
 									dom.h4
@@ -303,7 +323,7 @@ dom = React.DOM
 							className: "large-4 columns",	
 							dom.div
 								className: "small-12 columns",
-								dom.span 
+								dom.span 									
 									dom.div
 										className: "large-8 large-centered columns infinite"
 										dom.img

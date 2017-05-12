@@ -116,7 +116,7 @@ class QuestionsController < ApplicationController
 		end
 
 		@people_number = @peoples_number.count
-		@peoples_number_answered_correct = peoples_number_answered_correct.count
+		@peoples_number_answered_correct = @peoples_number_answered_correct.count
 
 		@percentage_people =  ((@peoples_number_answered_correct.to_f / @people_number) * 100).round(2)
 
