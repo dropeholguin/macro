@@ -33,7 +33,7 @@ dom = React.DOM
 										dom.a
 											className: "button large radius-10",
 											href: "/questions/new",
-											"CARD"
+											"SUBMIT"
 						dom.div
 								className: "large-4 text-center columns plans",
 								dom.div
