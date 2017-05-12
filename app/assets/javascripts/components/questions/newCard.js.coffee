@@ -143,7 +143,7 @@ dom = React.DOM
 												ref: "labelDescription",
 												onClick: @tutoForDescriptionClicked,
 												className: "button small radius-40",
-												"CLick me"	
+												"Help"	
 									dom.textarea
 										id: "description",
 										name: "question[description_markdown]",
@@ -290,7 +290,7 @@ dom = React.DOM
 											dom.label
 												onClick: @tutoForExplanationClicked,
 												className: "button small radius-40",
-												"CLick me"
+												"Help"
 									dom.textarea
 										id: "explanation",
 										name: "question[explanation_markdown]",
@@ -307,7 +307,7 @@ dom = React.DOM
 												dom.label
 													onClick: @tutoForTagClicked,
 													className: "button small radius-40",
-													"CLick me"																						
+													"Help"																						
 										dom.input
 											'data-delimiter': ", ",
 											multiple: "true",
