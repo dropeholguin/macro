@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
 	before_action :set_question, only: [:show, :edit, :update, :destroy]
 	before_filter :authenticate_user!
 	include ApplicationHelper
+	include ActionView::Helpers::DateHelper
 
 	def index
 		if params[:query].present? || params[:the_tag]
@@ -34,6 +35,7 @@ class QuestionsController < ApplicationController
 	        first_question_id = question_ids_array.shift
 	        question_array_string = question_ids_array.join("-")
 	        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+	        cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
 
 	        @question = Question.find first_question_id.to_i
 			if !@question.nil?
@@ -64,6 +66,7 @@ class QuestionsController < ApplicationController
         question_id = question_ids_array.shift
         question_array_string = question_ids_array.join("-")
         cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+        cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
 
         @question = Question.find question_id.to_i
         @description = markdown(@question.description_markdown)
@@ -81,6 +84,12 @@ class QuestionsController < ApplicationController
 		comments = card.comments.order("created_at desc")
 		state = card.evaluators_for(:votes).include?(@user)
 		votes = card.reputation_for(:votes).to_i
+		
+		time = (Time.now.to_i - DateTime.parse(cookies[:time]).to_i)
+		@card_time = Time.at(time).to_datetime
+
+		cookies.delete(:time)
+		
 
 		answers_correct = card.answers.select { |answer| answer.is_correct == true }
 		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
@@ -94,7 +103,7 @@ class QuestionsController < ApplicationController
 		else
 			@user.update_attributes(streak: -1)
 		end
-		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed)
+		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed, time_at: @card_time)
 		@card.save
 
 		@creator = card.user
@@ -116,12 +125,12 @@ class QuestionsController < ApplicationController
 		end
 
 		@people_number = @peoples_number.count
-		@peoples_number_answered_correct = peoples_number_answered_correct.count
+		@peoples_number_answered_correct = @peoples_number_answered_correct.count
 
 		@percentage_people =  ((@peoples_number_answered_correct.to_f / @people_number) * 100).round(2)
 
 		respond_to do |format|
-		 	format.json  { render json: { creator: @creator, created_at: @created_at, percentage_people: @percentage_people, people_number: @people_number, comments: comments, streak: @user.streak, state: state, is_passed: is_passed, votes: votes } }
+		 	format.json  { render json: { creator: @creator, created_at: @created_at, percentage_people: @percentage_people, people_number: @people_number, comments: comments, streak: @user.streak, state: state, is_passed: is_passed, votes: votes, time: @card.time_at.strftime("%M:%S") } }
 		end
 	end
 
