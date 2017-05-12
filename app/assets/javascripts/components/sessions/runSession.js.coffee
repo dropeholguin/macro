@@ -74,9 +74,9 @@ dom = React.DOM
 		$.ajax '/sessions_next_card',
         type: 'POST',
         dataType: 'json',
-        error: ->
+        error: (data) =>
             console.log("AJAX Error:")
-            window.location.replace("/sessions")
+            window.location.replace("/sessions_stats")
         success: (data) =>
             console.log(data)
             @setState({quest: data}) 
