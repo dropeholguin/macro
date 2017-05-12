@@ -33,6 +33,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'foundation-rails' # gem for foundation
 gem 'font-awesome-rails' # gem for font awesome icons
+gem 'jquery-countdown-rails'
 
 gem 'react-rails' # gem for react.js
 gem 'webpack-rails'

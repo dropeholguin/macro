@@ -50,10 +50,15 @@ class SessionsController < ApplicationController
 		@session.takes.each do |take|
 			questions << take.question
 		end
+		session_ids_array = SessionCard.session_cards_correct(@session.id, current_user.id).pluck(:id)
+		SessionCard.where(id: session_ids_array).destroy_all
+
 		question_ids_array = questions.pluck(:id)
         first_question_id = question_ids_array.shift
         question_array_string = question_ids_array.join("-")
         cookies[:questions] = { value: question_array_string, expires: 23.hours.from_now }
+        cookies[:session_id] = { value: @session.id, expires: 1.hours.from_now }
+        cookies[:session_time] = { value: Time.now, expires: 4.hours.from_now }
 
 		@question = Question.find first_question_id.to_i
 	end
@@ -90,7 +95,51 @@ class SessionsController < ApplicationController
 	end
 
 	def sessions_stats
-		
+		if !cookies[:session_id].nil?
+			@user = current_user
+			session = Session.find cookies[:session_id]
+			@cont = SessionCard.session_cards_correct(session.id, @user.id).count
+			@percentage_session = ((@cont.to_f / 16) * 100).round(2)
+			@passed_session = false
+
+			if @percentage_session >= 75
+				@passed_session = true
+			end
+
+			time = (Time.now.to_i - DateTime.parse(cookies[:session_time]).to_i)
+			session_time = Time.at(time).to_datetime
+
+			@stats_session = StatsSession.new(user_id: @user.id, is_passed: @passed_session, session_id: session.id, percentage: @percentage_session, time_at: session_time)
+			@stats_session.save
+			@peoples_number = []
+			@peoples_number_passed_session = []
+			@time_at = @stats_session.time_at.strftime("%M:%S")
+
+			#Number of people who have taken the session
+			StatsSession.peoples_session(session.id).each do |stats_session|
+				if !@peoples_number.include?(stats_session.user.id)
+					@peoples_number << stats_session.user.id
+				end
+			end
+			#Number of people who have passed the session
+			StatsSession.stats_sessions(session.id).each do |stats_session|
+				if !@peoples_number_passed_session.include?(stats_session.user.id)
+					@peoples_number_passed_session << stats_session.user.id
+				end
+			end
+
+			people_number = @peoples_number.count
+			peoples_number_passed_session = @peoples_number_passed_session.count
+
+			@percentage_people =  ((peoples_number_passed_session.to_f / people_number) * 100).round(2)
+
+
+			cookies.delete(:session_id)
+		else
+			respond_to do |format|
+				format.html { redirect_to sessions_path }
+			end
+		end
 	end
 
  	private

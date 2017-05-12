@@ -162,6 +162,8 @@ dom = React.DOM
 												className: "large-12 columns",
 												dom.input
 													type: "text",
+													name: "user_input",
+													id: "user_input",
 													onClick: @userInputClicked,
 									dom.div 
 										ref: "multipleChoice",
@@ -181,7 +183,6 @@ dom = React.DOM
 													dom.input
 														onClick: @tutoForAnswerClicked
 														type: "text",
-														required: true,
 														id: "question_answers_attributes_0_answer_markdown",
 														name: "question[answers_attributes][0][answer_markdown]",
 												dom.div
@@ -208,7 +209,6 @@ dom = React.DOM
 													className: "large-8 columns",
 													dom.input
 														type: "text",
-														required: true,
 														id: "question_answers_attributes_1_answer_markdown",
 														name: "question[answers_attributes][1][answer_markdown]",
 												dom.div
@@ -235,7 +235,6 @@ dom = React.DOM
 													className: "large-8 columns",
 													dom.input
 														type: "text",
-														required: true,		
 														id: "question_answers_attributes_2_answer_markdown",
 														name: "question[answers_attributes][2][answer_markdown]",
 												dom.div

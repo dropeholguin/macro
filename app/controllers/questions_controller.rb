@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
 	before_action :set_question, only: [:show, :edit, :update, :destroy]
 	before_filter :authenticate_user!
 	include ApplicationHelper
+	include ActionView::Helpers::DateHelper
 
 	def index
 		if params[:query].present? || params[:the_tag]
@@ -34,6 +35,7 @@ class QuestionsController < ApplicationController
 	        first_question_id = question_ids_array.shift
 	        question_array_string = question_ids_array.join("-")
 	        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+	        cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
 
 	        @question = Question.find first_question_id.to_i
 			if !@question.nil?
@@ -64,6 +66,7 @@ class QuestionsController < ApplicationController
         question_id = question_ids_array.shift
         question_array_string = question_ids_array.join("-")
         cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+        cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
 
         @question = Question.find question_id.to_i
         @description = markdown(@question.description_markdown)
@@ -78,8 +81,15 @@ class QuestionsController < ApplicationController
 		@user = current_user
 		answers = params[:checkbox]
 		card = Question.find params[:card_id]
-		@comments = card.comments.order("created_at desc")
-		@state = card.evaluators_for(:votes).include?(@user)
+		comments = card.comments.order("created_at desc")
+		state = card.evaluators_for(:votes).include?(@user)
+		votes = card.reputation_for(:votes).to_i
+		
+		time = (Time.now.to_i - DateTime.parse(cookies[:time]).to_i)
+		@card_time = Time.at(time).to_datetime
+
+		cookies.delete(:time)
+		
 
 		answers_correct = card.answers.select { |answer| answer.is_correct == true }
 		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
@@ -93,31 +103,34 @@ class QuestionsController < ApplicationController
 		else
 			@user.update_attributes(streak: -1)
 		end
-		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed)
+		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed, time_at: @card_time)
 		@card.save
 
 		@creator = card.user
 		@created_at = card.created_at.strftime("%b %d, %Y")
-		@people_number = 0
+		@peoples_number = []
+		@peoples_number_answered_correct = []
 
+		#Number of people who have taken the question
 		Card.question_cards(card.id).each do |card|
-			if card.user.present?
-				@people_number = @people_number + 1
+			if !@peoples_number.include?(card.user.id)
+				@peoples_number << card.user.id
 			end
 		end
-
-		people = 0
-		cards_count = Card.question_cards(card.id).count
-
+		#Number of people who have answered correct the question
 		Card.questions_right(card.id).each do |card|
-			if card.user.present?
-				people = people + 1
+			if !@peoples_number_answered_correct.include?(card.user.id)
+				@peoples_number_answered_correct << card.user.id
 			end
 		end
-		@percentage_people =  ((people.to_f / cards_count) * 100).round(2)
+
+		@people_number = @peoples_number.count
+		@peoples_number_answered_correct = @peoples_number_answered_correct.count
+
+		@percentage_people =  ((@peoples_number_answered_correct.to_f / @people_number) * 100).round(2)
 
 		respond_to do |format|
-		 	format.json  { render json: { creator: @creator, created_at: @created_at, people_number: @people_number, percentage_people: @percentage_people, comments: @comments, streak: @user.streak, state: @state, is_passed: is_passed} }
+		 	format.json  { render json: { creator: @creator, created_at: @created_at, percentage_people: @percentage_people, people_number: @people_number, comments: comments, streak: @user.streak, state: state, is_passed: is_passed, votes: votes, time: @card.time_at.strftime("%M:%S") } }
 		end
 	end
 
@@ -158,6 +171,7 @@ class QuestionsController < ApplicationController
 		  		@question.choice = "simple"
 		  	end
 		else
+			
 			@question.choice = "user input"
 		end
 		
