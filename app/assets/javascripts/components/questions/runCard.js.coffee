@@ -202,6 +202,9 @@ dom = React.DOM
 								className: "row text-right",
 								dom.div
 									className: "large-12 columns"
+									dom.span 
+										style: {fontStyle: "italic"},
+										"STIMER "
 									dom.i
 										className: "fa fa-clock-o",
 									dom.span {},
