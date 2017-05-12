@@ -70,7 +70,7 @@ dom = React.DOM
 				console.log("AJAX Error:")
 			success: (data) =>
 			    console.log(data)
-			    @setState({creator: data.creator.name, created_at: data.created_at, people_number: data.people_number, percentage_people: data.percentage_people, state: data.state, streak: data.streak, votes: data.votes, is_passed: data.is_passed }) 
+			    @setState({creator: data.creator.name, created_at: data.created_at, people_number: data.people_number, percentage_people: data.percentage_people, state: data.state, streak: data.streak, votes: data.votes, is_passed: data.is_passed, time: data.time }) 
 			    if(@state.state == false)
 			    	$(@refs.showVotes).show()
 			    	$(@refs.cardStats).hide()
@@ -318,7 +318,7 @@ dom = React.DOM
 									dom.div
 										ref: "cardStats",
 										className: "large-12 columns",
-										React.createElement CardStats, creator: @state.creator, created_at: @state.created_at, people_number: @state.people_number, percentage_people: @state.percentage_people,				
+										React.createElement CardStats, creator: @state.creator, created_at: @state.created_at, people_number: @state.people_number, percentage_people: @state.percentage_people, time: @state.time				
 						dom.div	
 							className: "large-4 columns",	
 							dom.div
@@ -388,6 +388,7 @@ dom = React.DOM
 		created_at: "No info"
 		people_number: "0"
 		percentage_people: "0"
+		time: "0"
 	render: ->
 		dom.div
 			className: "root text-center",
@@ -427,6 +428,14 @@ dom = React.DOM
 						dom.li
 							className: "fa fa-check",
 							" Well answered by: #{@props.percentage_people} %"
+			dom.div
+				className: "row",
+				dom.div
+					className: "large-6 columns",	
+					dom.h5 {},	
+						dom.li
+							className: "fa fa-clock-o",
+							" Total time: #{@props.time}s"							
 					
 
 

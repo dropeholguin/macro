@@ -30,7 +30,7 @@ dom = React.DOM
 								dom.h5 {},	
 									dom.li
 										className: "fa fa-check",
-										" Session taken: #{@props.percentage_session} %"
+										" Session taken reach: #{@props.percentage_session} %"
 						dom.div
 							className: "row",
 							dom.div
@@ -45,4 +45,11 @@ dom = React.DOM
 									dom.li
 										className: "fa fa-users",
 										" Well answered by: #{@props.percentage_people} % of users"
-
+						dom.div
+							className: "row",
+							dom.div
+								className: "large-6 columns",	
+								dom.h5 {},	
+									dom.li
+										className: "fa fa-clock-o ",
+										" Total time: #{@props.time_at}s"
