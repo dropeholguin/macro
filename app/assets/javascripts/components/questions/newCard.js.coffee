@@ -163,6 +163,19 @@ dom = React.DOM
 												dom.input
 													type: "text",
 													onClick: @userInputClicked,
+													id: "question_answers_attributes_4_answer_markdown",
+													name: "question[answers_attributes][4][answer_markdown]",
+												dom.div
+													className: "large-4 columns"
+													dom.select 
+														name: "question[answers_attributes][4][is_correct]",
+														dom.option
+															value: "1",
+															id: "question_answers_attributes_4_is_correct",
+															"Correct",
+														dom.option
+															value: "0",															
+															"Incorrect",														
 									dom.div 
 										ref: "multipleChoice",
 										className: "margin-20",
@@ -181,7 +194,6 @@ dom = React.DOM
 													dom.input
 														onClick: @tutoForAnswerClicked
 														type: "text",
-														required: true,
 														id: "question_answers_attributes_0_answer_markdown",
 														name: "question[answers_attributes][0][answer_markdown]",
 												dom.div
@@ -208,7 +220,6 @@ dom = React.DOM
 													className: "large-8 columns",
 													dom.input
 														type: "text",
-														required: true,
 														id: "question_answers_attributes_1_answer_markdown",
 														name: "question[answers_attributes][1][answer_markdown]",
 												dom.div
@@ -235,7 +246,6 @@ dom = React.DOM
 													className: "large-8 columns",
 													dom.input
 														type: "text",
-														required: true,		
 														id: "question_answers_attributes_2_answer_markdown",
 														name: "question[answers_attributes][2][answer_markdown]",
 												dom.div

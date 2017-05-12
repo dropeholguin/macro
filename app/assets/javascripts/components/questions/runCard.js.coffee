@@ -74,7 +74,7 @@ dom = React.DOM
 				console.log("AJAX Error:")
 			success: (data) =>
 			    console.log(data)
-			    @setState({creator: data.creator.name, created_at: data.created_at, people_number: data.people_number, percentage_people: data.percentage_people})     
+			    @setState({creator: data.creator.name, created_at: data.created_at, people_number: data.people_number, percentage_people: data.percentage_people, state: data.state})     
       	console.log ("This is selected: "+selected) 
 		$("input").prop('disabled', true) 
 		$("#comment_comment_markdown").prop('disabled', false)    		
