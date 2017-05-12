@@ -58,6 +58,7 @@ class SessionsController < ApplicationController
         question_array_string = question_ids_array.join("-")
         cookies[:questions] = { value: question_array_string, expires: 23.hours.from_now }
         cookies[:session_id] = { value: @session.id, expires: 1.hours.from_now }
+        cookies[:session_time] = { value: Time.now, expires: 4.hours.from_now }
 
 		@question = Question.find first_question_id.to_i
 	end
@@ -105,10 +106,14 @@ class SessionsController < ApplicationController
 				@passed_session = true
 			end
 
-			@stats_session = StatsSession.new(user_id: @user.id, is_passed: @passed_session, session_id: session.id, percentage: @percentage_session)
+			time = (Time.now.to_i - DateTime.parse(cookies[:session_time]).to_i)
+			session_time = Time.at(time).to_datetime
+
+			@stats_session = StatsSession.new(user_id: @user.id, is_passed: @passed_session, session_id: session.id, percentage: @percentage_session, time_at: session_time)
 			@stats_session.save
 			@peoples_number = []
 			@peoples_number_passed_session = []
+			@time_at = @stats_session.time_at.strftime("%M:%S")
 
 			#Number of people who have taken the session
 			StatsSession.peoples_session(session.id).each do |stats_session|
@@ -127,6 +132,8 @@ class SessionsController < ApplicationController
 			peoples_number_passed_session = @peoples_number_passed_session.count
 
 			@percentage_people =  ((peoples_number_passed_session.to_f / people_number) * 100).round(2)
+
+
 			cookies.delete(:session_id)
 		else
 			respond_to do |format|
