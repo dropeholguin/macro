@@ -18,6 +18,7 @@ dom = React.DOM
 		choice: @props.choice
 		animate_tag: "animated fadeInRight"
 	componentDidMount: ->
+		$(@refs.timer).countdown({since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})   		
 		$(@refs.animateTitle).addClass('animated fadeInLeft')
 		$(@refs.animateDescription).addClass('animated fadeInRight')
 		$(@refs.showVotes).hide()
@@ -164,6 +165,16 @@ dom = React.DOM
 						className: "row white-background",
 						dom.div
 							className: "answer-container large-8 columns"
+							dom.div
+								className: "row text-right",
+								dom.div
+									className: "large-12 columns"
+									dom.i
+										className: "fa fa-clock-o",
+									dom.span {},
+										" ",	
+									dom.span
+										ref: "timer",
 							dom.div
 								className: "row",
 								dom.div

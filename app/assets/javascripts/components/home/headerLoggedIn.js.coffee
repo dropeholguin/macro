@@ -12,10 +12,18 @@ dom = React.DOM
 		if(@props.points == null)
 			@setState(
 				points: 0 
-			)		
-  	pointsChanged: (event) ->
-  		@state.points = event.target.value
-  		@forceUpdate()
+			)
+	componentWillMount: ->
+		@fetchPoints()
+		setInterval(@fetchPoints, 1000)
+	fetchPoints: ->
+		$.ajax
+		  url: @props.tokens_wallet_path
+		  type: 'post'
+		  dataType: 'json'
+		  data: points: @state.points
+		  success: (data) =>
+		    @setState({points: data.tokens})		
 	runCardClicked: (event) ->
 		if @state.points == 0
 	 		$.amaran content: {'title': 'Sorry!','message': 'You dont have enough tokens to run a card!', 'info':'!', 'icon':'fa fa-flag'}, theme: 'awesome error', delay :10000          		
@@ -46,48 +54,83 @@ dom = React.DOM
 						className: "dropdown menu",
 						'data-dropdown-menu': "",
 						dom.li 
-							className: "menu-item-bar",
-							dom.h3 {},
-								"MACRO CARDS",													
+							id: "logo",
+							style: {maxWidth: "70px"},
+							className: "menu-item-bar"
+							dom.a
+								href: @props.root_path,		
+								dom.img
+									src: @props.img,
+						dom.li
+							style: {verticalAlign: "bottom"},
+							className: "menu-item-bar"			
+							dom.h4
+								style: {fontStyle: "italic", fontWeight: "bold"},
+								"MACRO CARDS"
 				dom.div
 					className: "top-bar-right",
 					dom.ul
 						className: "dropdown menu",
-						'data-dropdown-menu': "",
+						'data-dropdown-menu': "",						
 						dom.li 
 							className: "menu-item-bar",
 							dom.a 
-								className: "radius-10",
+								className: "radius-10 item-selected",
 								"Cards"	
 							dom.ul
 								className: "menu vertical item-white",
-								dom.li {},
+								dom.li 
+									className: "item-selected",
 									dom.a
 										href: "/questions/new",
 										dom.i
 											className: "fa fa-plus",
 											'aria-hidden': "true",
-											"New Card",
-								dom.li {},
+											" New Card",
+								dom.li
+									className: "item-selected",
 									dom.a
 										href: "/questions",
 										dom.i
 											className: "fa fa-eye",
 											'aria-hidden': "true",
-											"Show Cards",
-								dom.li {},
+											" Show Cards",
+								dom.li
+									className: "item-selected",
 									dom.a
 										href: "/run_cards",
 										dom.i
-											className: "fa fa-eye",
+											className: "fa fa-play",
 											onClick: @runCardClicked,
 											'aria-hidden': "true",
-											"Run Card",
+											" Run Card",
+						dom.li 
+							className: "menu-item-bar",
+							dom.a 
+								className: "radius-10 item-selected",
+								"Sessions"	
+							dom.ul
+								className: "menu vertical item-white",
+								dom.li 
+									className: "item-selected",
+									dom.a
+										href: "/sessions/new",
+										dom.i
+											className: "fa fa-plus",
+											'aria-hidden': "true",
+											" New Session",								
+								dom.li
+									className: "item-selected",
+									dom.a
+										href: "/sessions",
+										dom.i
+											className: "fa fa-play",
+											'aria-hidden': "true",
+											" Run Session",
 						dom.li 
 							className: "menu-item-bar",
 							dom.a 
 								className: "radius-10 card-mode-btn",
-								onChange: @pointsChanged,
 								"#{@state.points} TOKENS"
 						dom.li {},
 							dom.a
@@ -97,7 +140,8 @@ dom = React.DOM
 									'aria-hidden': "true",
 							dom.ul
 								className: "menu vertical",
-								dom.li {},
+								dom.li 
+									className: "item-selected",
 									dom.a
 										'data-method': "delete",
 										rel: "nofollow",
@@ -106,7 +150,7 @@ dom = React.DOM
 										dom.i
 											className: "fa fa-sign-out",
 											'aria-hidden': "true",
-											"Log Out"
+											" Log Out"
 
 
 
