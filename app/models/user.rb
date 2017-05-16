@@ -8,6 +8,7 @@ has_many :flags, dependent: :destroy
 has_many :sessions
 has_many :session_cards
 has_many :stats_sessions
+has_many :notifications
 
 has_reputation :votes, source: {reputation: :votes, of: :questions}, aggregated_by: :sum
 has_reputation :votes, source: {reputation: :votes, of: :comments}, aggregated_by: :sum

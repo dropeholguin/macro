@@ -233,9 +233,11 @@ class QuestionsController < ApplicationController
 	end
 
 	def vote
-	  value = params[:type] == "up" ? 1 : -1
-	  @question = Question.find(params[:id])
-	  @question.add_or_update_evaluation(:votes, value, current_user)
+		value = params[:type] == "up" ? 1 : -1
+		@question = Question.find(params[:id])
+		@notification = Notification.new(user: current_user, question: @question, message: "#{value} #{current_user.name} has voted his card")
+		@notification.save
+		@question.add_or_update_evaluation(:votes, value, current_user)
 	end
 
 	def suspend

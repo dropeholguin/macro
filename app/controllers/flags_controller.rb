@@ -10,6 +10,8 @@ class FlagsController < ApplicationController
 	    respond_to do |format|
 			if @question.user != current_user
 				if @flag.save
+					@notification = Notification.new(user: current_user, question: @question, message: "#{current_user.name} has flagged his card")
+					@notification.save
 					@question.update_attributes(count_flags: @question.count_flags + 1)
 		            if @question.count_flags >= 2
 		              @question.update_attributes(suspended: true)
