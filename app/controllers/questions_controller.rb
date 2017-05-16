@@ -22,8 +22,9 @@ class QuestionsController < ApplicationController
 
 	def tokens_wallet
 		@user = current_user
+		notifications = Notification.card_notifications(@user.id)
 		respond_to do |format|
-		 	format.json  { render json: { tokens: @user.points } }
+		 	format.json  { render json: { tokens: @user.points, notifications: notifications } }
 		end
 	end
 
@@ -235,7 +236,7 @@ class QuestionsController < ApplicationController
 	def vote
 		value = params[:type] == "up" ? 1 : -1
 		@question = Question.find(params[:id])
-		@notification = Notification.new(user: current_user, question: @question, message: "#{value} #{current_user.name} has voted his card")
+		@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "#{value} #{current_user.name} has voted his card")
 		@notification.save
 		@question.add_or_update_evaluation(:votes, value, current_user)
 	end

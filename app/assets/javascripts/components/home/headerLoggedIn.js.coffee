@@ -23,7 +23,8 @@ dom = React.DOM
 		  dataType: 'json'
 		  data: points: @state.points
 		  success: (data) =>
-		    @setState({points: data.tokens})		
+		    @setState({points: data.tokens})
+		    console.log data		
 	runCardClicked: (event) ->
 		if @state.points == 0
 	 		$.amaran content: {'title': 'Sorry!','message': 'You dont have enough tokens to run a card!', 'info':'!', 'icon':'fa fa-flag'}, theme: 'awesome error', delay :10000          		

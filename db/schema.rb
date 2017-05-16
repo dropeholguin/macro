@@ -114,9 +114,11 @@ ActiveRecord::Schema.define(version: 20170516043613) do
   create_table "notifications", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "question_id"
+    t.integer  "owner_id"
     t.string   "message"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["owner_id"], name: "index_notifications_on_owner_id", using: :btree
     t.index ["question_id"], name: "index_notifications_on_question_id", using: :btree
     t.index ["user_id"], name: "index_notifications_on_user_id", using: :btree
   end
