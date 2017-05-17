@@ -102,7 +102,10 @@ class SessionsController < ApplicationController
 			@percentage_session = ((@cont.to_f / 16) * 100).round(2)
 			@passed_session = false
 
-			if @percentage_session >= 75
+			if @percentage_session == 100
+				@user.update_attributes(points: @user.points + 16)
+				@passed_session = true
+			elsif @percentage_session >= 75
 				@passed_session = true
 			end
 
