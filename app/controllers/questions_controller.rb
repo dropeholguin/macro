@@ -239,6 +239,11 @@ class QuestionsController < ApplicationController
 		@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "#{value} #{current_user.name} has voted his card")
 		@notification.save
 		@question.add_or_update_evaluation(:votes, value, current_user)
+
+		if @question.reputation_for(:votes).to_i == 4
+			author = @question.user
+			author.update_attributes(points: author.points + 32)
+		end
 	end
 
 	def suspend
