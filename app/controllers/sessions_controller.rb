@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
 		@session.user = @user
 
 		respond_to do |format|
-			if !params[:question].nil? && params[:question][:ids].size == 16
+			if !params[:question].nil? && params[:question][:ids].size == 4
 				if @session.save
 					params[:question][:ids].each do |question_id|
 						question = Question.find question_id
@@ -101,9 +101,13 @@ class SessionsController < ApplicationController
 			@cont = SessionCard.session_cards_correct(session.id, @user.id).count
 			@percentage_session = ((@cont.to_f / 16) * 100).round(2)
 			@passed_session = false
+			@result = "Fail"
 
 			if @percentage_session >= 75
 				@passed_session = true
+				@result = "Pass"
+			elseif @percentage_session = 100
+				@result = "High Score!!"
 			end
 
 			time = (Time.now.to_i - DateTime.parse(cookies[:session_time]).to_i)
