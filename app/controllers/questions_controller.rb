@@ -171,8 +171,7 @@ class QuestionsController < ApplicationController
 		  	else
 		  		@question.choice = "simple"
 		  	end
-		else
-			
+		else		
 			@question.choice = "user input"
 		end
 		
@@ -236,7 +235,12 @@ class QuestionsController < ApplicationController
 	def vote
 		value = params[:type] == "up" ? 1 : -1
 		@question = Question.find(params[:id])
-		@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "#{value} #{current_user.name} has voted his card")
+		if value == 1
+			message = "+#{value} #{current_user.name} has voted his card"
+		else
+			message = "#{value} #{current_user.name} has voted his card"
+		end
+		@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: message)
 		@notification.save
 		@question.add_or_update_evaluation(:votes, value, current_user)
 
@@ -250,6 +254,8 @@ class QuestionsController < ApplicationController
         @question = Question.find(params[:id])
         @question.update_attributes(suspended: true)
         respond_to do |format|
+        	@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "Your card #{@question.title} has been suspended")
+			@notification.save
             ModelMailer.suspend_question(@question).deliver
             format.html { redirect_to admin_questions_path, notice: 'question was suspended.' }
             format.json { head :no_content }
@@ -260,6 +266,8 @@ class QuestionsController < ApplicationController
         @question = Question.find(params[:id])
         @question.update_attributes(suspended: false)
         respond_to do |format|
+        	@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "Your card #{@question.title} has been approved")
+			@notification.save
             ModelMailer.approve_question(@question).deliver
             format.html { redirect_to admin_questions_path, notice: 'question was Approved.' }
             format.json { head :no_content }

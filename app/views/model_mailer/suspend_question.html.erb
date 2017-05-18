@@ -12,7 +12,7 @@
       Flag Comments: 
         <% @question.flags.each do |flag| %>
           <tr>
-            <td>- <%= flag.reason %></td>
+            <td>- <%= markdown(flag.reason) %></td>
           </tr>
         <% end %>
     </p>
