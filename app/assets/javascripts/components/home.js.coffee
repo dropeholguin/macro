@@ -17,9 +17,7 @@ dom = React.DOM
 								dom.h4 {},
 									"SUBMIT"
 								dom.div {},
-									"Add more — get more!",
-								dom.div {}, 
-								 	"Help community to grow!"
+									"Set questions for other users and collect reputation points."
 							dom.div
 								className: "white-background radius-bottom",
 								dom.div
@@ -41,7 +39,7 @@ dom = React.DOM
 									dom.h4 {},
 										"CARDS"
 									dom.div {},
-										"Answer questions one by one.",
+										"Pick a topic and see the questions, answers and explanations.",
 									dom.div {}, 									 	
 								dom.div
 									className: "white-background radius-bottom",
@@ -64,7 +62,7 @@ dom = React.DOM
 									dom.h4 {},
 										"SESSIONS"
 									dom.div {},
-										"Pass a test — gain new privileges!",
+										"Put your knowledge to the test with a timed session.",
 									dom.div {}, 									 	
 								dom.div
 									className: "white-background radius-bottom",

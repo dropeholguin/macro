@@ -1,4 +1,4 @@
-<%= react_component 'SessionStats', {cont: @cont, percentage_session: @percentage_session, passed_session: @passed_session, percentage_people: @percentage_people, time_at: @time_at} %>
+<%= react_component 'SessionStats', {cont: @cont, percentage_session: @percentage_session, passed_session: @passed_session,result: @result, percentage_people: @percentage_people, time_at: @time_at} %>
 
 	<h1><%= @highest_score.user.name %></h1>
 	<h2><%= @highest_score.time_at.strftime("%M:%S") %></h2>

@@ -71,7 +71,7 @@ dom = React.DOM
 			success: (data) =>
 			    console.log(data)
 			    @setState({creator: data.creator.name, created_at: data.created_at, people_number: data.people_number, percentage_people: data.percentage_people, state: data.state, streak: data.streak, votes: data.votes, is_passed: data.is_passed, time: data.time }) 
-			    if(@state.state == false)
+			    if(data.state == false and data.streak >=5)
 			    	$(@refs.showVotes).show()
 			    	$(@refs.cardStats).hide()
 			    	$(@refs.cardStats).removeClass('animated fadeInDown')
@@ -83,8 +83,9 @@ dom = React.DOM
 	    				$.amaran content: {'title': 'Well done!', 'message': '+2 TOKEN', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 		    	if (data.is_passed == false)
 	    			$.amaran content: {'title': 'Sorry!', 'message': '', 'info': "You have answered wrong #{@state.title}", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
-		    	if (@state.state == true)
+		    	if (data.state == true)
 		    		$(@refs.showVotes).hide()
+		    		$(@refs.showComments).show()
 		    		$(@refs.cardStats).show()
 					$(@refs.cardStats).addClass('animated fadeInDown')
       	console.log ("This is selected: "+selected) 
@@ -164,20 +165,20 @@ dom = React.DOM
 		else
 			numVotes = "Vote"	
 		if(@state.streak <= 0)
-			streakRemains = "5"
-			msgSPDE = "TO START SPDE MODE!"
-		else if(@state.streak > 0 and @state.streak <= 1)
 			streakRemains = "4"
 			msgSPDE = "TO START SPDE MODE!"
-		else if(@state.streak > 1 and @state.streak <= 2)
-			streakRemains = "3"	
+		else if(@state.streak > 0 and @state.streak <= 1)
+			streakRemains = "3"
 			msgSPDE = "TO START SPDE MODE!"
-		else if(@state.streak > 2 and @state.streak <= 3)
+		else if(@state.streak > 1 and @state.streak <= 2)
 			streakRemains = "2"	
 			msgSPDE = "TO START SPDE MODE!"
-		else if(@state.streak > 3 and @state.streak <= 4)
-			streakRemains = "1"
+		else if(@state.streak > 2 and @state.streak <= 3)
+			streakRemains = "1"	
 			msgSPDE = "TO START SPDE MODE!"
+		else if(@state.streak > 3 and @state.streak <= 4)
+			streakRemains = "0"
+			msgSPDE = "SPDE MODE - ENABLED"
 		else if(@state.streak > 4)	
 			streakRemains = "You are on"
 			msgSPDE = "SPDE MODE!" 					
@@ -202,6 +203,9 @@ dom = React.DOM
 								className: "row text-right",
 								dom.div
 									className: "large-12 columns"
+									dom.span 
+										style: {fontStyle: "italic"},
+										"STIMER "
 									dom.i
 										className: "fa fa-clock-o",
 									dom.span {},
@@ -288,40 +292,39 @@ dom = React.DOM
 											className: rateColor,
 											onChange: @voteChanged,	
 											" #{@state.votes} " + numVotes,
-
-								if(@props.current_user and @props.current_user_voted)		
-									dom.div
-										ref: "showVotes",
-										className: "small-12 columns",
-										dom.p
-											ref: "voteTitle",
-											className: "weight",
-											style: {color: "#07C", fontWeight: "bold"},
-											"Rate this card:",
+									if(@props.current_user and @props.current_user_voted)		
 										dom.div
-											ref: "numVotesDiv",
-											className: "small-6 columns"
-											dom.i
-												className: "fa fa-star-o "+rateColor,	
-											dom.span
-												className: rateColor,
-												onChange: @voteChanged,	
-												" #{@state.votes} " + numVotes,	
-										dom.div
-											className: "small-6 columns text-right"								
-											dom.a
-												ref: "voteUp",
-												style: {marginRight: "5px"},
-												className: "button hollow small secondary radius-10",
-												onClick: @voteUpClicked,
-												dom.i
-													className: "fa fa-thumbs-o-up"
-											dom.button
-												ref: "voteDown",
-												className: "button hollow small secondary radius-10",
-												onClick: @voteDownClicked,
-												dom.i
-													className: "fa fa-thumbs-o-down",
+											ref: "showVotes",
+											className: "small-12 columns",
+												dom.p
+													ref: "voteTitle",
+													className: "weight",
+													style: {color: "#07C", fontWeight: "bold"},
+													"Rate this card:",
+												dom.div
+													ref: "numVotesDiv",
+													className: "small-6 columns"
+													dom.i
+														className: "fa fa-star-o "+rateColor,	
+													dom.span
+														className: rateColor,
+														onChange: @voteChanged,	
+														" #{@state.votes} " + numVotes,	
+												dom.div
+													className: "small-6 columns text-right"								
+													dom.a
+														ref: "voteUp",
+														style: {marginRight: "5px"},
+														className: "button hollow small secondary radius-10",
+														onClick: @voteUpClicked,
+														dom.i
+															className: "fa fa-thumbs-o-up"
+													dom.button
+														ref: "voteDown",
+														className: "button hollow small secondary radius-10",
+														onClick: @voteDownClicked,
+														dom.i
+															className: "fa fa-thumbs-o-down",
 									dom.div
 										ref: "cardStats",
 										className: "large-12 columns",
@@ -349,7 +352,7 @@ dom = React.DOM
 							ref: "showComments",			
 							dom.div
 								className: "large-8 columns",
-								React.createElement Comments, csrfToken: @props.csrfToken, url: "/questions/#{@props.card_id}/comments", comments: @props.comments		
+								React.createElement Comments, csrfToken: @props.csrfToken, url: "/questions/#{@state.card_id}/comments", comments: @props.comments		
 						
 @RunCardAnswer = React.createClass
 	displayName: 'RunCardAnswer'
