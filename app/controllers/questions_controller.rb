@@ -266,7 +266,7 @@ class QuestionsController < ApplicationController
         @question = Question.find(params[:id])
         @question.update_attributes(suspended: false)
         respond_to do |format|
-        	@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "Your card #{@question.title} has been approved")
+        	@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "Your card #{@question.title} has been reactivated")
 			@notification.save
             ModelMailer.approve_question(@question).deliver
             format.html { redirect_to admin_questions_path, notice: 'question was Approved.' }
