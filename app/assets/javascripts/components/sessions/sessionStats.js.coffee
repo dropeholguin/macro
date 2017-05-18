@@ -14,7 +14,7 @@ dom = React.DOM
 						dom.h4 {},
 							"Statistical Analysis Section"
 						dom.p {},
-							"Analyze your performance on this session."
+							"Analyse your performance on this session."
 					dom.div
 						className: "row white-background",
 						dom.div
@@ -24,13 +24,13 @@ dom = React.DOM
 								dom.h5 {},	
 									dom.li
 										className: "fa fa-hashtag",
-										" Correct cards answered: #{@props.cont}"
+										" You got #{@props.cont}/16 correct (#{@props.percentage_session}%)"
 							dom.div
 								className: "large-6 columns",	
 								dom.h5 {},	
 									dom.li
 										className: "fa fa-check",
-										" Session taken reach: #{@props.percentage_session} %"
+										"You ranked ?? out of ?? on this session"
 						dom.div
 							className: "row",
 							dom.div
@@ -38,13 +38,13 @@ dom = React.DOM
 								dom.h5 {},	
 									dom.li
 										className: "fa fa-line-chart ",
-										" Passed Session: #{@props.passed_session}"
+										" Result: #{@props.result}"
 							dom.div
 								className: "large-6 columns",	
 								dom.h5 {},	
 									dom.li
 										className: "fa fa-users",
-										" Well answered by: #{@props.percentage_people} % of users"
+										" Average score: ??%"
 						dom.div
 							className: "row",
 							dom.div
@@ -53,3 +53,10 @@ dom = React.DOM
 									dom.li
 										className: "fa fa-clock-o ",
 										" Total time: #{@props.time_at}s"
+							dom.div
+								className: "large-6 columns",	
+								dom.h5 {},	
+									dom.li
+										className: "fa fa-user-plus",
+										" #{@props.percentage_people}% of users achieved 75% or above in this session."
+

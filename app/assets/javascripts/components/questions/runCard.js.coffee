@@ -165,20 +165,20 @@ dom = React.DOM
 		else
 			numVotes = "Vote"	
 		if(@state.streak <= 0)
-			streakRemains = "5"
-			msgSPDE = "TO START SPDE MODE!"
-		else if(@state.streak > 0 and @state.streak <= 1)
 			streakRemains = "4"
 			msgSPDE = "TO START SPDE MODE!"
-		else if(@state.streak > 1 and @state.streak <= 2)
-			streakRemains = "3"	
+		else if(@state.streak > 0 and @state.streak <= 1)
+			streakRemains = "3"
 			msgSPDE = "TO START SPDE MODE!"
-		else if(@state.streak > 2 and @state.streak <= 3)
+		else if(@state.streak > 1 and @state.streak <= 2)
 			streakRemains = "2"	
 			msgSPDE = "TO START SPDE MODE!"
-		else if(@state.streak > 3 and @state.streak <= 4)
-			streakRemains = "1"
+		else if(@state.streak > 2 and @state.streak <= 3)
+			streakRemains = "1"	
 			msgSPDE = "TO START SPDE MODE!"
+		else if(@state.streak > 3 and @state.streak <= 4)
+			streakRemains = "0"
+			msgSPDE = "SPDE MODE - ENABLED"
 		else if(@state.streak > 4)	
 			streakRemains = "You are on"
 			msgSPDE = "SPDE MODE!" 					
@@ -203,6 +203,9 @@ dom = React.DOM
 								className: "row text-right",
 								dom.div
 									className: "large-12 columns"
+									dom.span 
+										style: {fontStyle: "italic"},
+										"STIMER "
 									dom.i
 										className: "fa fa-clock-o",
 									dom.span {},

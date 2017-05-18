@@ -101,12 +101,16 @@ class SessionsController < ApplicationController
 			@cont = SessionCard.session_cards_correct(session.id, @user.id).count
 			@percentage_session = ((@cont.to_f / 16) * 100).round(2)
 			@passed_session = false
+			@result = "Fail"
 
 			if @percentage_session == 100
 				@user.update_attributes(points: @user.points + 16)
 				@passed_session = true
 			elsif @percentage_session >= 75
 				@passed_session = true
+				@result = "Pass"
+			elseif @percentage_session = 100
+				@result = "High Score!!"
 			end
 
 			time = (Time.now.to_i - DateTime.parse(cookies[:session_time]).to_i)
