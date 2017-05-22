@@ -57,7 +57,7 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "web-app-core_#{Rails.env}"
   config.action_mailer.perform_caching = false
   config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = {
+  config.action_mailer.smtp_settings = {
     address: "email-smtp.us-west-2.amazonaws.com",
     port: 587,
     user_name: ENV["SES_SMTP_USERNAME"], #Your SMTP user
@@ -65,9 +65,7 @@ Rails.application.configure do
     authentication: :plain,
     enable_starttls_auto: true,
     openssl_verify_mode: 'none'
-    }
-
-    config.action_mailer.delivery_method = :ses
+  }
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
