@@ -2,6 +2,11 @@ dom = React.DOM
 
 @SessionStats = React.createClass
 	displayName: 'SessionStats'
+	getInitialState: ->
+		number_cards_correct: @props.score.number_cards_correct
+	componentDidMount: ->
+		if @props.score.number_cards_correct == null
+			@setState({number_cards_correct: 0})
 	render: ->
 		dom.div
 			className: "root",
@@ -59,4 +64,41 @@ dom = React.DOM
 									dom.li
 										className: "fa fa-user-plus",
 										" #{@props.percentage_people}% of users achieved 75% or above in this session."
+						dom.div
+							className: "row",
+							dom.div
+								className: "large-12 columns",
+								dom.h4
+									className: "text-center",
+									"Highest Score"
+						dom.div
+							className: "row",
+							dom.div
+								className: "large-6 columns",	
+								dom.h5 {},	
+									dom.li
+										className: "fa fa-user ",
+										" Name: #{@props.user}"
+							dom.div
+								className: "large-6 columns",	
+								dom.h5 {},	
+									dom.li
+										className: "fa fa-clock-o ",
+										" Best time: #{@props.time_at_score}s"
+						dom.div
+							className: "row",
+							dom.div
+								className: "large-6 columns",	
+								dom.h5 {},	
+									dom.li
+										className: "fa fa-check ",
+										" Cards well answered: #{@state.number_cards_correct }"
+							dom.div
+								className: "large-6 columns",	
+								dom.h5 {},	
+									dom.li
+										className: "fa fa-percent ",
+										" Percentage: #{@props.score.percentage}%"
+
+
 
