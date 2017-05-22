@@ -105,18 +105,17 @@ class SessionsController < ApplicationController
 
 			if @percentage_session == 100
 				@user.update_attributes(points: @user.points + 16)
+				@result = "High Score!!"
 				@passed_session = true
 			elsif @percentage_session >= 75
 				@passed_session = true
 				@result = "Pass"
-			elseif @percentage_session = 100
-				@result = "High Score!!"
 			end
 
 			time = (Time.now.to_i - DateTime.parse(cookies[:session_time]).to_i)
 			session_time = Time.at(time).to_datetime
 
-			@stats_session = StatsSession.new(user_id: @user.id, is_passed: @passed_session, session_id: session.id, percentage: @percentage_session, time_at: session_time, number_cards_correct: @count)
+			@stats_session = StatsSession.new(user_id: @user.id, is_passed: @passed_session, session_id: session.id, percentage: @percentage_session, time_at: session_time, number_cards_correct: @cont)
 			@stats_session.save
 			@peoples_number = []
 			@peoples_number_passed_session = []
@@ -143,12 +142,13 @@ class SessionsController < ApplicationController
 			#method for get Highest score
 			@score_stats_session = []
 			people_score = []
-			StatsSession.peoples_session(session.id).order("number_cards_correct desc, time_at asc").each do |stats_session|
-				if !people_score.include?(stats_session.user.id)
-					people_score << stats_session.user.id
-					@score_stats_session << stats_session
+			StatsSession.peoples_session(session.id).order("number_cards_correct desc, time_at asc").each do |stat_session|
+				if !people_score.include?(stat_session.user.id)
+					people_score << stat_session.user.id
+					@score_stats_session << stat_session
 				end
 			end
+
 			@highest_score = @score_stats_session.first
 
 			cookies.delete(:session_id)
