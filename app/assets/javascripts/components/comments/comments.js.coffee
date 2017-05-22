@@ -14,6 +14,8 @@ dom = React.DOM
 	loadCommentsClicked: (event) ->
 		event.preventDefault()
 		@setState({load_comment: "div:hidden"})
+	commentClicked: (event) ->
+		 $('#show_comment').append('<div>the new guy</div>')
 	render: ->
 		dom.div
 			className: "root",
@@ -43,6 +45,7 @@ dom = React.DOM
 				dom.div
 					className: "actions comments",
 					dom.button
+						ref: "commentClicked",
 						'data-no-turbolink': true,
 						className: "button large radius-10",
 						type: "submit",
@@ -67,6 +70,7 @@ dom = React.DOM
 		$(@refs.showComment).slice(0, 5).show()
 	render: ->
 	 	dom.div
+	 		id: "show_comment",
 	 		ref: "showComment",
 	 		className: "row comment-box",
 	 		style: {display: "none"}, 

@@ -90,7 +90,8 @@ dom = React.DOM
 					$(@refs.cardStats).addClass('animated fadeInDown')
       	console.log ("This is selected: "+selected) 
 		$("input").prop('disabled', true) 
-		$("#comment_comment_markdown").prop('disabled', false)    		
+		$("#comment_comment_markdown").prop('disabled', false)
+		$("#flag_form_input").prop('disabled', false)    		
 	nextQuestionClicked: (event) ->	
 		if(@state.is_passed == false)
 			window.location.replace("/")	
@@ -353,7 +354,10 @@ dom = React.DOM
 							dom.div
 								className: "large-8 columns",
 								React.createElement Comments, csrfToken: @props.csrfToken, url: "/questions/#{@state.card_id}/comments", comments: @props.comments		
-						
+						dom.div
+							className: "row"
+							ref: "flags"
+							React.createElement FlagForm, card_id: @state.card_id, csrfToken: @props.csrfTokenFlag,
 @RunCardAnswer = React.createClass
 	displayName: 'RunCardAnswer'
 	componentDidMount: ->

@@ -23,13 +23,16 @@ dom = React.DOM
 		  dataType: 'json'
 		  data: points: @state.points
 		  success: (data) =>
-		    @setState({points: data.tokens})
-		    console.log data		
+		    @setState({points: data.tokens, total_notifications: data.notifications.length, notifications: data.notifications})
+		    console.log @state.notifications		
 	runCardClicked: (event) ->
 		if @state.points == 0
 	 		$.amaran content: {'title': 'Sorry!','message': 'You dont have enough tokens to run a card!', 'info':'!', 'icon':'fa fa-flag'}, theme: 'awesome error', delay :10000          		
 		else
 	 		$.amaran content: {'title': 'News!','message': 'You have spent 2 tokens to run a card!', 'info':"", 'icon':'fa fa-flag'}, theme: 'awesome ok', delay :10000          		
+	notificationClicked: (event) ->
+		$("#notificationContainer").fadeToggle(300);
+		$("#notification_counter").fadeOut("slow");
 	render: ->
 		dom.div
 			className: "root",
@@ -72,7 +75,41 @@ dom = React.DOM
 					className: "top-bar-right",
 					dom.ul
 						className: "dropdown menu",
-						'data-dropdown-menu': "",						
+						'data-dropdown-menu': "",
+						dom.li 
+							onClick: @notificationClicked,
+							className: "item-selected",
+							id: "notification_li",
+							dom.span
+								id: "notification_counter",
+								@state.total_notifications,
+							dom.i
+								className: "fa fa-bell-o fa-2x",
+								'aria-hidden': "true",
+							dom.div
+								id: "notificationContainer",
+								dom.div
+									id: "notificationTitle",
+									"Notifications"
+								dom.div
+									id: "notificationsBody",									
+									dom.div 
+										className: "notifications",
+										dom.i
+											className: "fa fa-bell-o fa-2x",
+											'aria-hidden': "true",
+										"This is a notification"
+									dom.div 
+										className: "notifications",
+										dom.i
+											className: "fa fa-comments-o fa-2x",
+											'aria-hidden': "true",
+										"This is a notification",
+								dom.div
+									id: "notificationFooter",
+									dom.a
+										href: "#",
+										"See All"
 						dom.li 
 							className: "menu-item-bar",
 							dom.a 
@@ -152,6 +189,16 @@ dom = React.DOM
 											className: "fa fa-sign-out",
 											'aria-hidden': "true",
 											"SIGNOFF"
+@Notification = React.createClass
+	displayName: 'Notification'
+	render: ->
+		dom.div 
+			className: "notifications",
+			dom.i
+				className: "fa fa-bell-o fa-2x",
+				'aria-hidden': "true",
+			dom.h5 {},	
+				@props.notifications.message
 
 
 
