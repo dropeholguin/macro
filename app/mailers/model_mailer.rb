@@ -1,5 +1,5 @@
 class ModelMailer < ApplicationMailer
-	default from: 'admin@macrosas.com'
+	default from: 'allan@bowe.io'
 
 	def suspend_question(question)
 		@question = question
