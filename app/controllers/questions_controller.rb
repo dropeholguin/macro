@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
 	before_action :set_question, only: [:show, :edit, :update, :destroy]
-	before_filter :authenticate_user!
+	before_filter :authenticate_user!, except: [:suspend, :approve]
+	before_filter :authenticate_admin_user!, only: [:suspend, :approve]
 	include ApplicationHelper
 	include ActionView::Helpers::DateHelper
 
