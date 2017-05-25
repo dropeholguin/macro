@@ -58,7 +58,7 @@ end
 	# Include default devise modules. Others available are:
 	# :confirmable, :lockable, :timeoutable and :omniauthable
 	devise :database_authenticatable, :registerable,
-	 	:recoverable, :rememberable, :trackable, :validatable, :omniauthable
+	 	:recoverable, :rememberable, :trackable, :validatable, :omniauthable, :confirmable
 
 	validates :name, presence: true
 	has_many :identities
@@ -68,7 +68,9 @@ end
 
 	def assign_default_role
 		self.add_role(:student) if self.roles.blank?
+    self.change_points(8) if self.points.blank?
 	end
+
 	def self.connect_to_linkedin(auth, signed_in_resource=nil)
     user = User.joins(:identities).where("identities.provider = ? AND identities.uid = ?", auth.provider, auth.uid).first    
 
@@ -79,17 +81,20 @@ end
       if registered_user
         return registered_user
       else
-        user = User.create(name: auth.info.first_name + " " + auth.info.last_name,
+        user = User.new(name: auth.info.first_name + " " + auth.info.last_name,
 							email: auth.info.email,
 							password: Devise.friendly_token[0,20],
 						)
-        user.change_points(8)
+        user.skip_confirmation!
+        user.save!
         Identity.create_with_omniauth_linkedin(auth, user.id)
-
         user
       end
     end
 	end
+
+
+
   def voted_for?(question)
     evaluations.where(target_type: question.class, target_id: question.id).present?
   end
