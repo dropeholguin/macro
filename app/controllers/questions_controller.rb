@@ -16,6 +16,10 @@ class QuestionsController < ApplicationController
 		end
 	end
 
+	def cards_run_page
+		
+	end
+
 	def questions_list
 		@user = current_user
 		@questions = Question.questions_list(@user.id).order("created_at desc")
@@ -89,9 +93,7 @@ class QuestionsController < ApplicationController
 		
 		time = (Time.now.to_i - DateTime.parse(cookies[:time]).to_i)
 		@card_time = Time.at(time).to_datetime
-
 		cookies.delete(:time)
-		
 
 		answers_correct = card.answers.select { |answer| answer.is_correct == true }
 		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)

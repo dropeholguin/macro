@@ -35,4 +35,5 @@ Rails.application.routes.draw do
  	post "sessions_next_card", to: 'sessions#next_card'
  	get "sessions_stats", to: 'sessions#sessions_stats'
  	post "tokens_wallet", to: 'questions#tokens_wallet'
+ 	get "cards_run_page", to: 'questions#cards_run_page'
 end
