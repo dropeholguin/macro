@@ -193,6 +193,10 @@ dom = React.DOM
 			typeOption = "radio"
 		else if(@props.choice == "multiple")
 			typeOption = "checkbox"
+		else if (@props.choice == "user input")
+			typeOption = "text"
+			hide = "none"
+			msg = "type your answer"
 		if(@props.answer.is_correct)
 			rightColor = "this-ans" 
 		else
@@ -207,8 +211,10 @@ dom = React.DOM
 					dom.input
 						id: "#{@props.answer.id}",
 						name: "option",
-						type: typeOption,	
+						type: typeOption,
+						placeholder: msg	
 					dom.label
+						style: {display: hide},
 						htmlFor: "#{@props.answer.id}",
 						dangerouslySetInnerHTML: __html: @props.answer.answer_markdown.toString()				
 			
