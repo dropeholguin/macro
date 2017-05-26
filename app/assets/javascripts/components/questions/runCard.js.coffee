@@ -61,6 +61,9 @@ dom = React.DOM
 		if ($('.this-ansn').length > 0)
 			$('.this-ansn').addClass "wrong-color"
 		selected = $('input[name=option]:checked').map(-> @id).get()
+		if (@state.choice == "user input")
+			user_input = $('input[name=option]').val()
+			console.log ("User input: "+user_input)
 		$.ajax 
 			url: '/run_question'
 			type: 'POST'

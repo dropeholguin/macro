@@ -14,7 +14,7 @@ dom = React.DOM
 		if(@state.state)
 			$(@refs.showVotes).hide()			
 		if(@state.state == false)
-			$(@refs.showComments).hide()		
+			$(@refs.showComments).hide()				
 	componentWillMount: ->
 		if(@state.state)
 			$(@refs.showComments).show()
@@ -212,7 +212,7 @@ dom = React.DOM
 						id: "#{@props.answer.id}",
 						name: "option",
 						type: typeOption,
-						placeholder: msg	
+						placeholder: msg
 					dom.label
 						style: {display: hide},
 						htmlFor: "#{@props.answer.id}",
