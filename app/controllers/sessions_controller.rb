@@ -3,7 +3,14 @@ class SessionsController < ApplicationController
 	include ApplicationHelper
 
 	def index
-		@sessions = Session.all.order('created_at desc')
+		user = current_user
+		@sessions = []
+		Session.all.order('created_at desc').each do |session|
+			stats_session = StatsSession.stats_session(session.id, user.id)
+			if !stats_session.present?
+				@sessions << session
+			end
+		end
 	end
 
  	def new
@@ -24,7 +31,7 @@ class SessionsController < ApplicationController
 		@session.user = @user
 
 		respond_to do |format|
-			if !params[:question].nil? && params[:question][:ids].size == 16
+			if !params[:question].nil? && params[:question][:ids].size == 3
 				if @session.save
 					params[:question][:ids].each do |question_id|
 						question = Question.find question_id
@@ -47,6 +54,7 @@ class SessionsController < ApplicationController
  	def run_sessions
 		@session = Session.find params[:session_id]
 		questions = []
+		
 		@session.takes.each do |take|
 			questions << take.question
 		end
@@ -61,6 +69,7 @@ class SessionsController < ApplicationController
         cookies[:session_time] = { value: Time.now, expires: 4.hours.from_now }
 
 		@question = Question.find first_question_id.to_i
+
 	end
 
 	def next_card
