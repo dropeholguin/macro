@@ -95,8 +95,12 @@ class QuestionsController < ApplicationController
 		@card_time = Time.at(time).to_datetime
 		cookies.delete(:time)
 
-		answers_correct = card.answers.select { |answer| answer.is_correct == true }
-		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+		if card.choice == "user input"
+			is_passed = card.answers.first.answer_markdown.eql? params[:user_input]
+		else
+			answers_correct = card.answers.select { |answer| answer.is_correct == true }
+			is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+		end
 		if is_passed == true
 			@user.update_attributes(streak: @user.streak + 1)
 			if @user.streak < 9 && @user.streak >= 5

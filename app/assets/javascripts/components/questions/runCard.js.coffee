@@ -63,12 +63,12 @@ dom = React.DOM
 		selected = $('input[name=option]:checked').map(-> @id).get()
 		if (@state.choice == "user input")
 			user_input = $('input[name=option]').val()
-			console.log ("User input: "+user_input)
+			console.log ("User input: " + user_input)
 		$.ajax 
 			url: '/run_question'
 			type: 'POST'
 			dataType: 'json'
-			data: checkbox: selected, card_id: @state.card_id
+			data: checkbox: selected, card_id: @state.card_id, user_input: user_input
 			error: ->
 				console.log("AJAX Error:")
 			success: (data) =>
