@@ -6,18 +6,52 @@ class QuestionsController < ApplicationController
 	include ActionView::Helpers::DateHelper
 
 	def index
+		user = current_user
 		if params[:query].present? || params[:the_tag]
-			@questions = Question.search(params)
+			questions_search = Question.search(params)
+			@questions = []
+			cards = Card.number_cards_submitted(user.id).pluck(:question_id)
+			questions_search.each do |question|
+				if cards.include?(question.id)
+					@questions << question
+				end
+			end
 		elsif params[:term]
 			@questions = Question.ac_search(params[:term]).map(&:title)
     		render json: @questions
 		else
-			@questions = Question.all.order("created_at desc")
+			questions_search = Question.all.order("created_at desc")
+			@questions = []
+			cards = Card.number_cards_submitted(user.id).pluck(:question_id)
+			questions_search.each do |question|
+				if cards.include?(question.id)
+					@questions << question
+				end
+			end
 		end
 	end
 
-	def cards_run_page
-		
+	def cards_run_filter
+		user = current_user
+		cookies.delete(:cards)
+		if params[:query].present? || params[:the_tag].present?
+			questions = Question.search(params)
+			questions_sort = []
+
+			cards = Card.number_cards_submitted(user.id).pluck(:question_id)
+			questions.each do |question|
+				if !cards.include?(question.id)
+					questions_sort << question
+				end
+			end
+			@number_questions = questions_sort.count
+			question_ids_array = questions_sort.pluck(:id)
+	        question_array_string = question_ids_array.join("-")
+	        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+		elsif params[:term]
+			@questions = Question.ac_search(params[:term]).map(&:title)
+    		render json: @questions
+		end
 	end
 
 	def questions_list
@@ -36,28 +70,23 @@ class QuestionsController < ApplicationController
 	def card
 		@user = current_user
 		if @user.points > 0
-			questions = Question.all.sort_by{rand}
-			question_ids_array = questions.pluck(:id)
+			
+			question_ids_array = cookies[:cards].split("-")
 	        first_question_id = question_ids_array.shift
 	        question_array_string = question_ids_array.join("-")
-	        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+        	cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
 	        cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
 
 	        @question = Question.find first_question_id.to_i
 			if !@question.nil?
 				@answers = @question.answers
 				@comments = @question.comments.order("created_at desc")	
-				if @user.streak < 0
-					@user.update_attributes(streak: 0)
-					respond_to do |format|
-						format.html { redirect_to root_path, alert: '' }
-					end				
-				elsif @user.streak == 0
+				if @user.streak == 0
 					@user.update_attributes(points: @user.points - 2)
 				end
 			else
 				respond_to do |format|
-					format.html { redirect_to root_path, alert: '' }
+					format.html { redirect_to cards_run_filter_path, alert: '' }
 				end
 			end	
 		else 
@@ -109,7 +138,7 @@ class QuestionsController < ApplicationController
 				@user.update_attributes(points: @user.points + 2)
 			end
 		else
-			@user.update_attributes(streak: -1)
+			@user.update_attributes(streak: 0)
 		end
 		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed, time_at: @card_time)
 		@card.save

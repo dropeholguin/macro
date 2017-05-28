@@ -136,7 +136,7 @@ dom = React.DOM
 								dom.li
 									className: "item-selected",
 									dom.a
-										href: "/run_cards",
+										href: "/cards_run_filter",
 										dom.i
 											className: "fa fa-play",
 											onClick: @runCardClicked,
