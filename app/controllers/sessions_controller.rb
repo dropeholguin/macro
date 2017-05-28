@@ -5,12 +5,28 @@ class SessionsController < ApplicationController
 	def index
 		user = current_user
 		@sessions = []
-		Session.all.order('created_at desc').each do |session|
-			stats_session = StatsSession.stats_session(session.id, user.id)
-			if !stats_session.present?
-				@sessions << session
+		@number_session_passeds = StatsSession.number_session_passed(user.id).count
+
+		if params[:query].present? || params[:the_tag].present?
+			questions_search = Question.search(params)
+			sessions_search = []
+	
+			Session.all.order('created_at desc').each do |session|
+				stats_session = StatsSession.stats_session(session.id, user.id)
+				if !stats_session.present?
+					sessions_search << session
+				end
 			end
-		end
+
+			sessions_search.each do |session|
+				takes = session.takes.pluck(:question_id)
+				questions_search.each do |question|
+					if takes.include?(question.id) && !@sessions.include?(session)
+						@sessions << session
+					end
+				end
+			end
+    	end
 	end
 
  	def new
@@ -31,7 +47,7 @@ class SessionsController < ApplicationController
 		@session.user = @user
 
 		respond_to do |format|
-			if !params[:question].nil? && params[:question][:ids].size == 16
+			if !params[:question].nil? && params[:question][:ids].size == 3
 				if @session.save
 					params[:question][:ids].each do |question_id|
 						question = Question.find question_id

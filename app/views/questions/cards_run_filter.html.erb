@@ -13,7 +13,7 @@
 			<div class="small-8 columns">
 				<%= @number_questions %>
 				<% if @number_questions.to_i > 0 %>
-					<%= link_to "Run Card", run_cards_path %>	
+					<%= link_to "Run Card", run_cards_path, class: "button" %>	
 				<% end %>
 			</div>
 		</div>

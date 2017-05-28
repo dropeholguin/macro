@@ -1,12 +1,20 @@
 <div class="row">
-	<div class="large-10 large-centered columns">		
-		<%= react_component 'IndexCard', {title_page: "RUN A SESSION"} %> 
-		<div class="row">
-		<% @sessions.each do |session| %>
-			<div class="large-4 columns">
-				<%= react_component 'SessionIndex', {title: session.title, run_sessions_path: run_sessions_path(session_id: session.id), count: session.takes.count,session_img: image_path('session.png')} %> 
-			</div>   
-		<% end %>
+	<div class="large-10 large-centered columns">
+		<%= react_component 'IndexCard', {title_page: "RUN A SESSION"} %>
+		<div class="row white-background">
+			<div class="small-4 columns">
+				<div class="row">
+					<%= react_component 'SearchByTag', {tag_path: request.url}%>
+				</div>		
+			</div>
+			<div class="small-8 columns">
+				<h3><%= @number_session_passeds %></h3>
+				<% @sessions.each do |session| %>
+					<div class="large-4 columns">
+						<%= react_component 'SessionIndex', {title: session.title, run_sessions_path: run_sessions_path(session_id: session.id), count: session.takes.count,session_img: image_path('session.png')} %> 
+					</div>   
+				<% end %>
+			</div>
 		</div>
 	</div>
 </div>
