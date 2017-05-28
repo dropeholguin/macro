@@ -21,7 +21,7 @@ dom = React.DOM
 @Card = React.createClass
 	displayName: 'Card'
 	getDefaultProps: ->
-		button_1: "RUN"
+		button_1: "VIEW"
 		button_2: "EDIT_D"
 		button_3: "DELETE_D"
 		small: "small-10 columns"

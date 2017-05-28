@@ -58,11 +58,13 @@ dom = React.DOM
 		$(@refs.animateDescription).removeClass('animated fadeInRight')
 		
 		selected = $('input[name=option]:checked').map(-> @id).get()
+		if (@state.choice == "user input")
+			user_input = $('input[name=option]').val()
 		$.ajax 
 			url: @props.run_cards_path
 			type: 'POST'
 			dataType: 'json'
-			data: checkbox: selected, session: @state.session_id, card_id: @state.card_id
+			data: checkbox: selected, session: @state.session_id, card_id: @state.card_id, user_input: user_input
 			error: ->
 				console.log("AJAX Error:")
 			success: (data) =>

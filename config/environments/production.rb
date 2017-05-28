@@ -51,23 +51,21 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
-
+  config.action_mailer.default_url_options = { host: ENV['MAILER_URL'] }
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "web-app-core_#{Rails.env}"
   config.action_mailer.perform_caching = false
   config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = {
-    address: "email-smtp.us-west-2.amazonaws.com",
+  config.action_mailer.smtp_settings = {
+    address: "email-smtp.us-east-1.amazonaws.com",
     port: 587,
     user_name: ENV["SES_SMTP_USERNAME"], #Your SMTP user
     password: ENV["SES_SMTP_PASSWORD"], #Your SMTP password
     authentication: :plain,
     enable_starttls_auto: true,
     openssl_verify_mode: 'none'
-    }
-
-    config.action_mailer.delivery_method = :ses
+  }
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false

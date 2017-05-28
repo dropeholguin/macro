@@ -4,6 +4,7 @@ dom = React.DOM
 	displayName: 'NewCard'
 	getInitialState: ->
 		name: 'New Card'
+		columns: "large-8"
 	getDefaultProps: ->
 		url: '/questions'
 	componentDidMount: ->
@@ -55,11 +56,17 @@ dom = React.DOM
 		$(@refs.tagsTuto).addClass('animated fadeInDown')	
 	selectOptionOnChange: (event) ->
 		if $(@refs.choiceSelected).val() == "multiple"
-			$(@refs.multipleChoice).show()
-			$(@refs.userInput).hide()
+			$(@refs.answer1).append('<div class="row" id="answer1"><div class="large-8 columns"><input type="text" id="question_answers_attributes_1_answer_markdown" name="question[answers_attributes][1][answer_markdown]"></div><div class="large-4 columns"><select name="question[answers_attributes][1][is_correct]"><option value="false">Incorrect</option><option value="true" id="question_answers_attributes_1_is_correct">Correct</option></select></div><input type="hidden" id="question_answers_attributes_1_answer_markdown" name="question[answers_attributes][1][_destroy]" value="false"></div>')
+			$(@refs.answer2).append('<div class="row" id="answer2"><div class="large-8 columns"><input type="text" id="question_answers_attributes_2_answer_markdown" name="question[answers_attributes][2][answer_markdown]"></div><div class="large-4 columns"><select name="question[answers_attributes][2][is_correct]"><option value="false">Incorrect</option><option value="true" id="question_answers_attributes_2_is_correct">Correct</option></select></div><input type="hidden" id="question_answers_attributes_2_answer_markdown" name="question[answers_attributes][2][_destroy]" value="false"></div>')
+			$(@refs.optionAnswer0).show()
+			$(@refs.addOther).show()
+			@setState({columns: "large-8"})
 		if $(@refs.choiceSelected).val() == "user input"
-			$(@refs.multipleChoice).hide()
-			$(@refs.userInput).show()
+			$("#answer1").remove()
+			$("#answer2").remove()
+			$(@refs.optionAnswer0).hide()
+			$(@refs.addOther).hide()
+			@setState({columns: "large-12"})
 	userInputClicked: (event) ->
 		$(@refs.titleTuto).hide()
 		$(@refs.descriptionTuto).hide()
@@ -179,13 +186,14 @@ dom = React.DOM
 											dom.div
 												className: "row",
 												dom.div
-													className: "large-8 columns",
+													className: "#{@state.columns} columns",
 													dom.input
 														onClick: @tutoForAnswerClicked
 														type: "text",
 														id: "question_answers_attributes_0_answer_markdown",
 														name: "question[answers_attributes][0][answer_markdown]",
 												dom.div
+													ref: "optionAnswer0"
 													className: "large-4 columns"
 													dom.select 
 														name: "question[answers_attributes][0][is_correct]",
@@ -202,8 +210,10 @@ dom = React.DOM
 													name: "question[answers_attributes][0][_destroy]",
 													value: "false",
 										dom.div
+											ref: "answer1"
 											className: "nested-fields",
 											dom.div
+												id: "answer1",
 												className: "row",
 												dom.div
 													className: "large-8 columns",
@@ -228,8 +238,10 @@ dom = React.DOM
 													name: "question[answers_attributes][1][_destroy]",
 													value: "false",
 										dom.div
+											ref: "answer2"
 											className: "nested-fields",
 											dom.div
+												id: "answer2",
 												className: "row",
 												dom.div
 													className: "large-8 columns",
@@ -253,7 +265,8 @@ dom = React.DOM
 													id: "question_answers_attributes_2_answer_markdown",
 													name: "question[answers_attributes][2][_destroy]",
 													value: "false",		
-										dom.div		
+										dom.div	
+											ref: "addOther"	
 											className: "nested-fields",											
 											dom.a
 												'data-association-insertion-template': "<div class='nested-fields'>

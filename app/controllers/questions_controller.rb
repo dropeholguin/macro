@@ -1,17 +1,56 @@
 class QuestionsController < ApplicationController
 	before_action :set_question, only: [:show, :edit, :update, :destroy]
-	before_filter :authenticate_user!
+	before_filter :authenticate_user!, except: [:suspend, :approve]
+	before_filter :authenticate_admin_user!, only: [:suspend, :approve]
 	include ApplicationHelper
 	include ActionView::Helpers::DateHelper
 
 	def index
+		user = current_user
 		if params[:query].present? || params[:the_tag]
-			@questions = Question.search(params)
+			questions_search = Question.search(params)
+			@questions = []
+			cards = Card.number_cards_submitted(user.id).pluck(:question_id)
+			questions_search.each do |question|
+				if cards.include?(question.id)
+					@questions << question
+				end
+			end
 		elsif params[:term]
 			@questions = Question.ac_search(params[:term]).map(&:title)
     		render json: @questions
 		else
-			@questions = Question.all.order("created_at desc")
+			questions_search = Question.all.order("created_at desc")
+			@questions = []
+			cards = Card.number_cards_submitted(user.id).pluck(:question_id)
+			questions_search.each do |question|
+				if cards.include?(question.id)
+					@questions << question
+				end
+			end
+		end
+	end
+
+	def cards_run_filter
+		user = current_user
+		cookies.delete(:cards)
+		if params[:query].present? || params[:the_tag].present?
+			questions = Question.search(params)
+			questions_sort = []
+
+			cards = Card.number_cards_submitted(user.id).pluck(:question_id)
+			questions.each do |question|
+				if !cards.include?(question.id)
+					questions_sort << question
+				end
+			end
+			@number_questions = questions_sort.count
+			question_ids_array = questions_sort.pluck(:id)
+	        question_array_string = question_ids_array.join("-")
+	        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+		elsif params[:term]
+			@questions = Question.ac_search(params[:term]).map(&:title)
+    		render json: @questions
 		end
 	end
 
@@ -22,36 +61,32 @@ class QuestionsController < ApplicationController
 
 	def tokens_wallet
 		@user = current_user
+		notifications = Notification.card_notifications(@user.id)
 		respond_to do |format|
-		 	format.json  { render json: { tokens: @user.points } }
+		 	format.json  { render json: { tokens: @user.points, notifications: notifications } }
 		end
 	end
 
 	def card
 		@user = current_user
 		if @user.points > 0
-			questions = Question.all.sort_by{rand}
-			question_ids_array = questions.pluck(:id)
+			
+			question_ids_array = cookies[:cards].split("-")
 	        first_question_id = question_ids_array.shift
 	        question_array_string = question_ids_array.join("-")
-	        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+        	cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
 	        cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
 
 	        @question = Question.find first_question_id.to_i
 			if !@question.nil?
 				@answers = @question.answers
 				@comments = @question.comments.order("created_at desc")	
-				if @user.streak < 0
-					@user.update_attributes(streak: 0)
-					respond_to do |format|
-						format.html { redirect_to root_path, alert: '' }
-					end				
-				elsif @user.streak == 0
+				if @user.streak == 0
 					@user.update_attributes(points: @user.points - 2)
 				end
 			else
 				respond_to do |format|
-					format.html { redirect_to root_path, alert: '' }
+					format.html { redirect_to cards_run_filter_path, alert: '' }
 				end
 			end	
 		else 
@@ -87,12 +122,14 @@ class QuestionsController < ApplicationController
 		
 		time = (Time.now.to_i - DateTime.parse(cookies[:time]).to_i)
 		@card_time = Time.at(time).to_datetime
-
 		cookies.delete(:time)
-		
 
-		answers_correct = card.answers.select { |answer| answer.is_correct == true }
-		is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+		if card.choice == "user input"
+			is_passed = card.answers.first.answer_markdown.eql? params[:user_input]
+		else
+			answers_correct = card.answers.select { |answer| answer.is_correct == true }
+			is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+		end
 		if is_passed == true
 			@user.update_attributes(streak: @user.streak + 1)
 			if @user.streak < 9 && @user.streak >= 5
@@ -101,7 +138,7 @@ class QuestionsController < ApplicationController
 				@user.update_attributes(points: @user.points + 2)
 			end
 		else
-			@user.update_attributes(streak: -1)
+			@user.update_attributes(streak: 0)
 		end
 		@card = Card.new(user_id: @user.id, question_id: card.id, is_passed: is_passed, time_at: @card_time)
 		@card.save
@@ -170,8 +207,7 @@ class QuestionsController < ApplicationController
 		  	else
 		  		@question.choice = "simple"
 		  	end
-		else
-			
+		else		
 			@question.choice = "user input"
 		end
 		
@@ -233,15 +269,29 @@ class QuestionsController < ApplicationController
 	end
 
 	def vote
-	  value = params[:type] == "up" ? 1 : -1
-	  @question = Question.find(params[:id])
-	  @question.add_or_update_evaluation(:votes, value, current_user)
+		value = params[:type] == "up" ? 1 : -1
+		@question = Question.find(params[:id])
+		if value == 1
+			message = "+#{value} #{current_user.name} has voted his card"
+		else
+			message = "#{value} #{current_user.name} has voted his card"
+		end
+		@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: message)
+		@notification.save
+		@question.add_or_update_evaluation(:votes, value, current_user)
+
+		if @question.reputation_for(:votes).to_i == 4
+			author = @question.user
+			author.update_attributes(points: author.points + 32)
+		end
 	end
 
 	def suspend
         @question = Question.find(params[:id])
         @question.update_attributes(suspended: true)
         respond_to do |format|
+        	@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "Your card #{@question.title} has been suspended")
+			@notification.save
             ModelMailer.suspend_question(@question).deliver
             format.html { redirect_to admin_questions_path, notice: 'question was suspended.' }
             format.json { head :no_content }
@@ -252,6 +302,8 @@ class QuestionsController < ApplicationController
         @question = Question.find(params[:id])
         @question.update_attributes(suspended: false)
         respond_to do |format|
+        	@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "Your card #{@question.title} has been reactivated")
+			@notification.save
             ModelMailer.approve_question(@question).deliver
             format.html { redirect_to admin_questions_path, notice: 'question was Approved.' }
             format.json { head :no_content }

@@ -3,7 +3,14 @@ class SessionsController < ApplicationController
 	include ApplicationHelper
 
 	def index
-		@sessions = Session.all.order('created_at desc')
+		user = current_user
+		@sessions = []
+		Session.all.order('created_at desc').each do |session|
+			stats_session = StatsSession.stats_session(session.id, user.id)
+			if !stats_session.present?
+				@sessions << session
+			end
+		end
 	end
 
  	def new
@@ -47,6 +54,7 @@ class SessionsController < ApplicationController
  	def run_sessions
 		@session = Session.find params[:session_id]
 		questions = []
+		
 		@session.takes.each do |take|
 			questions << take.question
 		end
@@ -61,6 +69,7 @@ class SessionsController < ApplicationController
         cookies[:session_time] = { value: Time.now, expires: 4.hours.from_now }
 
 		@question = Question.find first_question_id.to_i
+
 	end
 
 	def next_card
@@ -83,9 +92,12 @@ class SessionsController < ApplicationController
 		card = Question.find params[:card_id]
 		session = Session.find params[:session]
 
-		answers_correct = card.answers.select { |answer| answer.is_correct == true }
-		@is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
-
+		if card.choice == "user input"
+			@is_passed = card.answers.first.answer_markdown.eql? params[:user_input]
+		else
+			answers_correct = card.answers.select { |answer| answer.is_correct == true }
+			@is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+		end
 		@session_card = SessionCard.new(user_id: @user.id, question_id: card.id, is_passed: @is_passed, session_id: session.id )
 		@session_card.save
 
@@ -103,17 +115,19 @@ class SessionsController < ApplicationController
 			@passed_session = false
 			@result = "Fail"
 
-			if @percentage_session >= 75
+			if @percentage_session == 100
+				@user.update_attributes(points: @user.points + 16)
+				@result = "High Score!!"
+				@passed_session = true
+			elsif @percentage_session >= 75
 				@passed_session = true
 				@result = "Pass"
-			elseif @percentage_session = 100
-				@result = "High Score!!"
 			end
 
 			time = (Time.now.to_i - DateTime.parse(cookies[:session_time]).to_i)
 			session_time = Time.at(time).to_datetime
 
-			@stats_session = StatsSession.new(user_id: @user.id, is_passed: @passed_session, session_id: session.id, percentage: @percentage_session, time_at: session_time)
+			@stats_session = StatsSession.new(user_id: @user.id, is_passed: @passed_session, session_id: session.id, percentage: @percentage_session, time_at: session_time, number_cards_correct: @cont)
 			@stats_session.save
 			@peoples_number = []
 			@peoples_number_passed_session = []
@@ -137,6 +151,17 @@ class SessionsController < ApplicationController
 
 			@percentage_people =  ((peoples_number_passed_session.to_f / people_number) * 100).round(2)
 
+			#method for get Highest score
+			@score_stats_session = []
+			people_score = []
+			StatsSession.peoples_session(session.id).order("number_cards_correct desc, time_at asc").each do |stat_session|
+				if !people_score.include?(stat_session.user.id)
+					people_score << stat_session.user.id
+					@score_stats_session << stat_session
+				end
+			end
+
+			@highest_score = @score_stats_session.first
 
 			cookies.delete(:session_id)
 		else
