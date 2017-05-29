@@ -10,11 +10,9 @@
 					<%= react_component 'SearchByTag', {tag_path: request.url}%>
 				</div>		
 			</div>
-			<div class="small-8 columns">
-				<%= @number_questions %>
-				<% if @number_questions.to_i > 0 %>
-					<%= link_to "Run Card", run_cards_path, class: "button" %>	
-				<% end %>
+
+			<div class="small-8 columns text-center">
+				<%= react_component 'RunCardFilter', {number_questions: @number_questions, total: @number_questions.to_i, run_cards_path: run_cards_path}%>				
 			</div>
 		</div>
 	</div>
