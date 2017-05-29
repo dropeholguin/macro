@@ -370,6 +370,8 @@ dom = React.DOM
 			typeOption = "radio"
 		else if(@props.choice == "multiple")
 			typeOption = "checkbox"
+		else if(@props.choice == "user input")
+			rightColor: "none"
 		if(@props.answer.is_correct)
 			rightColor = "this-ans" 
 		else
