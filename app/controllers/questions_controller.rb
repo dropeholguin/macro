@@ -84,6 +84,8 @@ class QuestionsController < ApplicationController
 				@comments = @question.comments.order("created_at desc")	
 				if @user.streak == 0
 					@user.update_attributes(points: @user.points - 2)
+					@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "You've earned -2 tokens", category: "tokens_negative", source: "#{question_path(@question)}")
+					@notification.save
 				end
 			else
 				respond_to do |format|
@@ -135,8 +137,12 @@ class QuestionsController < ApplicationController
 			@user.update_attributes(streak: @user.streak + 1)
 			if @user.streak < 9 && @user.streak >= 5
 				@user.update_attributes(points: @user.points + 1)
+				@notification = Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +1 tokens", category: "tokens_positive", source: "#{question_path(card)}")
+				@notification.save
 			elsif @user.streak >= 9
 				@user.update_attributes(points: @user.points + 2)
+				@notification = Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +2 tokens", category: "tokens_positive", source: "#{question_path(card)}")
+				@notification.save
 			end
 		else
 			@user.update_attributes(streak: 0)
