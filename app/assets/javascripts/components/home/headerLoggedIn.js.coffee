@@ -197,7 +197,7 @@ dom = React.DOM
 		if @props.notification.category == "suspend"
 			icon = "fa fa-ban fa-2x"
 			colorNotification = "red"
-		if @props.notification.category == "reactive"
+		if @props.notification.category == "reactivate"
 			icon = "fa fa-check fa-2x"
 			colorNotification = "green"
 		dom.div 
