@@ -276,7 +276,7 @@ class QuestionsController < ApplicationController
 		else
 			message = "#{value} #{current_user.name} has voted his card"
 		end
-		@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: message, category: "vote")
+		@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: message, category: "vote", source: "#{question_path(@question)}")
 		@notification.save
 		@question.add_or_update_evaluation(:votes, value, current_user)
 
@@ -290,7 +290,7 @@ class QuestionsController < ApplicationController
         @question = Question.find(params[:id])
         @question.update_attributes(suspended: true)
         respond_to do |format|
-        	@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "Your card #{@question.title} has been suspended", category: "suspend")
+        	@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "Your card #{@question.title} has been suspended", category: "suspend", source: "#{question_path(@question)}")
 			@notification.save
             ModelMailer.suspend_question(@question).deliver
             format.html { redirect_to admin_questions_path, notice: 'question was suspended.' }
@@ -302,7 +302,7 @@ class QuestionsController < ApplicationController
         @question = Question.find(params[:id])
         @question.update_attributes(suspended: false)
         respond_to do |format|
-        	@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "Your card #{@question.title} has been reactivated", category: "reactivate")
+        	@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "Your card #{@question.title} has been reactivated", category: "reactivate", source: "#{question_path(@question)}")
 			@notification.save
             ModelMailer.approve_question(@question).deliver
             format.html { redirect_to admin_questions_path, notice: 'question was Approved.' }

@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 20170529023902) do
     t.datetime "updated_at",                  null: false
     t.boolean  "state",       default: false
     t.string   "category"
+    t.string   "source"
     t.index ["owner_id"], name: "index_notifications_on_owner_id", using: :btree
     t.index ["question_id"], name: "index_notifications_on_question_id", using: :btree
     t.index ["user_id"], name: "index_notifications_on_user_id", using: :btree
