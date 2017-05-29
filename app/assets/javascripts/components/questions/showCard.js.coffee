@@ -7,6 +7,7 @@ dom = React.DOM
 		votes: @props.votes
 		comments: []
 		state: @props.state
+		card_id: @props.card_id
 	componentDidMount: ->
 		$(@refs.anim1).addClass('animated fadeInUp')
 		$(@refs.anim2).addClass('animated pulse')
@@ -183,7 +184,10 @@ dom = React.DOM
 							dom.div
 								className: "large-8 columns",
 								React.createElement Comments, csrfToken: @props.csrfToken, url: "/questions/#{@props.card_id}/comments", comments: @props.comments		
-
+						dom.div
+							className: "row"
+							ref: "flags"
+							React.createElement FlagForm, card_id: @state.card_id, csrfToken: @props.csrfTokenFlag,
 @CardAnswer = React.createClass
 	displayName: 'CardAnswer'
 	componentDidMount: ->
