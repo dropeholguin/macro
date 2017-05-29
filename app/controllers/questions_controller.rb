@@ -62,8 +62,9 @@ class QuestionsController < ApplicationController
 	def tokens_wallet
 		@user = current_user
 		notifications = Notification.card_notifications(@user.id)
+		number_notifications = Notification.number_notifications(@user.id)
 		respond_to do |format|
-		 	format.json  { render json: { tokens: @user.points, notifications: notifications } }
+		 	format.json  { render json: { tokens: @user.points, notifications: notifications, number_notifications: number_notifications } }
 		end
 	end
 
