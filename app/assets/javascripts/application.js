@@ -20,6 +20,7 @@
 //= require simplemde.min
 //= require components
 //= require cocoon
+//= require prism
 //= require_tree .
 //= require jquery.countdown
 window.Components = {} 
@@ -27,6 +28,30 @@ window.Components = {}
 //you'll overwrite library functions
 $(function(){ $(document).foundation(); });
 $(document).on("turbolinks:load", function() {
-  var simplemde = new SimpleMDE({ element: document.getElementById("description") });
-  var simplemde = new SimpleMDE({	element: document.getElementById("explanation")});
+  var simplemde = new SimpleMDE({ 
+    element: document.getElementById("description"),
+    previewRender: function(plainText, preview) {
+      setTimeout(function() {
+        preview.innerHTML = this.parent.markdown(plainText).replace(/<code>/g, '<code class="language-sas">');
+        Prism.highlightAll();
+      }.bind(this), 1)
+      return "Loading..."
+    },
+    renderingConfig: {
+      codeSyntaxHighlighting: true,
+    }
+  });
+  var simplemde = new SimpleMDE({
+    element: document.getElementById("explanation"),
+    previewRender: function(plainText, preview) {
+      setTimeout(function() {
+        preview.innerHTML = this.parent.markdown(plainText).replace(/<code>/g, '<code class="language-sas">');
+        Prism.highlightAll();
+      }.bind(this), 1)
+      return "Loading..."
+    },
+    renderingConfig: {
+      codeSyntaxHighlighting: true,
+    }
+  });
 });
