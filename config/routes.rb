@@ -22,6 +22,8 @@ Rails.application.routes.draw do
 
 	resources :flags, only: [:create]
 	resources :sessions, only: [:new, :create, :index]
+
+	resources :uploads, only: [:create]
 	
 	post "run_question", to: 'questions#run_question'
 	post "next_card", to: 'questions#next_card'

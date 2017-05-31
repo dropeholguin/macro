@@ -27,31 +27,3 @@ window.Components = {}
 //Choose your name. Do not use React here or
 //you'll overwrite library functions
 $(function(){ $(document).foundation(); });
-$(document).on("turbolinks:load", function() {
-  var simplemde = new SimpleMDE({ 
-    element: document.getElementById("description"),
-    previewRender: function(plainText, preview) {
-      setTimeout(function() {
-        preview.innerHTML = this.parent.markdown(plainText).replace(/<code>/g, '<code class="language-sas">');
-        Prism.highlightAll();
-      }.bind(this), 1)
-      return "Loading..."
-    },
-    renderingConfig: {
-      codeSyntaxHighlighting: true,
-    }
-  });
-  var simplemde = new SimpleMDE({
-    element: document.getElementById("explanation"),
-    previewRender: function(plainText, preview) {
-      setTimeout(function() {
-        preview.innerHTML = this.parent.markdown(plainText).replace(/<code>/g, '<code class="language-sas">');
-        Prism.highlightAll();
-      }.bind(this), 1)
-      return "Loading..."
-    },
-    renderingConfig: {
-      codeSyntaxHighlighting: true,
-    }
-  });
-});
