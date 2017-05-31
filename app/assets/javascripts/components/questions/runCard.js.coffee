@@ -19,7 +19,7 @@ dom = React.DOM
 		timeLeft: +120
 		streak: @props.streak
 	componentDidMount: ->
-		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', expiryUrl: @props.root_path})
+		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', onExpiry: @handleClick})
 		$(@refs.showVotes).hide()
 		$(@refs.showComments).hide()
 		$(@refs.cardStats).hide()
@@ -116,7 +116,7 @@ dom = React.DOM
 				success: (data) =>
 				    console.log(data)
 				    @setState({quest: data, timeLeft: +120})
-		    		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', expiryUrl: @props.root_path})   		
+		    		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', onExpiry: @handleClick})   		
 				    @infoUpdate(data)
 				    @answersUpdate(data)
 				    @tagsUpdate(data)            

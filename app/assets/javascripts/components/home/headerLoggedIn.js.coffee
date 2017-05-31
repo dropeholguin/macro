@@ -200,6 +200,12 @@ dom = React.DOM
 		if @props.notification.category == "reactivate"
 			icon = "fa fa-check fa-2x"
 			colorNotification = "green"
+		if @props.notification.category == "tokens_positive"
+			icon = "fa fa-trophy fa-2x"
+			colorNotification = "green"
+		if @props.notification.category == "tokens_negative"
+			icon = "fa fa-minus fa-2x"
+			colorNotification = "red"
 		dom.div 
 			className: "row notifications",			
 				dom.div
