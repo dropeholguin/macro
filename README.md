@@ -72,6 +72,7 @@ Use Git to clone mysascards-staging's source code to your local machine.
 
 To see if it was successfully cloned use
 
+    $ cd mysascards-staging
 	$ git remote
 
 ###Deploy your changes
