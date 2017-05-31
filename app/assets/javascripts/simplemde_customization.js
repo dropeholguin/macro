@@ -17,6 +17,7 @@ var customImageUpload = {
         <input type="file" id="upload-image-input">\
         <br>\
         <button class="button large" id="upload-image-btn">Upload</button>\
+        <p id="upload-image-error" class="is-invalid-label"></p>\
         <button class="close-button" data-close aria-label="Close modal" type="button">\
           <span aria-hidden="true">&times;</span>\
         </button>\
@@ -88,14 +89,12 @@ $(document).on('click', '#upload-image-btn', function(e){
         $('#simpleMDEUpload').foundation('destroy');
       }
       else{
-        $('#simpleMDEUpload').foundation('close');
-        $('#simpleMDEUpload').foundation('destroy');
+        $('#upload-image-error').text(response.error);
       }
     },
     error: function(xhr, ajaxOptions, thrownError) {
       console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-      $('#simpleMDEUpload').foundation('close');
-      $('#simpleMDEUpload').foundation('destroy');
+      $('#upload-image-error').text("Some unknown error occurred!");
     }
   });
 });
