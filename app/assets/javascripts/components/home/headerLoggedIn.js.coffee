@@ -5,6 +5,7 @@ dom = React.DOM
 	getInitialState: ->
 		points: @props.points
 		current_points: []
+		notifications: []
 	getDefaultProps: ->
 		points: 0
 	componentDidMount: ->
@@ -24,7 +25,8 @@ dom = React.DOM
 		  data: points: @state.points
 		  success: (data) =>
 		    @setState({points: data.tokens, total_notifications: data.notifications.length, notifications: data.notifications})
-		    console.log @state.notifications		
+		    console.log data		
+
 	runCardClicked: (event) ->
 		if @state.points == 0
 	 		$.amaran content: {'title': 'Sorry!','message': 'You dont have enough tokens to run a card!', 'info':'!', 'icon':'fa fa-flag'}, theme: 'awesome error', delay :10000          		
@@ -92,19 +94,10 @@ dom = React.DOM
 									id: "notificationTitle",
 									"Notifications"
 								dom.div
-									id: "notificationsBody",									
-									dom.div 
-										className: "notifications",
-										dom.i
-											className: "fa fa-bell-o fa-2x",
-											'aria-hidden': "true",
-										"This is a notification"
-									dom.div 
-										className: "notifications",
-										dom.i
-											className: "fa fa-comments-o fa-2x",
-											'aria-hidden': "true",
-										"This is a notification",
+									id: "notificationsBody",
+									style: {overflow: "auto", maxHeight: "400px"},	
+									for notification in @state.notifications
+										React.createElement Notification, key: notification.id, notification: notification			
 								dom.div
 									id: "notificationFooter",
 									dom.a
@@ -136,7 +129,7 @@ dom = React.DOM
 								dom.li
 									className: "item-selected",
 									dom.a
-										href: "/run_cards",
+										href: "/cards_run_filter",
 										dom.i
 											className: "fa fa-play",
 											onClick: @runCardClicked,
@@ -192,13 +185,41 @@ dom = React.DOM
 @Notification = React.createClass
 	displayName: 'Notification'
 	render: ->
+		if @props.notification.category == "vote"
+			icon = "fa fa-thumbs-o-up fa-2x"
+			colorNotification = "green"
+		if @props.notification.category == "comment"
+			icon = "fa fa-comments-o fa-2x"
+			colorNotification = "#8a8a8a"
+		if @props.notification.category == "flag"
+			icon = "fa fa-flag-o fa-2x"
+			colorNotification = "red"
+		if @props.notification.category == "suspend"
+			icon = "fa fa-ban fa-2x"
+			colorNotification = "red"
+		if @props.notification.category == "reactivate"
+			icon = "fa fa-check fa-2x"
+			colorNotification = "green"
+		if @props.notification.category == "tokens_positive"
+			icon = "fa fa-trophy fa-2x"
+			colorNotification = "green"
+		if @props.notification.category == "tokens_negative"
+			icon = "fa fa-minus fa-2x"
+			colorNotification = "red"
 		dom.div 
-			className: "notifications",
-			dom.i
-				className: "fa fa-bell-o fa-2x",
-				'aria-hidden': "true",
-			dom.h5 {},	
-				@props.notifications.message
+			className: "row notifications",			
+				dom.div
+					className: "small-2 columns"	
+					dom.i
+						className: icon,
+						'aria-hidden': "true",
+				dom.a
+					href: @props.notification.source
+					dom.div
+						className: "small-10 columns"		
+						dom.h6 
+							style: {color: colorNotification},	
+							@props.notification.message
 
 
 

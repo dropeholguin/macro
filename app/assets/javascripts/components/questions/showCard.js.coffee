@@ -7,6 +7,7 @@ dom = React.DOM
 		votes: @props.votes
 		comments: []
 		state: @props.state
+		card_id: @props.card_id
 	componentDidMount: ->
 		$(@refs.anim1).addClass('animated fadeInUp')
 		$(@refs.anim2).addClass('animated pulse')
@@ -14,7 +15,7 @@ dom = React.DOM
 		if(@state.state)
 			$(@refs.showVotes).hide()			
 		if(@state.state == false)
-			$(@refs.showComments).hide()		
+			$(@refs.showComments).hide()				
 	componentWillMount: ->
 		if(@state.state)
 			$(@refs.showComments).show()
@@ -183,7 +184,10 @@ dom = React.DOM
 							dom.div
 								className: "large-8 columns",
 								React.createElement Comments, csrfToken: @props.csrfToken, url: "/questions/#{@props.card_id}/comments", comments: @props.comments		
-
+						dom.div
+							className: "row"
+							ref: "flags"
+							React.createElement FlagForm, card_id: @state.card_id, csrfToken: @props.csrfTokenFlag,
 @CardAnswer = React.createClass
 	displayName: 'CardAnswer'
 	componentDidMount: ->
@@ -193,6 +197,10 @@ dom = React.DOM
 			typeOption = "radio"
 		else if(@props.choice == "multiple")
 			typeOption = "checkbox"
+		else if (@props.choice == "user input")
+			typeOption = "text"
+			hide = "none"
+			msg = "type your answer"
 		if(@props.answer.is_correct)
 			rightColor = "this-ans" 
 		else
@@ -207,8 +215,10 @@ dom = React.DOM
 					dom.input
 						id: "#{@props.answer.id}",
 						name: "option",
-						type: typeOption,	
+						type: typeOption,
+						placeholder: msg
 					dom.label
+						style: {display: hide},
 						htmlFor: "#{@props.answer.id}",
 						dangerouslySetInnerHTML: __html: @props.answer.answer_markdown.toString()				
 			

@@ -19,7 +19,7 @@ dom = React.DOM
 		timeLeft: +120
 		streak: @props.streak
 	componentDidMount: ->
-		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', expiryUrl: @props.root_path})
+		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', onExpiry: @handleClick})
 		$(@refs.showVotes).hide()
 		$(@refs.showComments).hide()
 		$(@refs.cardStats).hide()
@@ -61,11 +61,14 @@ dom = React.DOM
 		if ($('.this-ansn').length > 0)
 			$('.this-ansn').addClass "wrong-color"
 		selected = $('input[name=option]:checked').map(-> @id).get()
+		if (@state.choice == "user input")
+			user_input = $('input[name=option]').val()
+			console.log ("User input: " + user_input)
 		$.ajax 
 			url: '/run_question'
 			type: 'POST'
 			dataType: 'json'
-			data: checkbox: selected, card_id: @state.card_id
+			data: checkbox: selected, card_id: @state.card_id, user_input: user_input
 			error: ->
 				console.log("AJAX Error:")
 			success: (data) =>
@@ -113,7 +116,7 @@ dom = React.DOM
 				success: (data) =>
 				    console.log(data)
 				    @setState({quest: data, timeLeft: +120})
-		    		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', expiryUrl: @props.root_path})   		
+		    		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', onExpiry: @handleClick})   		
 				    @infoUpdate(data)
 				    @answersUpdate(data)
 				    @tagsUpdate(data)            
@@ -367,6 +370,8 @@ dom = React.DOM
 			typeOption = "radio"
 		else if(@props.choice == "multiple")
 			typeOption = "checkbox"
+		else if(@props.choice == "user input")
+			rightColor: "none"
 		if(@props.answer.is_correct)
 			rightColor = "this-ans" 
 		else
@@ -449,7 +454,45 @@ dom = React.DOM
 					dom.h5 {},	
 						dom.li
 							className: "fa fa-clock-o",
-							" Total time: #{@props.time}s"							
+							" Total time: #{@props.time}s"	
+	
+@RunCardFilter = React.createClass
+	getDefaultProps: ->
+		number_questions: 0
+	componentDidMount: ->
+		$(@refs.arrow).addClass('animated pulse infinite')
+	render: ->
+		dom.div
+			className: "root",
+			dom.div
+				className: "row radius-10",
+				style: {border: "1px solid #cacaca"}				
+				dom.div
+					className: "large-12 columns"
+					dom.h4 
+						style: {fontStyle: "italic", fontWeight: "bold"},
+						if @props.total > 0	
+							"#{@props.number_questions} Cards Available"
+						else
+							"To start choose a topic or type a related card"					
+					dom.div
+						className: "large-12 columns",
+						if @props.total > 0	
+							dom.a
+								className: "button radius-10",
+								href: @props.run_cards_path,
+								dom.i
+									className: "fa fa-play"
+								" RUN"
+						else
+							dom.i
+								ref: "arrow" 
+								style: {color: "#169bd4"}
+								className: "fa fa-play-circle fa-5x"
+							
+
+
+
 					
 
 

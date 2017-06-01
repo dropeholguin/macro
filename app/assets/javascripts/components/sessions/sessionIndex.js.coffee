@@ -1,9 +1,8 @@
 dom = React.DOM
 
 @SessionIndex = React.createClass
-
+	displayName: 'SessionIndex'
 	render: ->
-		displayName: 'Session'
 		dom.div
 			className: "root",
 			dom.div

@@ -61,3 +61,27 @@ Now clone this repo
 then navigate to localhost:3000!
 
 For admin features check out http://localhost:3000/admin/login
+
+##Deploy process to Heroku
+
+If you haven't already logged in your Heroku account, follow the prompts to create a new SSH public key.
+
+	$ heroku login
+
+###Clone the repository
+
+Use Git to clone mysascards-staging's source code to your local machine.
+
+	$ heroku git:clone -a mysascards-staging
+
+To see if it was successfully cloned use
+
+	$ git remote
+
+###Deploy your changes
+
+Make some changes to the code you just cloned and deploy them to Heroku using Git.
+
+	$ git add .
+	$ git commit -am "make it better"
+	$ git push heroku master

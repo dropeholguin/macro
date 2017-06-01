@@ -3,7 +3,30 @@ class SessionsController < ApplicationController
 	include ApplicationHelper
 
 	def index
-		@sessions = Session.all.order('created_at desc')
+		user = current_user
+		@sessions = []
+		@number_session_passeds = StatsSession.number_session_passed(user.id).count
+
+		if params[:query].present? || params[:the_tag].present?
+			questions_search = Question.search(params)
+			sessions_search = []
+	
+			Session.all.order('created_at desc').each do |session|
+				stats_session = StatsSession.stats_session(session.id, user.id)
+				if !stats_session.present?
+					sessions_search << session
+				end
+			end
+
+			sessions_search.each do |session|
+				takes = session.takes.pluck(:question_id)
+				questions_search.each do |question|
+					if takes.include?(question.id) && !@sessions.include?(session)
+						@sessions << session
+					end
+				end
+			end
+    	end
 	end
 
  	def new
@@ -47,6 +70,7 @@ class SessionsController < ApplicationController
  	def run_sessions
 		@session = Session.find params[:session_id]
 		questions = []
+		
 		@session.takes.each do |take|
 			questions << take.question
 		end
@@ -61,6 +85,7 @@ class SessionsController < ApplicationController
         cookies[:session_time] = { value: Time.now, expires: 4.hours.from_now }
 
 		@question = Question.find first_question_id.to_i
+
 	end
 
 	def next_card
@@ -83,9 +108,12 @@ class SessionsController < ApplicationController
 		card = Question.find params[:card_id]
 		session = Session.find params[:session]
 
-		answers_correct = card.answers.select { |answer| answer.is_correct == true }
-		@is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
-
+		if card.choice == "user input"
+			@is_passed = card.answers.first.answer_markdown.eql? params[:user_input]
+		else
+			answers_correct = card.answers.select { |answer| answer.is_correct == true }
+			@is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+		end
 		@session_card = SessionCard.new(user_id: @user.id, question_id: card.id, is_passed: @is_passed, session_id: session.id )
 		@session_card.save
 

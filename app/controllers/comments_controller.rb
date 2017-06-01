@@ -7,7 +7,7 @@ class CommentsController < ApplicationController
     	@comment.user = current_user
 
 		if @comment.save
-			@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "#{current_user.name} commented on his card")
+			@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "#{current_user.name} commented on his card", category: "comment", source: "#{question_path(@question)}")
 			@notification.save
 			flash[:notice] = "Comment added"
 	    else

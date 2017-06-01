@@ -24,9 +24,9 @@ ActiveAdmin.register Question do
   end
   action_item only: :show  do
     if question.suspended == false
-      link_to 'Suspend Photo', suspend_path(question), method: :patch, class: 'button'
+      link_to 'Suspend Question', suspend_path(question), method: :patch, class: 'button'
     else
-      link_to 'Approve Photo', approve_path(question), method: :patch, class: 'button'
+      link_to 'Approve Question', approve_path(question), method: :patch, class: 'button'
     end
   end
   show do
@@ -54,9 +54,9 @@ ActiveAdmin.register Question do
     column :suspended
     column "" do |question|
       if question.suspended == false
-        link_to 'Suspend Account', suspend_path(question), method: :patch, class: 'button'
+        link_to 'Suspend Question', suspend_path(question), method: :patch, class: 'button'
       else
-        link_to 'Active Account', approve_path(question), method: :patch, class: 'button'
+        link_to 'Active Question', approve_path(question), method: :patch, class: 'button'
       end
     end
   	actions defaults: false do |question|

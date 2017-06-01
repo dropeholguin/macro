@@ -210,6 +210,9 @@
     color: #8a8a8a;
     padding: 10px 15px;
 }
+.notifications:hover{
+    background-color: rgba(248, 248, 248, 1);
+}
 #notification_li:hover{
     border: none;
     border-radius: 5px;

@@ -3,8 +3,8 @@ dom = React.DOM
 @IndexCard = React.createClass
 	displayName: 'IndexCard'
 	getDefaultProps: ->
-		title_page: "CREATED CARDS"
-		description_page: "Manage your cards: review rating, edit, delete and read comments"
+		title_page: "???  new questions available"
+		description_page: "Filter by topics and keywords.  If you answer all available questions correctly then play continues at ranuni(0)"
 	getInitialState: ->
 		title_page: @props.title_page
 		description_page: @props.description_page
@@ -21,7 +21,7 @@ dom = React.DOM
 @Card = React.createClass
 	displayName: 'Card'
 	getDefaultProps: ->
-		button_1: "RUN"
+		button_1: "VIEW"
 		button_2: "EDIT_D"
 		button_3: "DELETE_D"
 		small: "small-10 columns"

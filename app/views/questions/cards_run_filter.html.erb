@@ -1,0 +1,19 @@
+<div class="row">
+	<div class="large-10 large-centered columns">
+		<%= react_component 'IndexCard', {question: @questions, questions_path: questions_path, tag_path: request.url}%>
+		<div class="row white-background">
+			<div class="small-4 columns">
+				<div class="row">
+					<%= react_component 'SearchCard', {questions_path: cards_run_filter_path}%>
+				</div>
+				<div class="row">
+					<%= react_component 'SearchByTag', {tag_path: request.url}%>
+				</div>		
+			</div>
+
+			<div class="small-8 columns text-center">
+				<%= react_component 'RunCardFilter', {number_questions: @number_questions, total: @number_questions.to_i, run_cards_path: run_cards_path}%>				
+			</div>
+		</div>
+	</div>
+</div>
