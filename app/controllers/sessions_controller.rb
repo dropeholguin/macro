@@ -26,6 +26,8 @@ class SessionsController < ApplicationController
 					end
 				end
 			end
+			@number_sessions = @sessions.count
+			@id_session = @sessions.pluck(:id).sample
     	end
 	end
 

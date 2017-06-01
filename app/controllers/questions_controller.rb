@@ -45,7 +45,7 @@ class QuestionsController < ApplicationController
 				end
 			end
 			@number_questions = questions_sort.count
-			question_ids_array = questions_sort.pluck(:id)
+			question_ids_array = questions_sort.pluck(:id).sort_by { rand }
 	        question_array_string = question_ids_array.join("-")
 	        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
 		elsif params[:term]
