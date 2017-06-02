@@ -118,10 +118,19 @@ class SessionsController < ApplicationController
 		end
 		@session_card = SessionCard.new(user_id: @user.id, question_id: card.id, is_passed: @is_passed, session_id: session.id )
 		@session_card.save
+		
+		#other question
+		question_ids_array = cookies[:questions].split("-")
+        question_id = question_ids_array.shift
+        question_array_string = question_ids_array.join("-")
+        cookies[:questions] = { value: question_array_string, expires: 23.hours.from_now }
+
+        @question = Question.find question_id.to_i
+        @description = markdown(@question.description_markdown)
 
 		respond_to do |format|
-		 	format.json  { render json: { is_passed: @is_passed, tokens: @user.points } }
-		end
+		 	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list, description: @description, remaining_card: (question_ids_array.size + 1) } }
+		end		
 	end
 
 	def sessions_stats
