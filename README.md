@@ -36,6 +36,8 @@ Install the following:
 
  * elasticsearch 2.4.4 (download from here - https://www.elastic.co/downloads/past-releases)
 
+ * heroku
+
 For elastic search, unzip the download, enter the directory, and start the server by running:
 
     ./bin/elasticsearch
@@ -70,6 +72,7 @@ Use Git to clone mysascards-staging's source code to your local machine.
 
 To see if it was successfully cloned use
 
+    $ cd mysascards-staging
 	$ git remote
 
 ###Deploy your changes
