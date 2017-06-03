@@ -20,13 +20,10 @@
 //= require simplemde.min
 //= require components
 //= require cocoon
+//= require prism
 //= require_tree .
 //= require jquery.countdown
 window.Components = {} 
 //Choose your name. Do not use React here or
 //you'll overwrite library functions
 $(function(){ $(document).foundation(); });
-$(document).on("turbolinks:load", function() {
-  var simplemde = new SimpleMDE({ element: document.getElementById("description") });
-  var simplemde = new SimpleMDE({	element: document.getElementById("explanation")});
-});
