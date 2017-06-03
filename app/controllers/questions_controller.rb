@@ -45,7 +45,7 @@ class QuestionsController < ApplicationController
 				end
 			end
 			@number_questions = questions_sort.count
-			question_ids_array = questions_sort.pluck(:id)
+			question_ids_array = questions_sort.pluck(:id).sort_by { rand }
 	        question_array_string = question_ids_array.join("-")
 	        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
 		elsif params[:term]
@@ -278,18 +278,22 @@ class QuestionsController < ApplicationController
 	def vote
 		value = params[:type] == "up" ? 1 : -1
 		@question = Question.find(params[:id])
+		author = @question.user
+
 		if value == 1
 			message = "+#{value} #{current_user.name} has voted his card"
 		else
 			message = "#{value} #{current_user.name} has voted his card"
 		end
-		@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: message, category: "vote", source: "#{question_path(@question)}")
-		@notification.save
-		@question.add_or_update_evaluation(:votes, value, current_user)
 
-		if @question.reputation_for(:votes).to_i == 4
-			author = @question.user
-			author.update_attributes(points: author.points + 32)
+		if author != current_user
+			@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: message, category: "vote", source: "#{question_path(@question)}")
+			@notification.save
+			@question.add_or_update_evaluation(:votes, value, current_user)
+
+			if @question.reputation_for(:votes).to_i == 4
+				author.update_attributes(points: author.points + 32)
+			end
 		end
 	end
 

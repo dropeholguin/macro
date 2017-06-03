@@ -9,10 +9,9 @@
 			</div>
 			<div class="small-8 columns">
 				<h4 class="bold">Sessions passed: <%= @number_session_passeds %></h4>
-				<% @sessions.each do |session| %>
-					<div class="large-6 columns">
-						<%= react_component 'SessionIndex', {title: session.title, run_sessions_path: run_sessions_path(session_id: session.id), count: session.takes.count,session_img: image_path('session.png')} %> 
-					</div>   
+				<% if @number_sessions.to_i > 0%>
+					<%= @number_sessions %>
+					<%= link_to "Run Session", run_sessions_path(session_id: @id_session.to_i) %>
 				<% end %>
 			</div>
 		</div>
