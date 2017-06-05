@@ -5,8 +5,51 @@ dom = React.DOM
 	render: ->
 		dom.div
 			className: "root",
+			dom.div
+				className: "row expanded"
+				style: {marginTop: "20px"}
+				dom.div
+					className: "large-6 columns"
+				dom.div
+					className: "large-6 columns"
+					dom.form 
+						method: 'POST',
+						action: @props.url,	
+						dom.input
+							key: "utf8"
+							name: "utf8"
+							type: "hidden"
+							value: "✓"
+						dom.input({
+							key: "authenticity_token"
+							name: "authenticity_token"
+							type: "hidden"
+							value: @props.csrfToken
+							});					
+						dom.div
+							className: "large-4 columns"
+							dom.input
+								type: "text"
+								name: "user[email]",
+								key: "email",
+								id: "user_email"
+								placeholder: "Your email",
+						dom.div
+							className: "large-4 columns"
+							dom.input
+								type: "password"
+								name: 'user[password]',
+								key: "password",
+								id: "user_password",
+								placeholder: "Your password",	
+						dom.div
+							className: "large-4 columns"
+							dom.input
+								type: "submit"
+								className: "button large radius-10"
+								value: "SIGN ON"						
 			dom.div 
-				className: "row expanded background-home",
+				className: "row expanded background-home",				
 				dom.div
 					className: "large-12 text-center columns margin-space white-title"
 					dom.h2 
