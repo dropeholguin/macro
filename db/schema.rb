@@ -263,6 +263,15 @@ ActiveRecord::Schema.define(version: 20170602171848) do
     t.index ["session_id"], name: "index_takes_on_session_id", using: :btree
   end
 
+  create_table "uploads", force: :cascade do |t|
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "email",                  default: "", null: false
