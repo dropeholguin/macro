@@ -29,9 +29,9 @@ dom = React.DOM
 	infoUpdate: (data) ->	
 		console.log (data)		
 		@setState({title: data.question.title, description: data.description, explanation: data.question.explanation_markdown, card_id: data.question.id})
-		$(@refs.runCard).show()		
+		$(@refs.runCard).hide()		
 		$(@refs.explanationDiv).hide()
-		$(@refs.nextCard).hide()	
+		$(@refs.nextCard).show()	
 		$(@refs.flagButton).hide()	
 		$(@refs.votesDiv).hide()
 		$("input").prop('disabled', false)
@@ -74,9 +74,13 @@ dom = React.DOM
 	nextQuestionClicked: (event) ->
 		$(@refs.animateTitle).addClass('animated fadeInLeft')
 		$(@refs.animateDescription).addClass('animated fadeInRight')
+		selected = $('input[name=option]:checked').map(-> @id).get()
+		if (@state.choice == "user input")
+			user_input = $('input[name=option]').val()
 		$.ajax '/sessions_next_card',
         type: 'POST',
         dataType: 'json',
+		data: checkbox: selected, session: @state.session_id, card_id: @state.card_id, user_input: user_input
         error: (data) =>
             console.log("AJAX Error:")
             window.location.replace("/sessions_stats")
@@ -227,6 +231,7 @@ dom = React.DOM
 									className: "small-12 columns text-right",
 									dom.a 
 										id: "run-card",
+										style: {display: "none"}
 										className: "button large radius-10",
 										onClick: @handleClick,
 										ref: "runCard",
@@ -237,7 +242,6 @@ dom = React.DOM
 										id: "back-card",
 										ref: "nextCard",											
 										onClick: @nextQuestionClicked,
-										style: {display: 'none'},
 										className: "button large radius-10",
 										"NEXT",								
 								dom.div
