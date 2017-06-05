@@ -64,17 +64,29 @@ class SessionsController < ApplicationController
  		@user = current_user
 		@session = Session.new(session_params)
 		@session.user = @user
+		state = true
 
 		respond_to do |format|
 			if !params[:question].nil? && params[:question][:ids].size == 16
-				if @session.save
-					params[:question][:ids].each do |question_id|
-						question = Question.find question_id
-						take = Take.new(question_id: question.id, session_id: @session.id)
-						take.save
+				params[:question][:ids].each do |question_id|
+					question = Question.find question_id
+					if !question.tag_list.include?(@session.tag)
+						state = false
 					end
-					format.html { redirect_to sessions_path, notice: 'session was successfully created.' }
-					format.json { render :show, status: :created, location: @session }
+				end
+				if state == true
+					if @session.save
+						params[:question][:ids].each do |question_id|
+							question = Question.find question_id
+							take = Take.new(question_id: question.id, session_id: @session.id)
+							take.save
+						end
+						format.html { redirect_to sessions_path, notice: 'session was successfully created.' }
+						format.json { render :show, status: :created, location: @session }
+					else
+						format.html { redirect_to new_session_path }
+						format.json { render json: @session.errors, status: :unprocessable_entity }
+					end
 				else
 					format.html { redirect_to new_session_path }
 					format.json { render json: @session.errors, status: :unprocessable_entity }

@@ -12,19 +12,12 @@ payPhotos = ->
 		success: (data) ->
 			console.log(data)
 
-pay = ->
-	$('#run').click ->
-		$.ajax '/run_card',
-		type: 'POST',
-		dataType: 'json',
-		error: ->
-			console.log("AJAX Error: #{textStatus}")
-		success: (data) ->
-			console.log("RUN CAR")
+selectSession = ->
+	$('#select-tag').change ->
+		tag = $(this).find('option:selected').val();
+		title = $("input[name='session[title]']").val();
+		console.log title
+		window.location = "new?title="+ title + "&the_tag=" + tag
 
-$(document).ready payPhotos
-$(document).ready pay
-
-$(document).on 'turbolinks:load', ->
-	payPhotos()
-	pay()
+$(document).on 'turbolinks:load', selectSession
+$(document).ready selectSession

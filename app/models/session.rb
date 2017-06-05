@@ -6,7 +6,8 @@ class Session < ApplicationRecord
 	has_many :session_cards
 	has_many :stats_sessions
 
-	validates :title, presence: true
+	validates :title, :tag, presence: true
+	enum tags: ["SAS Programming", "SAS Macro", "DI Studio", "SAS Management Console", "Enterprise Guide", "Workspace Management"]
 
 	mapping do
 	    indexes :id, index: :not_analyzed
