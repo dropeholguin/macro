@@ -120,6 +120,21 @@ class SessionsController < ApplicationController
 	end
 
 	def next_card
+		@user = current_user
+		answers = params[:checkbox]
+		card = Question.find params[:card_id]
+		session = Session.find params[:session]
+
+		if card.choice == "user input"
+			@is_passed = card.answers.first.answer_markdown.eql? params[:user_input]
+		else
+			answers_correct = card.answers.select { |answer| answer.is_correct == true }
+			@is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+		end
+		@session_card = SessionCard.new(user_id: @user.id, question_id: card.id, is_passed: @is_passed, session_id: session.id )
+		@session_card.save
+		
+		#other question
 		question_ids_array = cookies[:questions].split("-")
         question_id = question_ids_array.shift
         question_array_string = question_ids_array.join("-")

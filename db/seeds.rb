@@ -29,7 +29,7 @@ puts "Creating Questions"
 (1..100).each do |num|
 	user = users.shuffle.first
 	question = Question.new(user_id: user.id, title: Faker::Book.title, description_markdown: Faker::Lorem.paragraph(2, true), explanation_markdown: Faker::Lorem.paragraph(2, true), choice: "simple")
-  	question.tag_list = tags.sample(2)
+  question.tag_list = tags.sample(2)
 	question.save!
 	question_array << question    
 end
