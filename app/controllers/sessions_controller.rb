@@ -67,7 +67,7 @@ class SessionsController < ApplicationController
 		state = true
 
 		respond_to do |format|
-			if !params[:question].nil? && params[:question][:ids].size == 16
+			if !params[:question].nil? && params[:question][:ids].size == 7
 				params[:question][:ids].each do |question_id|
 					question = Question.find question_id
 					if !question.tag_list.include?(@session.tag)

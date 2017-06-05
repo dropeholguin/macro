@@ -75,12 +75,12 @@ dom = React.DOM
 		$(@refs.animateTitle).addClass('animated fadeInLeft')
 		$(@refs.animateDescription).addClass('animated fadeInRight')
 		selected = $('input[name=option]:checked').map(-> @id).get()
-		if (@state.choice == "user input")
-			user_input = $('input[name=option]').val()
+		if @state.choice == "user input"
+			user_input = $('input[name=option').val()
 		$.ajax '/sessions_next_card',
         type: 'POST',
         dataType: 'json',
-		data: checkbox: selected, session: @state.session_id, card_id: @state.card_id, user_input: user_input
+        data: checkbox: selected, session: @state.session_id, card_id: @state.card_id, user_input: user_input
         error: (data) =>
             console.log("AJAX Error:")
             window.location.replace("/sessions_stats")
@@ -90,6 +90,7 @@ dom = React.DOM
             @infoUpdate(data) 
             @answersUpdate(data)
             @tagsUpdate(data)
+            console.log ("selected: ")
             $.amaran content: {'title': 'Info:', 'message': '', 'info': "#{data.remaining_card} CARDS left", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
         @setState(animate_tag: "animated fadeInRight")
 	flagButtonClicked: (event)->
