@@ -31,5 +31,64 @@ dom = React.DOM
 								href: @props.run_sessions_path,
 								className: "button large radius-10 orange",
 								"RUN"						
-
+@SearchByTagSession = React.createClass
+	displayName: 'SearchByTag'
+	render: ->
+		if(@props.tag_path.split("?").length-1 > 0)
+			url_tag = "&query="
+		else
+			url_tag = "?&query=" 
+		dom.div
+			className: "small-12 columns",
+			dom.div 
+				className: "margin-tag",
+				dom.span
+					className: "title-tag",
+					"Platform Administrator",
+				dom.li 
+					className: "title-li",
+					dom.a
+						href: "#{@props.tag_path}"+url_tag+"Management+Console",
+						className: "tag-decoration",
+						"SAS Management Console"
+			dom.div 
+				className: "margin-tag",
+				dom.span
+					className: "title-tag",
+					"ETL Developer",
+				dom.li 
+					className: "title-li",
+					dom.a
+						href: "#{@props.tag_path}"+url_tag+"Macro",
+						className: "tag-decoration",
+						"SAS Macro"
+				dom.li 
+					className: "title-li",
+					dom.a
+						href: "#{@props.tag_path}"+url_tag+"DI+Studio",
+						className: "tag-decoration",
+						"DI Studio"
+			dom.div 
+				className: "margin-tag",
+				dom.span
+					className: "title-tag",
+					"Analyst",
+				dom.li 
+					className: "title-li",
+					dom.a
+						href: "#{@props.tag_path}"+url_tag+"Programming",
+						className: "tag-decoration",
+						"SAS Programming"
+				dom.li 
+					className: "title-li",
+					dom.a
+						href: "#{@props.tag_path}"+url_tag+"Enterprise+Guide",
+						className: "tag-decoration",
+						"Enterprise Guide"
+				dom.li 
+					className: "title-li",
+					dom.a
+						href: "#{@props.tag_path}"+url_tag+"Workspace+Management",
+						className: "tag-decoration",
+						"Workspace Management"
 

@@ -6,29 +6,46 @@ class SessionsController < ApplicationController
 		user = current_user
 		@sessions = []
 		@number_session_passeds = StatsSession.number_session_passed(user.id).count
-
 		if params[:query].present? || params[:the_tag].present?
-			questions_search = Question.search(params)
-			sessions_search = []
-	
-			Session.all.order('created_at desc').each do |session|
+			
+			sessions = Session.search(params)
+
+			sessions.each do |session|
 				stats_session = StatsSession.stats_session(session.id, user.id)
 				if !stats_session.present?
-					sessions_search << session
+					@sessions << session
 				end
 			end
 
-			sessions_search.each do |session|
-				takes = session.takes.pluck(:question_id)
-				questions_search.each do |question|
-					if takes.include?(question.id) && !@sessions.include?(session)
-						@sessions << session
-					end
-				end
-			end
 			@number_sessions = @sessions.count
-			@id_session = @sessions.pluck(:id).sample
-    	end
+		 	@id_session = @sessions.pluck(:id).sample
+		end
+		# user = current_user
+		# @sessions = []
+		# @number_session_passeds = StatsSession.number_session_passed(user.id).count
+
+		# if params[:query].present? || params[:the_tag].present?
+		# 	questions_search = Question.search(params)
+		# 	sessions_search = []
+	
+		# 	Session.all.order('created_at desc').each do |session|
+		# 		stats_session = StatsSession.stats_session(session.id, user.id)
+		# 		if !stats_session.present?
+		# 			sessions_search << session
+		# 		end
+		# 	end
+
+		# 	sessions_search.each do |session|
+		# 		takes = session.takes.pluck(:question_id)
+		# 		questions_search.each do |question|
+		# 			if takes.include?(question.id) && !@sessions.include?(session)
+		# 				@sessions << session
+		# 			end
+		# 		end
+		# 	end
+		# 	@number_sessions = @sessions.count
+		# 	@id_session = @sessions.pluck(:id).sample
+  #   	end
 	end
 
  	def new
@@ -200,6 +217,6 @@ class SessionsController < ApplicationController
 
  	private
  		def session_params
-		  params.require(:session).permit(:title)
+		  params.require(:session).permit(:title, :tag)
 		end
 end
