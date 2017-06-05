@@ -46,13 +46,6 @@ dom = React.DOM
 						dom.input
 							className: "radius-10",
 							type:  "text",
-							name: "user[name]",
-							key:"name",
-							id: "name",
-							placeholder: "Your name",
-						dom.input
-							className: "radius-10",
-							type:  "text",
 							name: "user[email]",
 							key: "email",
 							id: "email",
