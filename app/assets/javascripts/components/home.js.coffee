@@ -53,7 +53,7 @@ dom = React.DOM
 											className: "large-8 large-centered columns",
 											dom.a
 												className: "button large radius-10",
-												href: "/questions",
+												href: "/cards_run_filter",
 												"RUN"
 						dom.div
 								className: "large-4 text-center columns plans",
