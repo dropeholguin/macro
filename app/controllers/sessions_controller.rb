@@ -253,4 +253,3 @@ class SessionsController < ApplicationController
 		  params.require(:session).permit(:title, :tag)
 		end
 end
-app/controllers/sessions_controller.rb
