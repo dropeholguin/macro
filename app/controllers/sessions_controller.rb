@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
 	before_filter :authenticate_user!
+	before_filter :cards_number
 	include ApplicationHelper
 
 	def index
@@ -50,13 +51,14 @@ class SessionsController < ApplicationController
 
  	def new
  		@session = Session.new
- 		if params[:query].present? || params[:the_tag]
+ 		if params[:query].present?
 			@questions = Question.search(params)
+			render json: @questions
 		elsif params[:term]
 			@questions = Question.ac_search(params[:term]).map(&:title)
     		render json: @questions
 		else
-			@questions = Question.all.order('created_at desc')
+			@questions = []
 		end
  	end
 
@@ -67,7 +69,7 @@ class SessionsController < ApplicationController
 		state = true
 
 		respond_to do |format|
-			if !params[:question].nil? && params[:question][:ids].size == 7
+			if !params[:question].nil? && params[:question][:ids].size == @cards_number
 				params[:question][:ids].each do |question_id|
 					question = Question.find question_id
 					if !question.tag_list.include?(@session.tag)
@@ -120,20 +122,6 @@ class SessionsController < ApplicationController
 	end
 
 	def next_card
-		question_ids_array = cookies[:questions].split("-")
-        question_id = question_ids_array.shift
-        question_array_string = question_ids_array.join("-")
-        cookies[:questions] = { value: question_array_string, expires: 23.hours.from_now }
-
-        @question = Question.find question_id.to_i
-        @description = markdown(@question.description_markdown)
-
-		respond_to do |format|
-		 	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list, description: @description, remaining_card: (question_ids_array.size + 1) } }
-		end
-	end
-
-	def run_card
 		@user = current_user
 		answers = params[:checkbox]
 		card = Question.find params[:card_id]
@@ -159,7 +147,36 @@ class SessionsController < ApplicationController
 
 		respond_to do |format|
 		 	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list, description: @description, remaining_card: (question_ids_array.size + 1) } }
-		end		
+		end
+	end
+
+	def run_card
+		# @user = current_user
+		# answers = params[:checkbox]
+		# card = Question.find params[:card_id]
+		# session = Session.find params[:session]
+
+		# if card.choice == "user input"
+		# 	@is_passed = card.answers.first.answer_markdown.eql? params[:user_input]
+		# else
+		# 	answers_correct = card.answers.select { |answer| answer.is_correct == true }
+		# 	@is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+		# end
+		# @session_card = SessionCard.new(user_id: @user.id, question_id: card.id, is_passed: @is_passed, session_id: session.id )
+		# @session_card.save
+		
+		# #other question
+		# question_ids_array = cookies[:questions].split("-")
+  #       question_id = question_ids_array.shift
+  #       question_array_string = question_ids_array.join("-")
+  #       cookies[:questions] = { value: question_array_string, expires: 23.hours.from_now }
+
+  #       @question = Question.find question_id.to_i
+  #       @description = markdown(@question.description_markdown)
+
+		# respond_to do |format|
+		#  	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list, description: @description, remaining_card: (question_ids_array.size + 1) } }
+		# end		
 	end
 
 	def sessions_stats
@@ -167,12 +184,12 @@ class SessionsController < ApplicationController
 			@user = current_user
 			session = Session.find cookies[:session_id]
 			@cont = SessionCard.session_cards_correct(session.id, @user.id).count
-			@percentage_session = ((@cont.to_f / 16) * 100).round(2)
+			@percentage_session = ((@cont.to_f / @cards_number) * 100).round(2)
 			@passed_session = false
 			@result = "Fail"
 
 			if @percentage_session == 100
-				@user.update_attributes(points: @user.points + 16)
+				@user.update_attributes(points: @user.points + @cards_number)
 				@result = "High Score!!"
 				@passed_session = true
 			elsif @percentage_session >= 75
@@ -228,7 +245,12 @@ class SessionsController < ApplicationController
 	end
 
  	private
+		def cards_number
+			@cards_number = 10
+		end
+
  		def session_params
 		  params.require(:session).permit(:title, :tag)
 		end
 end
+app/controllers/sessions_controller.rb
