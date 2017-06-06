@@ -232,7 +232,7 @@ class QuestionsController < ApplicationController
 					format.html { render :new, notice: 'Incorrect Topic' }
 				else
 					if @question.save
-						format.html { redirect_to questions_url, notice: 'Question was successfully created.' }
+						format.html { redirect_to questions_list_url, notice: 'Question was successfully created.' }
 						format.json { render :show, status: :created, location: @question }
 					else
 						format.html { render :new }
@@ -244,7 +244,7 @@ class QuestionsController < ApplicationController
 					format.html { render :new, notice: 'Incorrect Topic' }
 				else
 					if @question.save
-						format.html { redirect_to questions_url, notice: 'Question was successfully created.' }
+						format.html { redirect_to questions_list_url, notice: 'Question was successfully created.' }
 						format.json { render :show, status: :created, location: @question }
 					else
 						format.html { render :new }
@@ -258,7 +258,7 @@ class QuestionsController < ApplicationController
 	def update
 		respond_to do |format|
 		  if @question.update(question_params)
-		    format.html { redirect_to questions_url, notice: 'Question was successfully updated.' }
+		    format.html { redirect_to questions_list_url, notice: 'Question was successfully updated.' }
 		    format.json { render :show, status: :ok, location: @question }
 		  else
 		    format.html { render :edit }
@@ -270,7 +270,7 @@ class QuestionsController < ApplicationController
 	def destroy
 		@question.destroy
 		respond_to do |format|
-		  format.html { redirect_to questions_url, notice: 'Question was successfully removed.' }
+		  format.html { redirect_to questions_list_url, notice: 'Question was successfully removed.' }
 		  format.json { head :no_content }
 		end
 	end
