@@ -51,9 +51,8 @@ class SessionsController < ApplicationController
 
  	def new
  		@session = Session.new
- 		if params[:query].present?
+ 		if params[:query].present? || params[:the_tag].present?
 			@questions = Question.search(params)
-			render json: @questions
 		elsif params[:term]
 			@questions = Question.ac_search(params[:term]).map(&:title)
     		render json: @questions
