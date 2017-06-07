@@ -13,6 +13,8 @@ var customImageUpload = {
       elemDiv.id = 'simpleMDEUpload';
       elemDiv.innerHTML = '\
         <h2 id="modalTitle">Upload Image</h2>\
+        <form class="dropzone" id="my-awesome-dropzone">\
+        </form>\
         <p class="lead">select an image to upload</p>\
         <input type="file" id="upload-image-input">\
         <br>\
@@ -25,6 +27,13 @@ var customImageUpload = {
       document.body.appendChild(elemDiv);
       var popup = new Foundation.Reveal($('#simpleMDEUpload'));
       popup.open();
+      $("#my-awesome-dropzone").dropzone({ 
+        url: "/uploads",
+        addRemoveLinks: true,
+        headers: {
+          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
     }
   },
   className: "fa fa-picture-o",
@@ -71,7 +80,7 @@ $(document).on("turbolinks:load", function() {
 $(document).on('click', '#upload-image-btn', function(e){
   var file_data = $('#upload-image-input').prop('files')[0];
   var form_data = new FormData();
-  form_data.append("image", file_data);
+  form_data.append("file", file_data);
 
   $.ajax({
     url: '/uploads',
