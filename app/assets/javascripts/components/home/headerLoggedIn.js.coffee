@@ -174,6 +174,16 @@ dom = React.DOM
 								dom.li 
 									className: "item-selected",
 									dom.a
+										rel: "",
+										href: @props.profile_settings,
+										ref: "",
+										dom.i
+											className: "fa fa-user-circle-o",
+											'aria-hidden': "true",
+											"Profile Settings"
+								dom.li 
+									className: "item-selected",
+									dom.a
 										'data-method': "delete",
 										rel: "nofollow",
 										href: @props.sign_out,
@@ -181,7 +191,8 @@ dom = React.DOM
 										dom.i
 											className: "fa fa-sign-out",
 											'aria-hidden': "true",
-											"SIGNOFF"
+											"SignOff"
+								
 @Notification = React.createClass
 	displayName: 'Notification'
 	render: ->
