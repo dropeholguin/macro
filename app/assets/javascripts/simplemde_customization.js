@@ -31,6 +31,17 @@ var customImageUpload = {
   title: "Insert Image",
 };
 
+var highlightSelectedCode = {
+  name: 'highlight selected code',
+  action: function(editor){
+    var selectedCode = editor.codemirror.getSelection();
+    var updatedCode = selectedCode.split('\n').map(line => '    ' + line).join('\n');
+    editor.codemirror.replaceSelection('```\n' + updatedCode + '\n```');
+  },
+  className: "fa fa-code",
+  title: "Hightlight Selected Code",
+}
+
 $(document).on("turbolinks:load", function() {
   var simplemde = new SimpleMDE({ 
     element: document.getElementById("description"),
@@ -46,7 +57,7 @@ $(document).on("turbolinks:load", function() {
     },
     toolbar: [
       "bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", 
-      customImageUpload, "|", "preview", "side-by-side", "fullscreen", "|", "guide"
+      customImageUpload, "|", highlightSelectedCode, "preview", "side-by-side", "fullscreen", "|", "guide"
     ]
   });
   var simplemde = new SimpleMDE({
@@ -63,7 +74,7 @@ $(document).on("turbolinks:load", function() {
     },
     toolbar: [
       "bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", 
-      customImageUpload, "|", "preview", "side-by-side", "fullscreen", "|", "guide"
+      customImageUpload, "|", highlightSelectedCode, "preview", "side-by-side", "fullscreen", "|", "guide"
     ]
   });
 });
