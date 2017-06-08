@@ -92,6 +92,7 @@ dom = React.DOM
             @tagsUpdate(data)
             console.log ("selected: ")
             $.amaran content: {'title': 'Info:', 'message': '', 'info': "#{data.remaining_card} CARDS left", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
+            highlightAllCodes()
         @setState(animate_tag: "animated fadeInRight")
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
