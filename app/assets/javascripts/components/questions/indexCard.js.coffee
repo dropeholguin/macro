@@ -115,7 +115,7 @@ dom = React.DOM
 						className: "button large radius-10",
 						type: "submit",
 						value: "Search",
-						'data-disable-with': "Search",	
+						'data-disable-with': "Search",
 
 @SearchByTag = React.createClass
 	displayName: 'SearchByTag'

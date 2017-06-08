@@ -30,7 +30,43 @@ dom = React.DOM
 							dom.a
 								href: @props.run_sessions_path,
 								className: "button large radius-10 orange",
-								"RUN"						
+								"RUN"
+@SearchCardSession = React.createClass
+	displayName: 'SearchCardSession'
+	componentDidMount: ->
+		$(@refs.autoComplete).autocomplete source: $('#title_autocomplete').data('autocomplete-source')
+	render: ->
+		dom.div
+			className: "small-12 columns",
+			dom.form
+				id: "formSearch"
+				action: @props.questions_path,
+				method: 'get',
+				acceptCharset: "UTF-8",
+				"data-remote": true,
+				dom.input
+					name: "utf8",
+					type: "hidden",
+					value: "✓",
+				dom.p {}
+					dom.label
+						className: "weight",
+						"SEARCH A CARD",      
+					dom.input
+						name: "query",
+						id:  "title_autocomplete",
+						ref: "autoComplete",
+						'data-autocomplete-source': @props.questions_path,
+						autoComplete: "off",
+						className: "ui-autocomplete-input",
+						type: "text",
+						placeholder: "Start typing to search more",
+					dom.input
+						className: "button large radius-10",
+						type: "submit",
+						value: "Search",
+						'data-disable-with': "Search",
+
 @SearchByTagSession = React.createClass
 	displayName: 'SearchByTag'
 	render: ->

@@ -51,13 +51,15 @@ class SessionsController < ApplicationController
 
  	def new
  		@session = Session.new
- 		if params[:query].present? || params[:the_tag].present?
-			@questions = Question.search(params)
-		elsif params[:term]
+ 		if params[:term]
 			@questions = Question.ac_search(params[:term]).map(&:title)
     		render json: @questions
-		else
-			@questions = []
+		end
+ 	end
+
+ 	def search_cards
+ 		if params[:query].present? || params[:the_tag].present?
+			@questions = Question.search(params)
 		end
  	end
 
@@ -188,7 +190,7 @@ class SessionsController < ApplicationController
 			@result = "Fail"
 
 			if @percentage_session == 100
-				@user.update_attributes(points: @user.points + @cards_number)
+				@user.update_attributes(points: @user.points + 16)
 				@result = "High Score!!"
 				@passed_session = true
 			elsif @percentage_session >= 75
