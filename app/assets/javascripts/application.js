@@ -21,6 +21,7 @@
 //= require components
 //= require cocoon
 //= require prism
+//= require dropzone
 //= require_tree .
 //= require jquery.countdown
 window.Components = {} 
