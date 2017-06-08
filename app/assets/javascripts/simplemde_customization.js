@@ -29,7 +29,7 @@ var customImageUpload = {
       document.body.appendChild(elemDiv);
       var popup = new Foundation.Reveal($('#simpleMDEUpload'));
       popup.open();
-      $("#my-awesome-dropzone").dropzone({ 
+      $("#my-awesome-dropzone").dropzone({
         url: "/uploads",
         addRemoveLinks: true,
         headers: {
@@ -38,6 +38,7 @@ var customImageUpload = {
         success: function(file, res){
           console.log(file, res);
           handleUploadSuccess(res);
+          this.removeAllFiles();
         },
         error: function(file, errorMessage, xhr){
           console.log(file, errorMessage, xhr)
@@ -66,7 +67,6 @@ var handleUploadSuccess = function(response){
     window.currentCM.replaceSelection("!["+response.image.name+"]("+response.image.url+")");
     $('#upload-image-error').addClass('hide')
     $('#simpleMDEUpload').foundation('close');
-    $('#simpleMDEUpload').foundation('destroy');
   }
   else{
     $('#upload-image-error').text(response.error);
