@@ -38,4 +38,5 @@ Rails.application.routes.draw do
  	get "sessions_stats", to: 'sessions#sessions_stats'
  	post "tokens_wallet", to: 'questions#tokens_wallet'
  	get "cards_run_filter", to: 'questions#cards_run_filter'
+ 	post "search_cards", to: 'sessions#search_cards'
 end

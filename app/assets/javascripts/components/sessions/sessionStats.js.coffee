@@ -29,7 +29,7 @@ dom = React.DOM
 								dom.h5 {},	
 									dom.li
 										className: "fa fa-hashtag",
-										" You got #{@props.cont}/16 correct (#{@props.percentage_session}%)"
+										" You got #{@props.cont} correct (#{@props.percentage_session}%)"
 							dom.div
 								className: "large-6 columns",	
 								dom.h5 {},	
