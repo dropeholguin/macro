@@ -1,0 +1,6 @@
+$("#card-container-session").empty();
+<% if !@questions.empty? %>
+    $('#card-container-session').append("<%= escape_javascript render(partial: 'cards', locals: { questions: @questions }) %>");
+<% else %>
+    $('#card-container-session').append("No Cards Found")
+<% end %>
