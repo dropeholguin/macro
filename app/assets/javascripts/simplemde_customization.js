@@ -4,8 +4,7 @@ var customImageUpload = {
     window.currentCM = editor.codemirror;
 
     if(document.getElementById('simpleMDEUpload')){
-      var popup = new Foundation.Reveal($('#simpleMDEUpload'));
-      popup.open();
+      $('#simpleMDEUpload').foundation('open');
     }
     else{
       var elemDiv = document.createElement('div');
@@ -14,8 +13,11 @@ var customImageUpload = {
       elemDiv.innerHTML = '\
         <h2 id="modalTitle">Upload Image</h2>\
         <form class="dropzone" id="my-awesome-dropzone">\
+          <div class="fallback">\
+            <input name="file" type="file" />\
+          </div>\
         </form>\
-        <p class="lead">select an image to upload</p>\
+        <p class="lead">or select an image to upload</p>\
         <input type="file" id="upload-image-input">\
         <br>\
         <button class="button large" id="upload-image-btn">Upload</button>\
@@ -32,6 +34,14 @@ var customImageUpload = {
         addRemoveLinks: true,
         headers: {
           'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(file, res){
+          console.log(file, res);
+          handleUploadSuccess(res);
+        },
+        error: function(file, errorMessage, xhr){
+          console.log(file, errorMessage, xhr)
+          hadnleUploadError(errorMessage);
         }
       });
     }
@@ -39,6 +49,24 @@ var customImageUpload = {
   className: "fa fa-picture-o",
   title: "Insert Image",
 };
+
+var handleUploadSuccess = function(response){
+  if(response.success){
+    window.currentCM.replaceSelection("!["+response.image.name+"]("+response.image.url+")");
+    $('#upload-image-error').addClass('hide')
+    $('#simpleMDEUpload').foundation('close');
+    $('#simpleMDEUpload').foundation('destroy');
+  }
+  else{
+    $('#upload-image-error').text(response.error);
+    $('#upload-image-error').removeClass('hide');
+  }
+}
+
+var hadnleUploadError = function(response){
+  $('#upload-image-error').text("Some unknown error occurred!");
+  $('#upload-image-error').removeClass('hide');
+}
 
 $(document).on("turbolinks:load", function() {
   var simplemde = new SimpleMDE({ 
@@ -92,21 +120,11 @@ $(document).on('click', '#upload-image-btn', function(e){
     data: form_data,
     type: 'post',
     success: function(response){
-      if(response.success){
-        window.currentCM.replaceSelection("!["+response.image.name+"]("+response.image.url+")");
-        $('#upload-image-error').addClass('hide')
-        $('#simpleMDEUpload').foundation('close');
-        $('#simpleMDEUpload').foundation('destroy');
-      }
-      else{
-        $('#upload-image-error').text(response.error);
-        $('#upload-image-error').removeClass('hide');
-      }
+      handleUploadSuccess(response);
     },
     error: function(xhr, ajaxOptions, thrownError) {
       console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-      $('#upload-image-error').text("Some unknown error occurred!");
-      $('#upload-image-error').removeClass('hide');
+      hadnleUploadError(thrownError);
     }
   });
 });
