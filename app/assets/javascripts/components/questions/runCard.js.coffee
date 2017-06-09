@@ -119,7 +119,8 @@ dom = React.DOM
 		    		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', onExpiry: @handleClick})   		
 				    @infoUpdate(data)
 				    @answersUpdate(data)
-				    @tagsUpdate(data)            
+				    @tagsUpdate(data)
+				    highlightAllCodes()
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
 		console.log ("It Works!")

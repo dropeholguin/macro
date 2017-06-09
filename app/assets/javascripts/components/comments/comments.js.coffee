@@ -4,18 +4,20 @@ dom = React.DOM
 	displayName: 'Comments'
 	getInitialState: ->
 		load_comment: []
+		comments: @props.comments
 	formSubmitted: (event) ->
 		event.preventDefault()
 		$.ajax
 			url: @props.url
 			type: "POST"
 			data: $(@refs.commentForm).serialize()
+			success: (data) =>
+				console.log ("this is: " + (data))
+				comment = $("#comment_comment_markdown").val()				
 	componentDidMount: ->
 	loadCommentsClicked: (event) ->
 		event.preventDefault()
-		@setState({load_comment: "div:hidden"})
-	commentClicked: (event) ->
-		 $('#show_comment').append('<div>the new guy</div>')
+		@setState({load_comment: "div:hidden"})		 
 	render: ->
 		dom.div
 			className: "root",
@@ -50,8 +52,10 @@ dom = React.DOM
 						className: "button large radius-10",
 						type: "submit",
 						name: "button",	
-						"Comment"	
-				for comment in @props.comments
+						"Comment"
+				dom.div
+					id: "commented"	
+				for comment in @state.comments
 					React.createElement ShowComments, key: comment.id, comment: comment, load_comment: @state.load_comment,
 				dom.div
 					className: "small-12 text-center columns",

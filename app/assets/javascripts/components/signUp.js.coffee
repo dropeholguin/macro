@@ -68,7 +68,7 @@ dom = React.DOM
 							placeholder: "Confirm your password",
 						dom.input
 							className: "button expanded primary radius-40 white",
-							value: "SIGN UP",
+							value: "REGISTER",
 							type: 'submit',
 						dom.p {},
 							"Already have an account?",

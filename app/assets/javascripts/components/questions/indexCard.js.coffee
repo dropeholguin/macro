@@ -40,13 +40,16 @@ dom = React.DOM
 				className: "row",
 				dom.div 
 					className: "small-7 columns",
-					dom.h5
-						style: {color: "#07C", fontWeight: "bold"},
-						@props.title	
+					dom.a 
+						className: "card-hover"
+						href: "/questions/#{@props.id}",
+						dom.h5
+							style: {color: "#07C", fontWeight: "bold"},
+							@props.title	
 				dom.div
 					className: "small-5 text-right columns",
 					dom.a
-						className: "button small hollow secondary margin-side" ,
+						className: "button small hollow secondary margin-side "+showButton,
 						href: "/questions/#{@props.id}",
 						@state.button_1,
 					dom.a

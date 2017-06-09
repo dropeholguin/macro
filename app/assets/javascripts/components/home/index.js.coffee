@@ -43,11 +43,19 @@ dom = React.DOM
 								id: "user_password",
 								placeholder: "Your password",	
 						dom.div
-							className: "large-4 columns"
+							className: "large-4 medium-6 small-6 columns"
 							dom.input
 								type: "submit"
 								className: "button large radius-10"
-								value: "SIGN ON"						
+								value: "SIGN ON"	
+						dom.div							
+							className: "large-4 medium-6 small-6 text-right columns"
+							dom.a
+								id: "button-register"
+								style: {display: "none"}
+								className: "button large radius-10"
+								href: "users/sign_up"
+								"REGISTER"					
 			dom.div 
 				className: "row expanded background-home",				
 				dom.div
@@ -67,7 +75,7 @@ dom = React.DOM
 							dom.a
 								className: "button expanded primary white blue-box",
 								href: "/users/sign_up",
-								"Sign Up To Macro Cards »"
+								"Register To Macro Cards »"
 					dom.p {},
 						"*We respect your privacy and have ZERO TOLERANCE for spam"
 					dom.div
@@ -117,12 +125,14 @@ dom = React.DOM
 						dom.img
 							src: @props.session_img,
 			dom.div
+				id: "about"
 				className: "row expanded gray-box",
 				dom.div
 					className: "large-12 text-center columns",
 					dom.h2 {},
 						"ABOUT MACRO CARDS"
 			dom.div
+				id: "info"
 				className: "row expanded white-background margin-help margin-auto",
 				dom.div
 					id: "content-home",
@@ -133,7 +143,7 @@ dom = React.DOM
 						dom.div
 							className: "small-2 medium-2 large-2 columns",
 							dom.i
-								className: "fa fa-users fa-5x"
+								className: "fa fa-users fa-4x"
 						dom.div
 							className: "small-10 medium-10 large-10 columns",
 							dom.h4 {},
@@ -145,7 +155,7 @@ dom = React.DOM
 						dom.div
 							className: "small-2 medium-2 large-2 columns",
 							dom.i
-								className: "fa fa-pencil fa-5x"
+								className: "fa fa-pencil fa-4x"
 						dom.div
 							className: "small-10 medium-10 large-10 columns",
 							dom.h4 {},
@@ -157,7 +167,7 @@ dom = React.DOM
 						dom.div
 							className: "small-2 medium-2 large-2 columns",
 							dom.i
-								className: "fa fa-bar-chart fa-5x"
+								className: "fa fa-bar-chart fa-4x"
 						dom.div
 							className: "small-10 medium-10 large-10 columns",
 							dom.h4 {},

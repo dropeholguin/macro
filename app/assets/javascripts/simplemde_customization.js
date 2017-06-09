@@ -29,7 +29,7 @@ var customImageUpload = {
       document.body.appendChild(elemDiv);
       var popup = new Foundation.Reveal($('#simpleMDEUpload'));
       popup.open();
-      $("#my-awesome-dropzone").dropzone({ 
+      $("#my-awesome-dropzone").dropzone({
         url: "/uploads",
         addRemoveLinks: true,
         headers: {
@@ -38,6 +38,7 @@ var customImageUpload = {
         success: function(file, res){
           console.log(file, res);
           handleUploadSuccess(res);
+          this.removeAllFiles();
         },
         error: function(file, errorMessage, xhr){
           console.log(file, errorMessage, xhr)
@@ -50,12 +51,22 @@ var customImageUpload = {
   title: "Insert Image",
 };
 
+var highlightSelectedCode = {
+  name: 'highlight selected code',
+  action: function(editor){
+    var selectedCode = editor.codemirror.getSelection();
+    var updatedCode = selectedCode.split('\n').map(line => '    ' + line).join('\n');
+    editor.codemirror.replaceSelection('```\n' + updatedCode + '\n```');
+  },
+  className: "fa fa-code",
+  title: "Hightlight Selected Code",
+}
+
 var handleUploadSuccess = function(response){
   if(response.success){
     window.currentCM.replaceSelection("!["+response.image.name+"]("+response.image.url+")");
     $('#upload-image-error').addClass('hide')
     $('#simpleMDEUpload').foundation('close');
-    $('#simpleMDEUpload').foundation('destroy');
   }
   else{
     $('#upload-image-error').text(response.error);
@@ -83,7 +94,7 @@ $(document).on("turbolinks:load", function() {
     },
     toolbar: [
       "bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", 
-      customImageUpload, "|", "preview", "side-by-side", "fullscreen", "|", "guide"
+      customImageUpload, "|", highlightSelectedCode, "preview", "side-by-side", "fullscreen", "|", "guide"
     ]
   });
   var simplemde = new SimpleMDE({
@@ -100,7 +111,7 @@ $(document).on("turbolinks:load", function() {
     },
     toolbar: [
       "bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", 
-      customImageUpload, "|", "preview", "side-by-side", "fullscreen", "|", "guide"
+      customImageUpload, "|", highlightSelectedCode, "preview", "side-by-side", "fullscreen", "|", "guide"
     ]
   });
 });
