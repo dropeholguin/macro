@@ -21,6 +21,7 @@
 //= require components
 //= require cocoon
 //= require prism
+//= require prism-components/prism-sas
 //= require dropzone
 //= require_tree .
 //= require jquery.countdown
