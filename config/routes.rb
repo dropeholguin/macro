@@ -40,4 +40,5 @@ Rails.application.routes.draw do
  	get "cards_run_filter", to: 'questions#cards_run_filter'
  	post "search_cards", to: 'sessions#search_cards'
  	post "users/lock/:id", to: 'locks#lock_access', as: :lock_access
+ 	post "notification_state", to: 'questions#notification_state'
 end
