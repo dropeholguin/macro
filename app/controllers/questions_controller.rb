@@ -71,8 +71,6 @@ class QuestionsController < ApplicationController
 	def notification_state
 		@user = current_user
 		notifications = Notification.number_notifications(@user.id)
-		puts "******************************************"
-		puts notifications.count
 		if !notifications.empty?
 			notifications.each do |notification|
 				notification.update_attributes(state: true)

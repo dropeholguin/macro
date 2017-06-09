@@ -25,19 +25,20 @@ Rails.application.routes.draw do
 
 	resources :uploads, only: [:create]
 	
-	post "run_question", to: 'questions#run_question'
-	post "next_card", to: 'questions#next_card'
-	post "run_card", to: 'sessions#run_card'
+	get "cards_run_filter", to: 'questions#cards_run_filter'
+	get "sessions_stats", to: 'sessions#sessions_stats'
 	get "run_cards", to: 'questions#card'
 	get "run_sessions", to: 'sessions#run_sessions'
 	get "user_profile", to: 'profile#user_profile'
 	get "questions_list", to: 'questions#questions_list'
+	get 'terms_and_conditions', to: 'home#terms_and_conditions'
 	patch "questions/suspend_question/:id", to: 'questions#suspend', as: :suspend
  	patch "questions/approve_question/:id", to: 'questions#approve', as: :approve
  	post "sessions_next_card", to: 'sessions#next_card'
- 	get "sessions_stats", to: 'sessions#sessions_stats'
  	post "tokens_wallet", to: 'questions#tokens_wallet'
- 	get "cards_run_filter", to: 'questions#cards_run_filter'
+ 	post "run_question", to: 'questions#run_question'
+	post "next_card", to: 'questions#next_card'
+	post "run_card", to: 'sessions#run_card'
  	post "search_cards", to: 'sessions#search_cards'
  	post "users/lock/:id", to: 'locks#lock_access', as: :lock_access
  	post "notification_state", to: 'questions#notification_state'

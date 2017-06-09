@@ -24,8 +24,6 @@ notification = ->
     $.ajax
       type: 'POST'
       url: '/notification_state'
-      success: (data) ->
-        console.log "entreeeeeeeeeeeeee"
 
 $(document).on 'turbolinks:load', ->
   notification()
