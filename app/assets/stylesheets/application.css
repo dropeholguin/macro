@@ -16,6 +16,7 @@
  *= require font-awesome
  *= require jquery.countdown
  *= require prism
+ *= require dropzone
  */
 
  .is-countdown{

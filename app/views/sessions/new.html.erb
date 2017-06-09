@@ -19,18 +19,9 @@
 					</div>
 				</div>
 			</div>
-			<%= react_component 'SearchCard', {questions_path: new_session_path}%>
-			<div id="card-container-session" class="row container-session">
-				<% @questions.each do |question| %>
-					<div class="small-4 columns"> 
-						<div class="select-card">
-							<%= check_box_tag 'question[ids][]', question.id %>
-							<%= label_tag 'select', 'Select' %>
-						</div>
-				        <%= react_component 'Card', {title: question.title, id: question.id, description: markdown(question.description_markdown), tag_list: question.tag_list,tag_path: request.url, float: "none", small: "small-12 columns text-center", display: "block", marginTop: "3px", button_1: "VIEW"} %>
-			        </div>
-				<% end %>
-			</div>
+			<%= react_component 'SearchCardSession', {questions_path: new_session_path} %>
+
+			<div id="card-container-session" class="row container-session"></div>	
 		<% end %>
 	</div>
 </div>

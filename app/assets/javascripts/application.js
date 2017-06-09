@@ -21,9 +21,24 @@
 //= require components
 //= require cocoon
 //= require prism
+//= require dropzone
 //= require_tree .
 //= require jquery.countdown
 window.Components = {} 
 //Choose your name. Do not use React here or
 //you'll overwrite library functions
 $(function(){ $(document).foundation(); });
+
+
+var highlightAllCodes = function(){
+  var codeElements = $('code');
+  codeElements.each(function(i){
+    $(codeElements[i]).addClass('language-sas');
+    $(codeElements[i]).wrap('<pre></pre>')
+  });
+  Prism.highlightAll();
+}
+
+$(document).on("turbolinks:load", function() {
+  highlightAllCodes();
+});
