@@ -28,7 +28,7 @@
 	padding: 0.3em 1em;
 }
  .fntsize-25{
- 	font-size: 25px;
+ 	font-size: 20px;
  	vertical-align: super;
  }
 .radius-40{
@@ -218,8 +218,23 @@
     border-radius: 5px;
     background-color: transparent !important;
 }
+.card-hover:hover{
+    text-decoration: underline;
+}
 
 code{
     padding: initial;
     border: initial;
+}
+
+@media screen and (max-width: 425px) {
+    #about, #info{
+        display: none;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #button-register{
+        display: inline-block !important;
+    }
 }
