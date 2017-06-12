@@ -13,11 +13,13 @@ dom = React.DOM
 			data: $(@refs.commentForm).serialize()
 			success: (data) =>
 				console.log ("this is: " + (data))
-				comment = $("#comment_comment_markdown").val()				
+				comment = $("#comment_comment_markdown").val()	
+				@setState({comment_generated: comment})
+				$('#commented').append('<div id="show_comment" class="row comment-box" style=""><h4>You commented:</h4><div class="small-1 columns"><span><i class="fa fa-commenting-o"></i></span></div><div class="small-11 columns"></div>'+@state.comment_generated+'</div>')	 
 	componentDidMount: ->
 	loadCommentsClicked: (event) ->
 		event.preventDefault()
-		@setState({load_comment: "div:hidden"})		 
+		@setState({load_comment: "div:hidden"})
 	render: ->
 		dom.div
 			className: "root",

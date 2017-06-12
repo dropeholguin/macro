@@ -100,7 +100,7 @@ dom = React.DOM
 							dom.div
 								className: "row",								
 								dom.div 
-									className: "small-6 columns",
+									className: "small-8 columns",
 									dom.h5
 										className: "weight",
 										"Answers:"
@@ -109,7 +109,7 @@ dom = React.DOM
 								dom.div
 									id: "explanation-card",
 									style: {display: 'none'}
-									className: "small-6 columns",
+									className: "small-4 columns",
 									dom.h5
 										className: "weight",
 										"Explanation:"

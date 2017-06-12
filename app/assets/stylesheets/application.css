@@ -18,7 +18,9 @@
  *= require prism
  *= require dropzone
  */
-
+#messages li{
+    text-align: left;
+}
  .is-countdown{
     background: none !important;
     border: none !important;

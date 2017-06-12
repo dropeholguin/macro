@@ -238,12 +238,12 @@ class QuestionsController < ApplicationController
 		respond_to do |format|
 			if @question.choice == "multiple" || @question.choice == "simple"
 				if count == 0
-					format.html { render :new, notice: 'At least one question must be correct' }
+					format.html { redirect_to new_question_url, alert: 'At least one answer must be correct' }
 				elsif state == true
-					format.html { render :new, notice: 'Incorrect Topic' }
+					format.html { redirect_to new_question_url, alert: 'Incorrect Topic' }
 				else
 					if @question.save
-						format.html { redirect_to questions_list_url, notice: 'Question was successfully created.' }
+						format.html { redirect_to questions_list_url, success: 'Question was successfully created.' }
 						format.json { render :show, status: :created, location: @question }
 					else
 						format.html { render :new }
@@ -252,10 +252,10 @@ class QuestionsController < ApplicationController
 				end	
 			else
 				if state == true
-					format.html { render :new, notice: 'Incorrect Topic' }
+					format.html { redirect_to new_question_url, alert: 'Incorrect Topic' }
 				else
 					if @question.save
-						format.html { redirect_to questions_list_url, notice: 'Question was successfully created.' }
+						format.html { redirect_to questions_list_url, success: 'Question was successfully created.' }
 						format.json { render :show, status: :created, location: @question }
 					else
 						format.html { render :new }
