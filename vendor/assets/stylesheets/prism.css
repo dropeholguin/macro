@@ -1,23 +1,33 @@
-/* http://prismjs.com/download.html?themes=prism&languages=sas&plugins=highlight-keywords */
+/* http://prismjs.com/download.html?themes=prism&languages=sas */
 /**
  * prism.js default theme for JavaScript, CSS and HTML
  * Based on dabblet (http://dabblet.com)
  * @author Lea Verou
  */
 
+ /* for Lithium messages                                         */
+ /* a very specific style override for SAS language in a PRE tag */
+ #lia-body .lia-content .lia-message-body pre.language-sas,
+ #lia-body .lia-content .lia-message-body pre.language-python,
+ #lia-body .lia-content .lia-message-body pre.language-lua,
+ #lia-body .lia-content .lia-message-body pre.language-java {
+    background-color: #ffffff;
+    font-family:  Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace;
+}
+
 code[class*="language-"],
 pre[class*="language-"] {
 	color: black;
-	background: none;
 	text-shadow: 0 1px white;
 	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	direction: ltr;
 	text-align: left;
 	white-space: pre;
 	word-spacing: normal;
 	word-break: normal;
 	word-wrap: normal;
 	line-height: 1.5;
-
+	
 	-moz-tab-size: 4;
 	-o-tab-size: 4;
 	tab-size: 4;
@@ -52,11 +62,12 @@ pre[class*="language-"] {
 	padding: 1em;
 	margin: .5em 0;
 	overflow: auto;
+	
 }
 
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
-	background: #f5f2f0;
+	background: #ffffff;
 }
 
 /* Inline code */
@@ -70,7 +81,7 @@ pre[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-	color: slategray;
+	color: green;
 }
 
 .token.punctuation {
@@ -88,16 +99,20 @@ pre[class*="language-"] {
 .token.constant,
 .token.symbol,
 .token.deleted {
-	color: #905;
+	color: #008080;
+	font-weight: bold;
+}
+
+.token.string {
+	color: #800080;
 }
 
 .token.selector,
 .token.attr-name,
-.token.string,
 .token.char,
 .token.builtin,
 .token.inserted {
-	color: #690;
+	color: maroon;
 }
 
 .token.operator,
@@ -106,17 +121,44 @@ pre[class*="language-"] {
 .language-css .token.string,
 .style .token.string {
 	color: #a67f59;
-	background: hsla(0, 0%, 100%, .5);
+	/* background: hsla(0, 0%, 100%, .5); */
 }
 
 .token.atrule,
 .token.attr-value,
-.token.keyword {
-	color: #07a;
+.token.keyword,
+.token.datalines.keyword,
+.token.datalines.punctuation
+ {
+	color: blue;
+	background: #ffffff;
 }
 
+.token.statement,
+.token.macrostatement,
 .token.function {
+	color: blue;
+}
+
+.token.datalines {
 	color: #DD4A68;
+	background: #ffffc0;
+}
+
+.token.procnames {
+	color: navy;
+	font-weight: bold;
+}
+
+.token.macrobound {
+  color: navy;
+  font-weight: bold;
+}
+
+.token.macroname {
+  color: navy;
+  font-weight: bold;
+  font-style: italic;
 }
 
 .token.regex,
@@ -129,6 +171,7 @@ pre[class*="language-"] {
 .token.bold {
 	font-weight: bold;
 }
+
 .token.italic {
 	font-style: italic;
 }
@@ -136,4 +179,3 @@ pre[class*="language-"] {
 .token.entity {
 	cursor: help;
 }
-
