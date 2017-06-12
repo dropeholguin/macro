@@ -61,18 +61,12 @@ dom = React.DOM
 						'data-dropdown-menu': "",
 						dom.li 
 							id: "logo",
-							style: {maxWidth: "70px"},
+							style: {maxWidth: "180px"},
 							className: "menu-item-bar"
 							dom.a
 								href: @props.root_path,		
 								dom.img
-									src: @props.img,
-						dom.li
-							style: {verticalAlign: "bottom"},
-							className: "menu-item-bar"			
-							dom.h4
-								style: {fontStyle: "italic", fontWeight: "bold"},
-								"MACRO CARDS"
+									src: @props.img,						
 				dom.div
 					className: "top-bar-right",
 					dom.ul
