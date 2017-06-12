@@ -31,7 +31,8 @@ Rails.application.routes.draw do
 	get "run_sessions", to: 'sessions#run_sessions'
 	get "user_profile", to: 'profile#user_profile'
 	get "questions_list", to: 'questions#questions_list'
-	get 'terms_and_conditions', to: 'home#terms_and_conditions'
+	get 'terms', to: 'home#terms_and_conditions'
+	get 'privacy', to: 'home#privacy_policy'
 	patch "questions/suspend_question/:id", to: 'questions#suspend', as: :suspend
  	patch "questions/approve_question/:id", to: 'questions#approve', as: :approve
  	post "sessions_next_card", to: 'sessions#next_card'
