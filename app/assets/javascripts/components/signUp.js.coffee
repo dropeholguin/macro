@@ -71,9 +71,7 @@ dom = React.DOM
 							value: "REGISTER",
 							type: 'submit',
 						dom.p {},
-							"Already have an account?",
-						dom.p {},
-							@props.devise_error_messages
+							"Already have an account?",						
 						dom.a
 							href: "/users/sign_in", 
 							className: "bold",
