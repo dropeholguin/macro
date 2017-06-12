@@ -55,7 +55,7 @@ var highlightSelectedCode = {
   name: 'highlight selected code',
   action: function(editor){
     var selectedCode = editor.codemirror.getSelection();
-    var updatedCode = selectedCode.split('\n').map(line => '    ' + line).join('\n');
+    var updatedCode = selectedCode.split('\n').map(line = '    ' + line).join('\n');
     editor.codemirror.replaceSelection('```\n' + updatedCode + '\n```');
   },
   className: "fa fa-code",
