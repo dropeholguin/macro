@@ -25,6 +25,10 @@ dom = React.DOM
 		  data: points: @state.points
 		  success: (data) =>
 		    @setState({points: data.tokens, total_notifications: data.number_notifications, notifications: data.notifications})
+		    if @state.total_notifications == 0
+		    	@setState({hide_number: "none"})
+	    	else
+	    		@setState({hide_number: "block"})
 		    console.log data		
 
 	runCardClicked: (event) ->
@@ -77,6 +81,7 @@ dom = React.DOM
 							className: "item-selected",
 							id: "notification_li",
 							dom.span
+								style: {display: @state.hide_number}
 								id: "notification_counter",
 								@state.total_notifications,
 							dom.i
