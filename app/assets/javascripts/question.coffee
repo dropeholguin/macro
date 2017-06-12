@@ -19,5 +19,11 @@ jQuery ->
     'autocomplete': 'source': tags_array
   return
 
-$(document).ready initTagInput
-$(document).on 'page:load', initTagInput
+notification = ->
+  $('#notification_li').click ->
+    $.ajax
+      type: 'POST'
+      url: '/notification_state'
+
+$(document).on 'turbolinks:load', ->
+  notification()

@@ -64,8 +64,19 @@ class QuestionsController < ApplicationController
 		notifications = Notification.card_notifications(@user.id).order("created_at desc")
 		number_notifications = Notification.number_notifications(@user.id)
 		respond_to do |format|
-		 	format.json  { render json: { tokens: @user.points, notifications: notifications, number_notifications: number_notifications } }
+		 	format.json  { render json: { tokens: @user.points, notifications: notifications, number_notifications: number_notifications.count } }
 		end
+	end
+
+	def notification_state
+		@user = current_user
+		notifications = Notification.number_notifications(@user.id)
+		if !notifications.empty?
+			notifications.each do |notification|
+				notification.update_attributes(state: true)
+			end
+		end
+		head :ok
 	end
 
 	def card

@@ -24,7 +24,7 @@ dom = React.DOM
 		  dataType: 'json'
 		  data: points: @state.points
 		  success: (data) =>
-		    @setState({points: data.tokens, total_notifications: data.notifications.length, notifications: data.notifications})
+		    @setState({points: data.tokens, total_notifications: data.number_notifications, notifications: data.notifications})
 		    console.log data		
 
 	runCardClicked: (event) ->
