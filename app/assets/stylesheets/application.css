@@ -17,6 +17,8 @@
  *= require jquery.countdown
  *= require prism
  *= require dropzone
+ *= require active_admin/editor/wysiwyg
+
  */
 #messages li{
     text-align: left;

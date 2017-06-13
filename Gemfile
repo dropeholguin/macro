@@ -68,6 +68,7 @@ gem "aws-ses", "~> 0.6.0", require: 'aws/ses'
 gem 'aws-sdk', '~> 2.3'
 gem "paperclip", "~> 5.0.0"
 gem 'faker'
+gem 'active_admin_editor', github: 'ejholmes/active_admin_editor'
 
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'
