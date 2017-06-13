@@ -79,36 +79,35 @@ class QuestionsController < ApplicationController
 		head :ok
 	end
 
-	def card
-		@user = current_user
-		if @user.points > 0
-			
-			question_ids_array = cookies[:cards].split("-")
-	        first_question_id = question_ids_array.shift
-	        question_array_string = question_ids_array.join("-")
-        	cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
-	        cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
+  def card
+    @user = current_user
+    if @user.points > 0
+      question_ids_array = cookies[:cards].split("-")
+      first_question_id = question_ids_array.shift
+      question_array_string = question_ids_array.join("-")
+      cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+      cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
 
-	        @question = Question.find first_question_id.to_i
-			if !@question.nil?
-				@answers = @question.answers
-				@comments = @question.comments.order("created_at desc")	
-				if @user.streak == 0
-					@user.update_attributes(points: @user.points - 2)
-					@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "You've earned -2 tokens", category: "tokens_negative", source: "#{question_path(@question)}")
-					@notification.save
-				end
-			else
-				respond_to do |format|
-					format.html { redirect_to cards_run_filter_path, alert: '' }
-				end
-			end	
-		else 
-			respond_to do |format|
-				format.html { redirect_to root_path, alert: '' }
-			end		
-		end
-	end
+      @question = Question.find first_question_id.to_i
+      if @question.present?
+        @answers = @question.answers
+        @comments = @question.comments.order("created_at desc")
+        if @user.streak == 0
+          @user.update_attributes(points: @user.points - 2)
+          @notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "You've earned -2 tokens", category: "tokens_negative", source: "#{question_path(@question)}")
+          @notification.save
+        end
+      else
+        respond_to do |format|
+          format.html { redirect_to cards_run_filter_path, alert: 'There are no more questions available for your combination of tags' }
+        end
+      end	
+    else 
+      respond_to do |format|
+        format.html { redirect_to root_path, alert: 'Points balance is zero.  Come back tomorrow!' }
+      end
+    end
+  end
 
 	def next_card
 		question_ids_array = cookies[:cards].split("-")
