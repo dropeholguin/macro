@@ -13,8 +13,8 @@ module ApplicationHelper
 
   def foundation_flash_class(level)
     case level.to_sym
-    when :notice    then "alert-box"
-    when :alert     then "alert-box warning"
+    when :notice    then "alert-box success"
+    when :alert     then "alert-box alert"
     when :success   then "alert-box success"
     when :info      then "alert-box info"
     when :error     then "alert-box alert"

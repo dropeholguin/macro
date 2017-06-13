@@ -243,7 +243,7 @@ class QuestionsController < ApplicationController
 					format.html { redirect_to new_question_url, alert: 'Incorrect Topic' }
 				else
 					if @question.save
-						format.html { redirect_to questions_list_url, success: 'Question was successfully created.' }
+						format.html { redirect_to questions_list_url, notice: 'Question was successfully created.' }
 						format.json { render :show, status: :created, location: @question }
 					else
 						format.html { render :new }
@@ -255,7 +255,7 @@ class QuestionsController < ApplicationController
 					format.html { redirect_to new_question_url, alert: 'Incorrect Topic' }
 				else
 					if @question.save
-						format.html { redirect_to questions_list_url, success: 'Question was successfully created.' }
+						format.html { redirect_to questions_list_url, notice: 'Question was successfully created.' }
 						format.json { render :show, status: :created, location: @question }
 					else
 						format.html { render :new }
