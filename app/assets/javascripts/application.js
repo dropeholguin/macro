@@ -35,7 +35,6 @@ var highlightAllCodes = function(){
   var codeElements = $('code');
   codeElements.each(function(i){
     $(codeElements[i]).addClass('language-sas');
-    $(codeElements[i]).wrap('<pre></pre>')
   });
   Prism.highlightAll();
 }
