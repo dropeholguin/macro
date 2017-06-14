@@ -8,6 +8,13 @@ dom = React.DOM
 		large: "large-5"
 		medium: "medium-6"
 		small: "small-9"
+	componentDidMount: ->
+		checked = $('#register').is(':checked')
+	termsAgreedClicked: (event) ->
+		if 	$('#register').is(':checked')
+			console.log ("True")
+		else 
+			console.log ("False")
 	render: ->
 		dom.div
 			className: "root white-background margin-auto",
@@ -66,7 +73,22 @@ dom = React.DOM
 							key: "password_confirmation",
 							id: "password_confirmation",
 							placeholder: "Confirm your password",
+						dom.div 
+							className: "large-12 columns text-left"
+							dom.p {},	
+								dom.input
+									onClick: @termsAgreedClicked
+									id: "terms"
+									ref: "terms"
+									type: "checkbox"
+								dom.label
+									htmlFor: "terms"
+									"Do you agree " 
+									dom.a 
+										href: "/terms" 
+										"terms and conditions ?"
 						dom.input
+							id: "register"
 							className: "button expanded primary radius-40 white",
 							value: "REGISTER",
 							type: 'submit',
