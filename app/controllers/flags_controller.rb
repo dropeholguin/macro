@@ -20,11 +20,11 @@ class FlagsController < ApplicationController
 					format.html { redirect_to @question, notice: 'flag was successfully created.' }
 					format.json { render :show, status: :created, location: @flag}
 				else
-					format.html { redirect_to root_path, alert: 'Complete the Reason' }
+					format.html { redirect_to @question, alert: 'Complete the Reason' }
 					format.json { render json: @flag.errors, status: :unprocessable_entity }  
 				end
 			else
-				format.html { redirect_to root_path, alert: "You can't flag your own question" }
+				format.html { redirect_to @question, alert: "You can't flag your own question" }
 			end
 	    end
 	end

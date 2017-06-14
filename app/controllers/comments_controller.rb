@@ -9,9 +9,6 @@ class CommentsController < ApplicationController
 		if @comment.save
 			@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: "#{current_user.name} commented on his card", category: "comment", source: "#{question_path(@question)}")
 			@notification.save
-			flash[:notice] = "Comment added"
-	    else
-	     	flash[:error] = "Something went wrong"
 	    end
 	    head :ok
 	end
@@ -20,7 +17,7 @@ class CommentsController < ApplicationController
 	  value = params[:type] == "up" ? 1 : -1
 	  @comment = Comment.find(params[:id])
 	  @comment.add_or_update_evaluation(:votes, value, current_user)
-	  redirect_to :back, notice: "Thank you for voting"
+	  redirect_to :back
 	end
 
 	private

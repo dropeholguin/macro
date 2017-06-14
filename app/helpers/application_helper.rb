@@ -13,8 +13,8 @@ module ApplicationHelper
 
   def foundation_flash_class(level)
     case level.to_sym
-    when :notice    then "alert-box"
-    when :alert     then "alert-box warning"
+    when :notice    then "alert-box success"
+    when :alert     then "alert-box alert"
     when :success   then "alert-box success"
     when :info      then "alert-box info"
     when :error     then "alert-box alert"
@@ -33,8 +33,7 @@ module ApplicationHelper
 
     extensions = {
       autolink:           true,
-      superscript:        true,
-      disable_indented_code_blocks: true
+      superscript:        true
     }
 
     renderer = Redcarpet::Render::HTML.new(options)

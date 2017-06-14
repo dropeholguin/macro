@@ -29,6 +29,8 @@ dom = React.DOM
 		button_1: @props.button_1
 		button_2: @props.button_2 
 		button_3: @props.button_3
+	componentDidMount: ->
+		highlightAllCodes()
 	render: ->
 		if(@state.button_2 == "EDIT_D")
 			showButton = "show-hide"
