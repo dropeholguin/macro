@@ -1,5 +1,17 @@
 class User < ApplicationRecord
-has_many :badges , :through => :levels 
+  acts_as_token_authenticatable
+  rolify
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, 
+    :trackable, :validatable, :omniauthable, :confirmable, :lockable
+
+  has_many :identities
+  has_many :questions
+
+  after_create :assign_default_role
+
+has_many :badges, through: :levels 
 has_many :levels
 has_many :evaluations, class_name: "RSEvaluation", as: :source
 has_many :cards
@@ -54,16 +66,6 @@ def next_badge?(kind_id = false)
                       }
   end
 end
-  rolify
-	# Include default devise modules. Others available are:
-	# :confirmable, :lockable, :timeoutable and :omniauthable
-	devise :database_authenticatable, :registerable,
-	 	:recoverable, :rememberable, :trackable, :validatable, :omniauthable, :confirmable, :lockable
-
-	has_many :identities
-	has_many :questions
-
-	after_create :assign_default_role
 
 	def assign_default_role
 		self.add_role(:student) if self.roles.blank?

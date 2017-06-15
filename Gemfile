@@ -38,10 +38,12 @@ gem 'jquery-countdown-rails'
 gem 'react-rails' # gem for react.js
 gem 'webpack-rails'
 # gem for user sign in and sign up
-gem 'devise'
+gem 'devise', '~> 4.2.0'
+# gem for token based authentication with devise
+gem 'simple_token_authentication', '~> 1.0'
 # gems for sign in with linkedin
-gem 'omniauth'
-gem 'omniauth-linkedin'
+gem 'omniauth', '~> 1.6.1'
+gem 'omniauth-linkedin', '~> 0.2.0'
 # gem for markdown
 gem 'simplemde-rails'
 gem 'redcarpet'

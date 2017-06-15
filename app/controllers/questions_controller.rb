@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
-	before_action :set_question, only: [:show, :edit, :update, :destroy]
-	before_filter :authenticate_user!, except: [:suspend, :approve]
-	before_filter :authenticate_admin_user!, only: [:suspend, :approve]
+  before_action :set_question, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:suspend, :approve]
+  before_action :authenticate_admin_user!, only: [:suspend, :approve]
 	include ApplicationHelper
 	include ActionView::Helpers::DateHelper
 
@@ -29,6 +29,8 @@ class QuestionsController < ApplicationController
 				end
 			end
 		end
+
+		respond_with @questions
 	end
 
 	def cards_run_filter
