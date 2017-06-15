@@ -7,24 +7,24 @@ class User < ApplicationRecord
     :trackable, :validatable, :omniauthable, :confirmable, :lockable
 
   has_many :identities
+  has_many :accepted_privacies
   has_many :questions
+  has_many :badges, through: :levels 
+  has_many :levels
+  has_many :evaluations, class_name: "RSEvaluation", as: :source
+  has_many :cards
+  has_many :comments
+  has_many :flags, dependent: :destroy
+  has_many :sessions
+  has_many :session_cards
+  has_many :stats_sessions
+  has_many :notifications
 
   after_create :assign_default_role
 
-has_many :badges, through: :levels 
-has_many :levels
-has_many :evaluations, class_name: "RSEvaluation", as: :source
-has_many :cards
-has_many :comments
-has_many :flags, dependent: :destroy
-has_many :sessions
-has_many :session_cards
-has_many :stats_sessions
-has_many :notifications
-
-has_reputation :votes, source: {reputation: :votes, of: :questions}, aggregated_by: :sum
-has_reputation :votes, source: {reputation: :votes, of: :comments}, aggregated_by: :sum
-scope :users_with_less_of_eight_cards, -> {where('points < ?', 8)}
+  has_reputation :votes, source: {reputation: :votes, of: :questions}, aggregated_by: :sum
+  has_reputation :votes, source: {reputation: :votes, of: :comments}, aggregated_by: :sum
+  scope :users_with_less_of_eight_cards, -> {where('points < ?', 8)}
 
 def change_points(options)
   if Gioco::Core::KINDS

@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170614235318) do
+ActiveRecord::Schema.define(version: 20170615045041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accepted_privacies", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "privacy_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["privacy_id"], name: "index_accepted_privacies_on_privacy_id", using: :btree
+    t.index ["user_id"], name: "index_accepted_privacies_on_user_id", using: :btree
+  end
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -316,4 +325,6 @@ ActiveRecord::Schema.define(version: 20170614235318) do
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
   end
 
+  add_foreign_key "accepted_privacies", "privacies"
+  add_foreign_key "accepted_privacies", "users"
 end
