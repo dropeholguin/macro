@@ -6,7 +6,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
     build_resource(sign_up_params)
 
     if params[:terms] == "on"
-      resource.privacy_version = Privacy.last.version
+      privacy = Privacy.last
+      if !privacy.nil?
+        resource.privacy_version = privacy.version
+      end
       resource.save
       yield resource if block_given?
       if resource.persisted?
