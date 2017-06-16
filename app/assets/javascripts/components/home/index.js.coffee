@@ -10,6 +10,12 @@ dom = React.DOM
 				style: {marginTop: "20px"}
 				dom.div
 					className: "large-6 columns"
+					dom.div 
+						className: "large-4 columns",
+						dom.a
+							href: @props.root_path,		
+							dom.img
+								src: @props.img,
 				dom.div
 					className: "large-6 columns"
 					dom.form 
