@@ -134,6 +134,15 @@ dom = React.DOM
 											onClick: @runCardClicked,
 											'aria-hidden': "true",
 											" Run Card",
+								dom.li
+									className: "item-selected",
+									dom.a
+										href: "/questions_list",
+										dom.i
+											className: "fa fa-files-o",
+											onClick: @runCardClicked,
+											'aria-hidden': "true",
+											" My Cards",
 						dom.li 
 							className: "menu-item-bar",
 							dom.a 
