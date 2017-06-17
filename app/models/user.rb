@@ -94,9 +94,28 @@ end
     end
 	end
 
-
-
   def voted_for?(question)
     evaluations.where(target_type: question.class, target_id: question.id).present?
+  end
+
+  def self.from_omniauth(auth)
+    identity = Identity.where(provider: auth.provider, uid: auth.uid.to_s).first_or_initialize
+    user = nil
+
+    if identity.user.blank?
+      email = auth.info.email ? auth.info.email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com"
+      user = where('email = ?', email).first_or_initialize do |user|
+        user.name     = auth.info.name
+        user.email    = email
+        user.password = Devise.friendly_token[0,20]
+      end
+      user.identities << identity
+    else
+      user = identity.user
+    end
+
+    user.skip_confirmation!
+    user.save!
+    user
   end
 end

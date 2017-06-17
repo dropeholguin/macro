@@ -43,6 +43,7 @@ gem 'devise', '~> 4.2.0'
 gem 'simple_token_authentication', '~> 1.0'
 # gems for sign in with linkedin
 gem 'omniauth', '~> 1.6.1'
+gem 'omniauth-facebook',  '~> 4.0'
 gem 'omniauth-linkedin', '~> 0.2.0'
 # gem for markdown
 gem 'simplemde-rails'
