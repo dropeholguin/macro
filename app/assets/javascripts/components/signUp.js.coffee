@@ -36,15 +36,6 @@ dom = React.DOM
 					className: "row",
 					dom.div
 						className: "#{@props.small} #{@props.medium} #{@props.large} small-centered medium-centered large-centered columns text-center",
-						dom.div
-							className: "fb-login-button margin-20",
-							'data-max-rows': "1",
-							'data-size': "large",
-							'data-button-type': "continue_with",
-							'data-show-faces': "false",
-							'data-auto-logout-link': "false",
-							'data-use-continue-as': "true",
-							'data-auto-logout-link': "true",
 						dom.a
 							className: "button expanded btn-linkedin linkedin-color radius-40",
 							href: @props.linkedin,

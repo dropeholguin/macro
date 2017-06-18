@@ -6,7 +6,6 @@ dom = React.DOM
     window.fbAsyncInit = (->
       FB.init
         appId: '104324696849506'
-        cookie: true
         xfbml: true
         version: 'v2.9'
       # Now that we've initialized the JavaScript SDK, we call
@@ -65,9 +64,9 @@ dom = React.DOM
       # @fetchUserInfo()
       # POST request to server login
       $.ajax
-          url: '/users/auth/facebook/callback', 
+          url: '/auth/facebook', 
           type: 'POST', 
-          data: response,
+          data: response.authResponse,
           success: (data) =>
             console.log data
 
@@ -97,4 +96,16 @@ dom = React.DOM
 
   render: ->
     dom.div
-      id: "social-login-button-facebook"
+      className: "row",
+      # dangerouslySetInnerHTML: {__html: '<fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>' }
+        dom.div
+          className: "#{@props.small} #{@props.medium} #{@props.large} small-centered medium-centered large-centered columns text-center",
+          dom.div
+            className: "fb-login-button margin-20",
+            'data-max-rows': "1",
+            'data-size': "large",
+            'data-button-type': "continue_with",
+            'data-show-faces': "false",
+            'data-auto-logout-link': "true",
+            'data-use-continue-as': "true",
+            'data-scope': "public_profile,email",

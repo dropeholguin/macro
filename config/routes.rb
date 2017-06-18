@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   resource :auth, only: [] do
     collection do
       post 'linkedin'
+      post 'facebook'
     end
   end
 	
