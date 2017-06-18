@@ -69,7 +69,8 @@ dom = React.DOM
           data: response.authResponse,
           success: (data) =>
             console.log data
-
+          error: (e) =>
+            console.log e.responseJSON
     else if response.status == 'not_authorized'
       # The person is logged into Facebook, but not your app.
       # alert('Please log ' + 'into this app.')

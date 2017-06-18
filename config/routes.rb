@@ -26,8 +26,9 @@ Rails.application.routes.draw do
 	resources :uploads, only: [:create]
   resource :auth, only: [] do
     collection do
-      post 'linkedin'
       post 'facebook'
+      post 'google'
+      post 'linkedin'
     end
   end
 	

@@ -2,15 +2,15 @@ class AuthsController < ApplicationController
 
   # POST /facebook
   def facebook
-    client = OAuth2::Client.new(ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_KEY'], site: 'https://graph.facebook.com')
+    client = OAuth2::Client.new(ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET'], site: 'https://graph.facebook.com')
     token  = OAuth2::AccessToken.new(client, params[:accessToken])
 
     begin
       user_info = ActiveSupport::JSON.decode(token.get('/me').body)
       auth = Hashie::Mash.new({
-        "uid" => user_info["id"],
-        "provider" => 'facebook',
-        "info" => user_info
+        uid: user_info['id'],
+        provider: 'facebook',
+        info: user_info
       })
 
       user = User.from_omniauth(auth)
@@ -27,9 +27,36 @@ class AuthsController < ApplicationController
     end
   end
 
+  # POST /google
+  def google
+    client = OAuth2::Client.new(ENV['GOOGLE_APP_ID'], ENV['GOOGLE_APP_SECRET'])
+    token  = OAuth2::AccessToken.new(client, params[:id_token])
+
+    begin
+      user_info = ActiveSupport::JSON.decode(token.get("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{params[:id_token]}").body)
+      auth = Hashie::Mash.new({ 
+        uid: user_info['sub'],
+        provider: 'google_oauth2', 
+        info: user_info
+      });
+
+      user = User.from_omniauth(auth)
+
+      if user.present? && user.valid?
+        render json: { success: true, user: user.as_json }, status: :ok
+      else
+        render json: { success: false, error: 'Invalid user or some error occured' }, status: :ok
+      end
+    rescue OAuth2::Error => e
+      render json: { success: false, error: 'Invalid auth_token' }, status: 40
+    rescue Exception => e
+      render json: { success: false, error: 'Unknown error occured, please try again later' }, status: 500
+    end
+  end
+
   # POST /linkedin
   def linkedin
-    client = LinkedIn::Client.new(ENV["LINKEDIN_ID"], ENV['LINKEDIN_SECRET'])
+    client = LinkedIn::Client.new(ENV['LINKEDIN_ID'], ENV['LINKEDIN_SECRET'])
 
     begin
       consumer = client.consumer
@@ -42,10 +69,10 @@ class AuthsController < ApplicationController
         fields: ['id', 'first-name', 'last-name', 'picture-url', 'email-address', 'positions:(title,company:(name))']
       })
 
-      user_info["name"] = "#{user_info["first-name"]} #{user_info["last-name"]}"
-      user_info["email"] = user_info["email-address"]
+      user_info['name'] = "#{user_info["first-name"]} #{user_info["last-name"]}"
+      user_info['email'] = user_info['email-address']
       auth = Hashie::Mash.new({
-        uid: user_info["id"],
+        uid: user_info['id'],
         provider: 'linkedin',
         info: user_info
       })
