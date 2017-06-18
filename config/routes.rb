@@ -24,6 +24,11 @@ Rails.application.routes.draw do
 	resources :sessions, only: [:new, :create, :index]
 
 	resources :uploads, only: [:create]
+  resource :auth, only: [] do
+    collection do
+      post 'linkedin'
+    end
+  end
 	
 	get "cards_run_filter", to: 'questions#cards_run_filter'
 	get "sessions_stats", to: 'sessions#sessions_stats'
