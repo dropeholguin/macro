@@ -312,6 +312,7 @@ ActiveRecord::Schema.define(version: 20170615045041) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token",   limit: 30
+    t.string   "privacy_version"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree

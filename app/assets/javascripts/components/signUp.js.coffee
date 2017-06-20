@@ -75,12 +75,15 @@ dom = React.DOM
 							placeholder: "Confirm your password",
 						dom.div 
 							className: "large-12 columns text-left"
-							dom.p {},	
-								dom.input
-									onClick: @termsAgreedClicked
-									id: "terms"
-									ref: "terms"
-									type: "checkbox"
+							dom.p {},
+								dom.input({
+										onClick: @termsAgreedClicked
+										key: "terms"
+										name: "terms"
+										id: "terms"
+										ref: "terms"
+										type: "checkbox"
+									});
 								dom.label
 									htmlFor: "terms"
 									"Do you agree " 
