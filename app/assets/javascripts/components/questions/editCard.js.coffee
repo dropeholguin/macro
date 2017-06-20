@@ -60,7 +60,7 @@ dom = React.DOM
 										type: "text"
 										placeholder: "CARD Tilte",
 										name: "question[title]",
-										value: @state.title,
+										defaultValue: @state.title,
 									dom.label {},
 										"DESCRIPTION"
 									dom.textarea

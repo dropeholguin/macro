@@ -13,4 +13,4 @@
   </div>
 <% end %>
 
-<%= react_component 'EditCard', {card_id: @question.id,title: @question.title, answers: @answers, description: @question.description_markdown, choice: @question.choice, tag_list: @question.tag_list, submit_img: image_path('submit.png'), explanation: @question.explanation_markdown,csrfToken: form_authenticity_token} %>
+<%= react_component 'EditCard', {card_id: @question.id,title: @question.title, answers: @question.answers, description: @question.description_markdown, choice: @question.choice, tag_list: @question.tag_list, submit_img: image_path('submit.png'), explanation: @question.explanation_markdown,csrfToken: form_authenticity_token} %>
