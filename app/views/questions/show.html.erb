@@ -1,6 +1,3 @@
-<%= react_component 'ShowCard', {card_id: @question.id,title: @question.title, answers: @answers, description: markdown(@question.description_markdown), choice: @question.choice, tag_list: @question.tag_list, img: image_path('SPDEMODE/Allanbowe-Anim-01.svg'), explanation: markdown(@question.explanation_markdown), vote_up: vote_question_path(@question, type: "up"), vote_down: vote_question_path(@question, type: "down"), votes: @question.reputation_for(:votes).to_i, current_user: current_user, current_user_voted: !current_user.voted_for?(@question), csrfToken: form_authenticity_token, state: @state, comments: @comments,csrfTokenFlag: form_authenticity_token,owner: @question.user} %>
+<%= react_component 'ShowCard', {card_id: @question.id,title: @question.title, answers: @answers, description: markdown(@question.description_markdown), choice: @question.choice, tag_list: @question.tag_list, img: image_path('SPDEMODE/Allanbowe-Anim-01.svg'), explanation: markdown(@question.explanation_markdown), vote_up: vote_question_path(@question, type: "up"), vote_down: vote_question_path(@question, type: "down"), votes: @question.reputation_for(:votes).to_i, current_user: current_user, current_user_voted: !current_user.voted_for?(@question), csrfToken: form_authenticity_token, state: @state, comments: @comments,csrfTokenFlag: form_authenticity_token,owner: @question.user, creator: @creator.name, created_at: @created_at, people_number: @people_number, percentage_people: @percentage_people} %>
 
-<h3>creator:</h3><%= @creator.email %>
-<h3>date:</h3> <%= @created_at %>
-<h3>Taken by:</h3> <%= @people_number %>
-<h3>Well answered by:</h3> <%= @percentage_people %>
+

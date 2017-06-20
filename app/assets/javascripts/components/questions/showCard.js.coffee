@@ -167,7 +167,7 @@ dom = React.DOM
 											dom.div
 												ref: "cardStats",
 												className: "large-12 columns",
-												React.createElement CardStats, creator: @state.creator, created_at: @state.created_at, people_number: @state.people_number, percentage_people: @state.percentage_people, time: @state.time										
+												React.createElement CardStats, creator: @props.creator, created_at: @props.created_at, people_number: @props.people_number, percentage_people: @props.percentage_people, time: @props.time										
 						dom.div
 							className: "small-4 columns",
 							dom.span 
