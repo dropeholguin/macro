@@ -2,7 +2,7 @@ window.onGSignIn = (googleUser) ->
   $.ajax
       url: '/auth/google',
       type: 'POST',
-      data: googleUser.getAuthResponse(),
+      data: { auth_token: googleUser.getAuthResponse().id_token },
       success: (data) =>
         console.log data
       error: (e) =>

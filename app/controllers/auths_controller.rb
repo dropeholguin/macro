@@ -3,7 +3,7 @@ class AuthsController < ApplicationController
   # POST /facebook
   def facebook
     client = OAuth2::Client.new(ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET'], site: 'https://graph.facebook.com')
-    token  = OAuth2::AccessToken.new(client, params[:accessToken])
+    token  = OAuth2::AccessToken.new(client, params[:auth_token])
 
     begin
       user_info = ActiveSupport::JSON.decode(token.get('/me').body)
@@ -21,19 +21,19 @@ class AuthsController < ApplicationController
         render json: { success: false, error: 'Invalid user or some error occured' }, status: :ok
       end
     rescue OAuth2::Error => e
-      render json: { success: false, error: 'Invalid auth_token' }, status: 401
+      render json: { error: 'Invalid auth_token' }, status: 401
     rescue Exception => e
-      render json: { success: false, error: 'Unknown error occured, please try again later' }, status: 500
+      render json: { error: 'Unknown error occured, please try again later' }, status: 500
     end
   end
 
   # POST /google
   def google
     client = OAuth2::Client.new(ENV['GOOGLE_APP_ID'], ENV['GOOGLE_APP_SECRET'])
-    token  = OAuth2::AccessToken.new(client, params[:id_token])
+    token  = OAuth2::AccessToken.new(client, params[:auth_token])
 
     begin
-      user_info = ActiveSupport::JSON.decode(token.get("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{params[:id_token]}").body)
+      user_info = ActiveSupport::JSON.decode(token.get("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{params[:auth_token]}").body)
       auth = Hashie::Mash.new({ 
         uid: user_info['sub'],
         provider: 'google_oauth2', 
@@ -48,9 +48,9 @@ class AuthsController < ApplicationController
         render json: { success: false, error: 'Invalid user or some error occured' }, status: :ok
       end
     rescue OAuth2::Error => e
-      render json: { success: false, error: 'Invalid auth_token' }, status: 40
+      render json: { error: 'Invalid auth_token' }, status: 40
     rescue Exception => e
-      render json: { success: false, error: 'Unknown error occured, please try again later' }, status: 500
+      render json: { error: 'Unknown error occured, please try again later' }, status: 500
     end
   end
 
@@ -61,7 +61,7 @@ class AuthsController < ApplicationController
     begin
       consumer = client.consumer
       token = consumer.get_access_token(nil, {}, {
-        'xoauth_oauth2_access_token' => params[:oauth_token]
+        'xoauth_oauth2_access_token' => params[:auth_token]
       })
 
       client.authorize_from_access(token.token, token.secret)
