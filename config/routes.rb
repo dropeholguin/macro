@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   		namespace :v1 do
   			get '/cards_index', to: "questions#index"
   			post '/cards', to: "questions#create"
+  			patch '/cards/:id', to: "questions#update"
   		end
   	end
 	

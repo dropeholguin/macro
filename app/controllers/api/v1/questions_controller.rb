@@ -11,8 +11,22 @@ class Api::V1::QuestionsController < ApplicationController
 
 		if card.save
 			render status: 200, json: {
-				message: "Successfully created card.",
+				message: "Successfully created Card.",
 				card: card
+			}.to_json
+		else
+			render status: 422, json: {
+				errors: card.errors
+			}.to_json
+		end
+	end
+
+	def update
+		card = Question.find(params[:id])
+		if card.update(card_params)
+			render status: 200, json: {
+				message: "Successfully updated Card.",
+				Card: card
 			}.to_json
 		else
 			render status: 422, json: {
