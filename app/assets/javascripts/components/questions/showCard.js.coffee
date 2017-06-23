@@ -162,7 +162,12 @@ dom = React.DOM
 												className: "button hollow small secondary radius-10",
 												onClick: @voteDownClicked,
 												dom.i
-													className: "fa fa-thumbs-o-down",										
+													className: "fa fa-thumbs-o-down",
+										if @props.current_user.id == @props.owner.id
+											dom.div
+												ref: "cardStats",
+												className: "large-12 columns",
+												React.createElement CardStats, creator: @props.creator, created_at: @props.created_at, people_number: @props.people_number, percentage_people: @props.percentage_people, time: @props.time										
 						dom.div
 							className: "small-4 columns",
 							dom.span 

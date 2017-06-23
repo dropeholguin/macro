@@ -191,6 +191,29 @@ class QuestionsController < ApplicationController
 	end
 
 	def show
+		@peoples_number = []
+		@peoples_number_answered_correct = []
+		@creator = @question.user
+		@created_at = @question.created_at.strftime("%b %d, %Y")
+
+		#Number of people who have taken the question
+		Card.question_cards(@question.id).each do |card|
+			if !@peoples_number.include?(card.user.id)
+				@peoples_number << card.user.id
+			end
+		end
+		#Number of people who have answered correct the question
+		Card.questions_right(@question.id).each do |card|
+			if !@peoples_number_answered_correct.include?(card.user.id)
+				@peoples_number_answered_correct << card.user.id
+			end
+		end
+
+		@people_number = @peoples_number.count
+		@peoples_number_answered_correct = @peoples_number_answered_correct.count
+
+		@percentage_people =  ((@peoples_number_answered_correct.to_f / @people_number) * 100).round(2)
+
 		@answers = @question.answers
 		@comments = @question.comments
 		@state = @question.evaluators_for(:votes).include?(current_user)
