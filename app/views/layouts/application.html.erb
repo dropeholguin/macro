@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= content_for?(:title) ? yield(:title) : "Macro-people" %></title>
 
+    <meta name="google-signin-client_id" content="<%= ENV['GOOGLE_APP_ID'] %>">
+
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
   </head>
 
   <body>
+    <div id="fb-root"></div>
+
     <%= render partial: 'layouts/flash' %>
     <% if user_signed_in? %>      
       <%= react_component 'HeaderLoggedIn', {user: current_user.email, sign_out: destroy_user_session_path,  points: current_user.points, profile_settings: edit_user_registration_path, img: image_path('logo-macro.png'), root_path: root_path, tokens_wallet_path: tokens_wallet_path} %>

@@ -38,10 +38,14 @@ gem 'jquery-countdown-rails'
 gem 'react-rails' # gem for react.js
 gem 'webpack-rails'
 # gem for user sign in and sign up
-gem 'devise'
+gem 'devise', '~> 4.2.0'
+# gem for token based authentication with devise
+gem 'simple_token_authentication', '~> 1.0'
+gem 'omniauth', '~> 1.6.1'
+gem 'oauth2', '~> 1.4'
 # gems for sign in with linkedin
-gem 'omniauth'
-gem 'omniauth-linkedin'
+gem 'omniauth-linkedin', '~> 0.2.0'
+gem 'linkedin', '~> 1.1.0'
 # gem for markdown
 gem 'simplemde-rails'
 gem 'redcarpet'
@@ -82,6 +86,7 @@ end
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'pry'
   gem 'dotenv-rails'
   gem 'jasmine-rails'
   gem 'poltergeist'
