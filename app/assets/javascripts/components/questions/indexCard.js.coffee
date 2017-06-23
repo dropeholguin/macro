@@ -60,7 +60,10 @@ dom = React.DOM
 						@state.button_2,
 					dom.a
 						className: "button small hollow secondary margin-side "+showButton,
-						href: "#",
+						href: "/question/#{@props.id}",
+						'data-confirm': "Are you sure?",
+						'data-method': "delete",
+						rel: "nofollow",
 						@state.button_3,
 			dom.div {},
 				dom.div

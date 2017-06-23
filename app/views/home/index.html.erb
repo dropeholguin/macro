@@ -1,5 +1,5 @@
 <% if user_signed_in? %>   
 	<%= react_component 'HomeLoggedIn', {csrfToken: form_authenticity_token, linkedin: user_linkedin_omniauth_authorize_path, arrow_img: image_path('arrow.png'), card_img: image_path('cards.png'), session_img: image_path('session.png'), submit_img: image_path('submit.png'), stock_img: image_path('stock-2bg.jpg')} %>   
 <% else %>  
-  <%= react_component 'Home', {csrfToken: form_authenticity_token, linkedin: user_linkedin_omniauth_authorize_path, arrow_img: image_path('arrow.png'), card_img: image_path('cards.png'), session_img: image_path('session.png'), submit_img: image_path('submit.png'), stock_img: image_path('stock-2bg.jpg'), url: session_path(resource_name), img: image_path('logo-macro.png')} %>    
+  <%= react_component 'LoginSasensei', {url: session_path(resource_name), csrfToken: form_authenticity_token, devise_error_messages: devise_error_messages!, linkedin: user_linkedin_omniauth_authorize_path } %>   
 <%end%>  

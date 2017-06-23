@@ -1,0 +1,43 @@
+.btn-social{
+	position: relative;
+    padding-left: 58px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 18px !important;
+    margin: 0 0 5px 0 !important;
+    border-radius: 6px;
+}
+.btn-social>:first-child {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 45px;
+    line-height: 37px;
+    font-size: 1.6em;
+    text-align: center;
+    border-right: 1px solid rgba(0,0,0,0.2);
+}
+.btn-block{
+	display: block;
+}
+.linkedin{
+	background-color: #027BB5 !important;
+}
+.github{
+	background-color: #464647 !important;
+}
+.openid{
+	background-color: #FF9500 !important;
+}
+.google-plus{
+	background-color: #F03324 !important;
+}
+.facebook{
+	background-color: #46459B !important;
+}
+.btn-social:hover{
+	opacity: 0.8;
+}
