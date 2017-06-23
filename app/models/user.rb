@@ -1,18 +1,30 @@
 class User < ApplicationRecord
-has_many :badges , :through => :levels 
-has_many :levels
-has_many :evaluations, class_name: "RSEvaluation", as: :source
-has_many :cards
-has_many :comments
-has_many :flags, dependent: :destroy
-has_many :sessions
-has_many :session_cards
-has_many :stats_sessions
-has_many :notifications
+  acts_as_token_authenticatable
+  rolify
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, 
+    :trackable, :validatable, :omniauthable, :confirmable, :lockable
 
-has_reputation :votes, source: {reputation: :votes, of: :questions}, aggregated_by: :sum
-has_reputation :votes, source: {reputation: :votes, of: :comments}, aggregated_by: :sum
-scope :users_with_less_of_eight_cards, -> {where('points < ?', 8)}
+  has_many :identities
+  has_many :accepted_privacies
+  has_many :questions
+  has_many :badges, through: :levels 
+  has_many :levels
+  has_many :evaluations, class_name: "RSEvaluation", as: :source
+  has_many :cards
+  has_many :comments
+  has_many :flags, dependent: :destroy
+  has_many :sessions
+  has_many :session_cards
+  has_many :stats_sessions
+  has_many :notifications
+
+  after_create :assign_default_role
+
+  has_reputation :votes, source: {reputation: :votes, of: :questions}, aggregated_by: :sum
+  has_reputation :votes, source: {reputation: :votes, of: :comments}, aggregated_by: :sum
+  scope :users_with_less_of_eight_cards, -> {where('points < ?', 8)}
 
 def change_points(options)
   if Gioco::Core::KINDS
@@ -54,16 +66,6 @@ def next_badge?(kind_id = false)
                       }
   end
 end
-  rolify
-	# Include default devise modules. Others available are:
-	# :confirmable, :lockable, :timeoutable and :omniauthable
-	devise :database_authenticatable, :registerable,
-	 	:recoverable, :rememberable, :trackable, :validatable, :omniauthable, :confirmable, :lockable
-
-	has_many :identities
-	has_many :questions
-
-	after_create :assign_default_role
 
 	def assign_default_role
 		self.add_role(:student) if self.roles.blank?
@@ -92,9 +94,28 @@ end
     end
 	end
 
-
-
   def voted_for?(question)
     evaluations.where(target_type: question.class, target_id: question.id).present?
+  end
+
+  def self.from_omniauth(auth)
+    identity = Identity.where(provider: auth.provider, uid: auth.uid.to_s).first_or_initialize
+    user = nil
+
+    if identity.user.blank?
+      email = auth.info.email ? auth.info.email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com"
+      user = where('email = ?', email).first_or_initialize do |user|
+        user.name     = auth.info.name
+        user.email    = email
+        user.password = Devise.friendly_token[0,20]
+      end
+      user.identities << identity
+    else
+      user = identity.user
+    end
+
+    user.skip_confirmation!
+    user.save!
+    user
   end
 end

@@ -59,7 +59,7 @@ dom = React.DOM
 							placeholder: "Your email",
 						dom.input
 							className: "radius-10",
-							autofocus: "off",
+							autoFocus: "off",
 							type:  "password",
 							name: 'user[password]',
 							key: "password",
@@ -67,7 +67,7 @@ dom = React.DOM
 							placeholder: "Your password (6 characters minimum)",
 						dom.input
 							className: "radius-10",
-							autofocus: "off",
+							autoFocus: "off",
 							type:  "password",
 							name: 'user[password_confirmation]',
 							key: "password_confirmation",

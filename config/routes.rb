@@ -24,6 +24,13 @@ Rails.application.routes.draw do
 	resources :sessions, only: [:new, :create, :index]
 
 	resources :uploads, only: [:create]
+  resource :auth, only: [] do
+    collection do
+      post 'facebook'
+      post 'google'
+      post 'linkedin'
+    end
+  end
 	
 	get "cards_run_filter", to: 'questions#cards_run_filter'
 	get "sessions_stats", to: 'sessions#sessions_stats'
@@ -32,7 +39,8 @@ Rails.application.routes.draw do
 	get "user_profile", to: 'profile#user_profile'
 	get "questions_list", to: 'questions#questions_list'
 	get 'terms', to: 'home#terms_and_conditions'
-	get 'privacy', to: 'home#privacy_policy'
+	get 'privacy', to: 'home#privacy_policy', as: :privacy
+	patch 'privacy/:id/accept', to: 'home#accept_privacy', as: :accept_privacy
 	patch "questions/suspend_question/:id", to: 'questions#suspend', as: :suspend
  	patch "questions/approve_question/:id", to: 'questions#approve', as: :approve
  	post "sessions_next_card", to: 'sessions#next_card'
