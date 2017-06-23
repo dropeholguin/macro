@@ -1,3 +1,13 @@
+.menu-vertical-center{
+    display: flex;
+    align-items: center;
+    min-height: 146px;
+    max-width: 326px;
+}
+.button-menu{
+	background: transparent url(image_path(#{"login_button_field.png"})) no-repeat left;
+    min-height: 146px; 
+}
 .btn-social{
 	position: relative;
     padding-left: 58px;
