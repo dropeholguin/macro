@@ -19,7 +19,7 @@ dom = React.DOM
 		timeLeft: +120
 		streak: @props.streak
 	componentDidMount: ->
-		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', onExpiry: @handleClick})
+		$(@refs.timer).countdown({since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})  
 		$(@refs.showVotes).hide()
 		$(@refs.showComments).hide()
 		$(@refs.cardStats).hide()
@@ -78,13 +78,15 @@ dom = React.DOM
 			    	$(@refs.showVotes).show()
 			    	$(@refs.cardStats).hide()
 			    	$(@refs.cardStats).removeClass('animated fadeInDown')
-		    	if (data.is_passed)
+		    	if (data.is_passed && data.time_long)
 		    		$.amaran content: {'title': 'Well done!', 'message': '', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 		    		if(@state.streak < 9 and @state.streak >=5)
             			$.amaran content: {'title': 'Well done!', 'message': '+1 TOKEN', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	    			if(@state.streak > 9)
 	    				$.amaran content: {'title': 'Well done!', 'message': '+2 TOKEN', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
-		    	if (data.is_passed == false)
+		    	if (data.time_long == false)
+		    		$.amaran content: {'title': 'Sorry!', 'message': '', 'info': "you took too long to answer this question! #{@state.title}", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
+		    	if (data.is_passed == false && data.time_long == true)
 	    			$.amaran content: {'title': 'Sorry!', 'message': '', 'info': "You have answered wrong #{@state.title}", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
 		    	if (data.state == true)
 		    		$(@refs.showVotes).hide()
@@ -116,7 +118,7 @@ dom = React.DOM
 				success: (data) =>
 				    console.log(data)
 				    @setState({quest: data, timeLeft: +120})
-		    		$(@refs.timer).countdown({until: @state.timeLeft, format: 'MS', layout: '{mn} {ml}, {sn} {sl}', onExpiry: @handleClick})   		
+		    		$(@refs.timer).countdown({since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})   		
 				    @infoUpdate(data)
 				    @answersUpdate(data)
 				    @tagsUpdate(data)
