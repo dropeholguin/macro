@@ -24,3 +24,5 @@ config/database.yml
 
 public/system
 public/assets
+/public/packs
+/node_modules
