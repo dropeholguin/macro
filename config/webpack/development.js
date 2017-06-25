@@ -1,8 +1,13 @@
 // Note: You must restart bin/webpack-dev-server for changes to take effect
 
+const webpack = require('webpack')
 const merge = require('webpack-merge')
 const sharedConfig = require('./shared.js')
 const { settings, output } = require('./configuration.js')
+
+const devFlagPlugin = new webpack.DefinePlugin({  
+  __DEV__: JSON.stringify(JSON.parse(process.env.DEBUG || 'false'))
+});
 
 module.exports = merge(sharedConfig, {
   devtool: 'cheap-eval-source-map',
@@ -14,6 +19,12 @@ module.exports = merge(sharedConfig, {
   output: {
     pathinfo: true
   },
+
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    devFlagPlugin
+  ],
 
   devServer: {
     clientLogLevel: 'none',

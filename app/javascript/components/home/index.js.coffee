@@ -1,10 +1,20 @@
 import React from "react"
+import { Link } from 'react-router-dom'
 import SignUp from "../signUp.js.coffee"
+
+import ImgPath from '../../utils/imageHelper'
 
 dom = React.DOM 
 
 export default React.createClass
 	displayName: 'Home'
+	defaultProps: ->
+		arrow_img: ImgPath 'arrow.png'
+		card_img: ImgPath 'cards.png'
+		session_img: ImgPath 'session.png'
+		submit_img: ImgPath 'submit.png'
+		stock_img: ImgPath 'stock-2bg.jpg'
+		img: ImgPath 'logo-macro.png'
 	render: ->
 		dom.div
 			className: "root",
@@ -50,23 +60,23 @@ export default React.createClass
 								name: 'user[password]',
 								key: "password",
 								id: "user_password",
-								placeholder: "Your password",	
+								placeholder: "Your password",
 						dom.div
 							className: "large-4 medium-6 small-6 columns"
 							dom.input
 								type: "submit"
 								className: "button large radius-10"
-								value: "SIGN ON"	
-						dom.div							
+								value: "SIGN ON"
+						dom.div
 							className: "large-4 medium-6 small-6 text-right columns"
-							dom.a
+							React.createElement Link,
 								id: "button-register"
 								style: {display: "none"}
 								className: "button large radius-10"
-								href: "users/sign_up"
-								"REGISTER"					
+								to: "/sign_up"
+								"REGISTER"
 			dom.div 
-				className: "row expanded background-home",				
+				className: "row expanded background-home",
 				dom.div
 					className: "large-12 text-center columns margin-space white-title"
 					dom.h2 
@@ -80,10 +90,10 @@ export default React.createClass
 					dom.div
 						className: "row",
 						dom.div
-							className: "large-4 large-centered columns",	
-							dom.a
+							className: "large-4 large-centered columns",
+							React.createElement Link,
 								className: "button expanded primary white blue-box",
-								href: "/users/sign_up",
+								to: "/sign_up",
 								"Register To Macro Cards »"
 					dom.p {},
 						"*We respect your privacy and have ZERO TOLERANCE for spam"

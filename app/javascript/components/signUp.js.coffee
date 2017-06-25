@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from 'react-router-dom'
 
 dom = React.DOM 
 
@@ -60,7 +61,6 @@ export default React.createClass
 							placeholder: "Your email",
 						dom.input
 							className: "radius-10",
-							autoFocus: "off",
 							type:  "password",
 							name: 'user[password]',
 							key: "password",
@@ -68,7 +68,6 @@ export default React.createClass
 							placeholder: "Your password (6 characters minimum)",
 						dom.input
 							className: "radius-10",
-							autoFocus: "off",
 							type:  "password",
 							name: 'user[password_confirmation]',
 							key: "password_confirmation",
@@ -88,8 +87,8 @@ export default React.createClass
 								dom.label
 									htmlFor: "terms"
 									"Do you agree " 
-									dom.a 
-										href: "/terms" 
+									React.createElement Link,
+										to: "/terms" 
 										"terms and conditions ?"
 						dom.input
 							id: "register"
@@ -98,7 +97,7 @@ export default React.createClass
 							type: 'submit',
 						dom.p {},
 							"Already have an account?",
-						dom.a
-							href: "/users/sign_in", 
-							className: "bold",
+						React.createElement Link,
+							to: "/sign_in", 
+							className: "bold", 
 							"SIGNON"
