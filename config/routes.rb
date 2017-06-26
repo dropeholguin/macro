@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     end
   end
 	
+  get 'react', to: 'home#react'
 	get "cards_run_filter", to: 'questions#cards_run_filter'
 	get "sessions_stats", to: 'sessions#sessions_stats'
 	get "run_cards", to: 'questions#card'
