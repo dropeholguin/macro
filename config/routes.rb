@@ -31,6 +31,14 @@ Rails.application.routes.draw do
       post 'linkedin'
     end
   end
+
+  	namespace :api do
+  		namespace :v1 do
+  			get '/cards_index', to: "questions#index"
+  			post '/cards', to: "questions#create"
+  			patch '/cards/:id', to: "questions#update"
+  		end
+  	end
 	
   get 'react', to: 'home#react'
 	get "cards_run_filter", to: 'questions#cards_run_filter'
