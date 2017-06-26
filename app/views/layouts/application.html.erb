@@ -10,14 +10,14 @@
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
+    <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
   </head>
 
-  <body>
+  <body class="sassensei">
     <div id="fb-root"></div>
-
     <%= render partial: 'layouts/flash' %>
     <% if user_signed_in? %>      
-      <%= react_component 'HeaderLoggedIn', {user: current_user.email, sign_out: destroy_user_session_path,  points: current_user.points, profile_settings: edit_user_registration_path, img: image_path('logo-macro.png'), root_path: root_path, tokens_wallet_path: tokens_wallet_path} %>
+      <%= react_component 'HeaderDesktop', {user: current_user, sign_out: destroy_user_session_path,  points: current_user.points, profile_settings: edit_user_registration_path, img: image_path('logo-macro.png'), root_path: root_path, tokens_wallet_path: tokens_wallet_path} %>
     <% else %>  
     <%end%>    
     <%= yield %>
