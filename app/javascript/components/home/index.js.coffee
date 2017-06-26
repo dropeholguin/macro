@@ -1,14 +1,17 @@
 import React from "react"
 import { Link } from 'react-router-dom'
-import SignUp from "../signUp.js.coffee"
 
+import SignUp from "../signUp.js.coffee"
+import GoogleLogin from "../auth/google.js.coffee"
+
+import APIUrls from '../../constants/apiUrls'
 import ImgPath from '../../utils/imageHelper'
 
 dom = React.DOM 
 
-export default React.createClass
+export default class Home extends React.Component
 	displayName: 'Home'
-	defaultProps: ->
+	@defaultProps:
 		arrow_img: ImgPath 'arrow.png'
 		card_img: ImgPath 'cards.png'
 		session_img: ImgPath 'session.png'
@@ -33,7 +36,7 @@ export default React.createClass
 					className: "large-6 columns"
 					dom.form 
 						method: 'POST',
-						action: @props.url,	
+						action: @props.url,
 						dom.input
 							key: "utf8"
 							name: "utf8"
@@ -197,3 +200,4 @@ export default React.createClass
 				dom.div
 					className: "large-5 columns"
 					React.createElement SignUp, large: "large-10", medium: "8", small: "10", csrfToken: @props.csrfToken,	
+				React.createElement GoogleLogin
