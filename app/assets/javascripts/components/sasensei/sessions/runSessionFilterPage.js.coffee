@@ -3,9 +3,9 @@ dom = React.DOM
 @RunSessionFilterPage = React.createClass
 	displayName: 'RunSessionFilter'
 	getDefaultProps: ->
-		buttons: [{title: "pick a topic", subtitle: "cards can be filtered for all or any topics."},
-			{title: "run cards", subtitle: "The Stimer grants 2 minutes to conquer the question"},
-			{title: "earn tokens", subtitle: "achieve 4 correct answers in a row to enter spde mode.", display: "none"}]
+		buttons: [{title: "pick a topic", subtitle: "sessions can be filtered for all or any topics."},
+			{title: "run session", subtitle: "You are graded first on accuracy, and then on speed."},
+			{title: "GAIN PRIVILEGES", subtitle: "A pass will grant the ability to SUBMIT questions.", display: "none"}]
 	render: ->
 		dom.div 
 			className: "row bottom-60"
