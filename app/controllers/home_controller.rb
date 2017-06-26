@@ -5,6 +5,13 @@ class HomeController < ApplicationController
   def index
   end
 
+  # GET /react
+  def react
+    respond_to do |format|
+      format.html { render layout: 'react-layout' }
+    end
+  end
+
   # GET /terms_and_conditions
   def terms_and_conditions
   end

@@ -20,6 +20,33 @@
  *= require active_admin/editor/wysiwyg
 
  */
+@import 'modules/login';
+@import 'modules/fonts';
+@import 'modules/button';
+.text-status{
+    font-family: 'Permanent Marker', cursive;
+    font-size: 20px;
+    padding-top: 20px;
+}
+ .sassensei{
+    background: transparent url(image_path(#{"background_placeholder.jpg"})) center;
+    background-color: #eee;
+    min-height: 600px; 
+    max-height: 900px;
+ }
+ .logo{
+    background: transparent url(image_path(#{"sasensei_logo.png"})) no-repeat center;
+    background-size: contain;
+    display: block;
+    height: 45px;
+
+ }
+ .logo:hover{
+    opacity: 0.8;
+ }
+ .uppercase{
+    text-transform: uppercase;
+ }
 #messages li{
     text-align: left;
 }
