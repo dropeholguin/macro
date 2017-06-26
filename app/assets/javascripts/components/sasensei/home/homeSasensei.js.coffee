@@ -3,9 +3,9 @@ dom = React.DOM
 @HomeSasensei = React.createClass
 	displayName: 'HomeSasensei'
 	getDefaultProps: ->
-		buttons: [{title: "cards", subtitle: "Pick a topic and see the questions, answers and explanations.", path: "/cards_run_filter"},
-		{title: "sessions", subtitle: "Put your knowledge to test with a timed session.", path: "/sessions"},
-		{title: "submit", subtitle: "Set questions for other users and collect reputation points.", path: "/questions/new"}]
+		buttons: [{title: "cards", kanjis:"質問", subtitle: "Pick a topic and see the questions, answers and explanations.", path: "/cards_run_filter"},
+		{title: "sessions", kanjis: "試験", subtitle: "Put your knowledge to test with a timed session.", path: "/sessions"},
+		{title: "submit", kanjis: "支給", subtitle: "Set questions for other users and collect reputation points.", path: "/questions/new"}]
 	render: ->
 		dom.div
 			className: "root"
@@ -42,8 +42,8 @@ dom = React.DOM
 			dom.div 
 				className: "row menu-vertical-center"
 				dom.div 
-					className: "large-4 columns kanjis-text",				
-					"KANJIS"
+					className: "large-4 columns kanjis-text text-center",				
+					@props.button.kanjis
 				dom.div
 					className: "large-8 columns"
 					dom.div

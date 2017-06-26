@@ -23,6 +23,11 @@
 @import 'modules/login';
 @import 'modules/fonts';
 @import 'modules/button';
+.text-status{
+    font-family: 'Permanent Marker', cursive;
+    font-size: 20px;
+    padding-top: 20px;
+}
  .sassensei{
     background: transparent url(image_path(#{"background_placeholder.jpg"})) center;
     background-color: #eee;

@@ -5,7 +5,7 @@ dom = React.DOM
 	getDefaultProps: ->
 		buttons: [{name: 'LinkedIn', icon: 'fa fa-linkedin', class: 'linkedin', path: '/users/auth/linkedin'},
 		{name: 'Google+', icon: 'fa fa-google-plus', class: 'google-plus'},
-		{name: 'Facebook', icon: 'fa fa-facebook', class: 'facebook'},]
+		{name: 'Facebook', icon: 'fa fa-facebook', class: 'facebook'}]
 	render: ->
 		dom.div
 			className: "root"

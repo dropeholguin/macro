@@ -4,7 +4,7 @@
 	font-size: 20px;
 }
 .menu-title{
-	color: #B17FA0;
+	color: #B17FA0 !important;
 	font-family: 'Permanent Marker', cursive;
 	font-size: 20px;
 }
@@ -12,4 +12,18 @@
 	color: #9C9C9C;
 	font-family: 'Permanent Marker', cursive;
 	font-size: 10px;
+}
+.title-tag-sasensei{
+	color: #ffffff;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 16px;
+}
+.search-tag-sasensei{
+	color: #9d9d9d !important;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 14px;
+    padding-left: 13px;
+    vertical-align: -webkit-baseline-middle;
+    display: inline-block;
+    width: 100%;
 }
