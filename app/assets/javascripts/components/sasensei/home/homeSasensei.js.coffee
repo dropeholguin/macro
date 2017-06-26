@@ -37,6 +37,7 @@ dom = React.DOM
 	displayName: 'ButtonMenu'
 	render: ->
 		dom.a
+			style: {marginBottom: "25px", float: "left"}
 			className: "button-menu large-4 columns text-left"
 			href: @props.button.path
 			dom.div 
