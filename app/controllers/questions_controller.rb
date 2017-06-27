@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:suspend, :approve]
   before_action :authenticate_admin_user!, only: [:suspend, :approve]
+  before_action :card_time
 	include ApplicationHelper
 	include ActionView::Helpers::DateHelper
 
@@ -134,7 +135,8 @@ class QuestionsController < ApplicationController
 		comments = card.comments.order("created_at desc")
 		state = card.evaluators_for(:votes).include?(@user)
 		votes = card.reputation_for(:votes).to_i
-		
+		time_long = true
+
 		time = (Time.now.to_i - DateTime.parse(cookies[:time]).to_i)
 		@card_time = Time.at(time).to_datetime
 		cookies.delete(:time)
@@ -145,7 +147,7 @@ class QuestionsController < ApplicationController
 			answers_correct = card.answers.select { |answer| answer.is_correct == true }
 			is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
 		end
-		if is_passed == true
+		if is_passed == true && @card_time <= @time
 			@user.update_attributes(streak: @user.streak + 1)
 			if @user.streak < 9 && @user.streak >= 5
 				@user.update_attributes(points: @user.points + 1)
@@ -156,6 +158,10 @@ class QuestionsController < ApplicationController
 				@notification = Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +2 tokens", category: "tokens_positive", source: "#{question_path(card)}")
 				@notification.save
 			end
+		elsif @card_time >= @time
+			time_long = false
+			is_passed = false
+			@user.update_attributes(streak: 0)
 		else
 			@user.update_attributes(streak: 0)
 		end
@@ -186,7 +192,7 @@ class QuestionsController < ApplicationController
 		@percentage_people =  ((@peoples_number_answered_correct.to_f / @people_number) * 100).round(2)
 
 		respond_to do |format|
-		 	format.json  { render json: { creator: @creator, created_at: @created_at, percentage_people: @percentage_people, people_number: @people_number, comments: comments, streak: @user.streak, state: state, is_passed: is_passed, votes: votes, time: @card.time_at.strftime("%M:%S") } }
+		 	format.json  { render json: { creator: @creator, created_at: @created_at, percentage_people: @percentage_people, people_number: @people_number, comments: comments, streak: @user.streak, state: state, is_passed: is_passed, votes: votes, time: @card.time_at.strftime("%M:%S"), time_long: time_long } }
 		end
 	end
 
@@ -357,6 +363,9 @@ class QuestionsController < ApplicationController
     end
 
 	private
+		def card_time
+			@time = 2.minutes
+		end
 
 		def set_question
 		  @question = Question.find(params[:id])

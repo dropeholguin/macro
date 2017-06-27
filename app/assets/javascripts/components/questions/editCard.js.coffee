@@ -97,8 +97,9 @@ dom = React.DOM
 												className: "small-9 columns"									
 												dom.label 												
 													"ANSWERS"
-										for answer in @props.answers
-											React.createElement AnswerMultipleChoice, key: answer.id, answer: answer		
+										if @props.choice == "multiple" or @props.choice == "simple"
+											for answer in @props.answers
+												React.createElement AnswerMultipleChoice, key: answer.id, answer: answer		
 										dom.div	
 											ref: "addOther"	
 											className: "nested-fields",											
@@ -165,23 +166,24 @@ dom = React.DOM
 					dom.input
 						onClick: @tutoForAnswerClicked
 						type: "text",
-						id: "question_answers_attributes_0_answer_markdown",
-						name: "question[answers_attributes][0][answer_markdown]",
+						id: "question_answers_attributes_#{@props.answer.id}_answer_markdown",
+						name: "question[answers_attributes][#{@props.answer.id}][answer_markdown]",
+						defaultValue: @props.answer.answer_markdown
 				dom.div
 					ref: "optionAnswer0"
 					className: "large-4 columns"
 					dom.select 
-						name: "question[answers_attributes][0][is_correct]",
+						name: "question[answers_attributes][#{@props.answer.id}][is_correct]",
 						dom.option
 							value: "0",															
 							"Incorrect",
 						dom.option
 							value: "1",
-							id: "question_answers_attributes_0_is_correct",
+							id: "question_answers_attributes_#{@props.answer.id}_is_correct",
 							"Correct",
 				dom.input
 					type: "hidden",
-					id: "question_answers_attributes_0_answer_markdown",
-					name: "question[answers_attributes][0][_destroy]",
+					id: "question_answers_attributes_#{@props.answer.id}_answer_markdown",
+					name: "question[answers_attributes][#{@props.answer.id}][_destroy]",
 					value: "false",
 

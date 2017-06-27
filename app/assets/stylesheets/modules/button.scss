@@ -1,0 +1,107 @@
+.menu-vertical-center{
+    display: flex;
+    align-items: center;
+    min-height: 146px;
+    max-width: 326px;
+    margin: auto;
+}
+.button-menu{
+	background: transparent url(image_path(#{"login_button_field.png"})) no-repeat left;
+    min-height: 146px; 
+}
+.button-menu:hover{
+    opacity: 0.7;
+}
+.button-info-status{
+    background: transparent url(image_path(#{"login_button_field.png"})) no-repeat left;
+    min-height: 126px; 
+}
+.btn-social{
+	position: relative;
+    padding-left: 58px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 18px !important;
+    margin: 0 0 5px 0 !important;
+    border-radius: 6px;
+}
+.btn-social>:first-child {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 45px;
+    line-height: 37px;
+    font-size: 1.6em;
+    text-align: center;
+    border-right: 1px solid rgba(0,0,0,0.2);
+}
+.btn-block{
+	display: block;
+}
+.linkedin{
+	background-color: #027BB5 !important;
+}
+.github{
+	background-color: #464647 !important;
+}
+.openid{
+	background-color: #FF9500 !important;
+}
+.google-plus{
+	background-color: #F03324 !important;
+}
+.facebook{
+	background-color: #46459B !important;
+}
+.btn-social:hover{
+	opacity: 0.8;
+}
+.kanjis-text{
+    font-size: 35px;
+    color: #000;
+}
+.btn-tag{
+    background: transparent url(image_path(#{"small_field.png"})) no-repeat left !important;
+    min-height: 41px;
+    border: none;
+}
+.btn-tag:hover{
+    opacity: 0.7;
+}
+.btn-search-tag{
+    background: transparent url(image_path(#{"small_field.png"})) no-repeat center !important;
+    min-height: 41px;
+    border: none;
+}
+.btn-search-tag:focus{
+    box-shadow: none;
+    border: none;
+}
+.number{
+    font-size: 90px;
+}
+.btn-run{
+    background: transparent url(image_path(#{"small_button.png"})) no-repeat center !important;
+    min-height: 41px;
+    max-width: 121px;
+    border: none;
+}
+.btn-run:hover{
+    opacity: 0.7;
+}
+.description-field{
+    background: transparent url(image_path(#{"description_field.png"})) no-repeat center !important;
+    min-height: 108px;
+    max-width: 331px;
+    border: none;
+    margin: 5px 0;
+}
+.font-48{
+    font-size: 48px;
+}
+.bottom-60{
+    margin-bottom: 60px;
+}
