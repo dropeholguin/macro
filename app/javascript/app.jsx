@@ -6,7 +6,7 @@ import Home from './components/home/index.js.coffee'
 import SignIn from './components/signIn.js.coffee'
 import SignUp from './components/signUp.js.coffee'
 
-import { renderDevTools } from './utils/devTools';
+// import { renderDevTools } from './utils/devTools';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -18,18 +18,15 @@ export default class App extends React.Component {
 
   render(){
     return (
-      <div>
-        <Provider store={this.props.store}>
-          <BrowserRouter>
-            <div>
-              <Route path="/react" component={Home}/>
-              <Route path="/sign_in" component={SignIn}/>
-              <Route path="/sign_up" component={SignUp}/>
-            </div>
-          </BrowserRouter>
-        </Provider>
-        {renderDevTools(this.props.store)}
-      </div>
+      <Provider store={this.props.store}>
+        <BrowserRouter>
+          <div>
+            <Route path="/react" component={Home}/>
+            <Route path="/sign_in" component={SignIn}/>
+            <Route path="/sign_up" component={SignUp}/>
+          </div>
+        </BrowserRouter>
+      </Provider>
     )
   }
 }
