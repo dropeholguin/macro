@@ -1,16 +1,15 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore } from 'redux'
+import { sessionService, sessionReducer } from 'redux-react-session';
 
 import App from '../app'
-import reducers from '../reducers'
+import store from '../store'
+import history from '../utils/history'
 
-const store = createStore(
-  reducers,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+// Init the session service
+sessionService.initSessionService(store);
 
 render(
-  <App store={store} />,
+  <App store={store} history={history} />,
   document.getElementById('app-root')
 )
