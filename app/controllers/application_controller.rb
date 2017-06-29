@@ -12,13 +12,11 @@ class ApplicationController < ActionController::Base
     def privacy_acceptance_check
       if user_signed_in? && controller_path != 'home' && !controller_path.starts_with?('admin/')
         latest_privacy = Privacy.order(created_at: :desc).first
-        if latest_privacy.present?
-          user_privacy = User.first.accepted_privacies.order(created_at: :desc).first
-          unless user_privacy.present? && latest_privacy.id == user_privacy.privacy_id
-            respond_to do |format|
-              format.html { redirect_to privacy_path }
-              format.json { render json: { error: 'You need to accept privacy policy first' }, status: 455 }
-            end
+
+        if latest_privacy.present? && latest_privacy.version != current_user.privacy_version
+          respond_to do |format|
+            format.html { redirect_to privacy_path }
+            format.json { render json: { error: 'You need to accept privacy policy first' }, status: 455 }
           end
         end
       end

@@ -34,7 +34,7 @@ class HomeController < ApplicationController
       if @privacy.present?
         accepted_privacy = current_user.accepted_privacies.new(privacy_id: @privacy.id)
 
-        if accepted_privacy.save
+        if accepted_privacy.save && current_user.update(privacy_version: @privacy.version)
           format.html
           format.json { render json: { success: true, privacy: @privacy.as_json }, status: :ok }
         else
