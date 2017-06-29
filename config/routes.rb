@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 	mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
 	devise_for :users, controllers: { unlocks: 'users/unlocks', confirmations: 'users/confirmations', omniauth_callbacks: 'users/omniauth_callbacks', registrations: "users/registrations" }
-	root to: "home#react"
+	root to: "home#index"
 
 	resources :questions do
 		collection do
@@ -41,9 +41,7 @@ Rails.application.routes.draw do
   		end
   	end
 	
-  get '/login', to: 'home#react'
-  get '/protected', to: 'home#react'
-  # get 'react', to: 'home#react'
+  get 'react', to: 'home#react'
 	get "cards_run_filter", to: 'questions#cards_run_filter'
 	get "sessions_stats", to: 'sessions#sessions_stats'
 	get "run_cards", to: 'questions#card'
