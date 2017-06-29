@@ -1,10 +1,12 @@
 class QuestionsController < ApplicationController
-  before_action :set_question, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:suspend, :approve]
-  before_action :authenticate_admin_user!, only: [:suspend, :approve]
-  before_action :card_time
+	before_action :set_question, only: [:show, :edit, :update, :destroy]
+	before_action :authenticate_user!, except: [:suspend, :approve]
+	before_action :authenticate_admin_user!, only: [:suspend, :approve]
+	before_action :card_time
 	include ApplicationHelper
 	include ActionView::Helpers::DateHelper
+	include ActionView::Helpers::TextHelper
+
 
 	def index
 		user = current_user
@@ -240,6 +242,7 @@ class QuestionsController < ApplicationController
 		@user = current_user
 		@question = Question.new(question_params)
 		@question.user = @user
+		@question.title = truncate(strip_tags(markdown(@question.description_markdown)), length: 15)
 		count = 0
 		state = false
 
@@ -372,6 +375,6 @@ class QuestionsController < ApplicationController
 		end
 
 		def question_params
-		  params.require(:question).permit(:title, :description_markdown, :explanation_markdown, :choice, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
+		  params.require(:question).permit(:description_markdown, :explanation_markdown, :choice, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
 		end
 end
