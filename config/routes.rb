@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   			get '/cards_index', to: "questions#index"
   			post '/cards', to: "questions#create"
   			patch '/cards/:id', to: "questions#update"
+  			get '/cards/count', to: "questions#count_cards"
   		end
   	end
 	
