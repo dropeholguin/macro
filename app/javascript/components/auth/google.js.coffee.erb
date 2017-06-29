@@ -18,7 +18,7 @@ export default React.createClass
   customButton: ->
     gapi.load 'auth2', ->
       auth2 = gapi.auth2.init({
-        client_id: '566475606812-jjubafu8j3sn5hibe0loo8r4176s0j2n.apps.googleusercontent.com',
+        client_id: "<%= ENV['GOOGLE_APP_ID'] %>",
         cookiepolicy: 'single_host_origin'})
       
       auth2.attachClickHandler document.getElementById('gCustomBtn'), {}, ((googleUser) ->

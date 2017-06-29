@@ -1,8 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { authLogin } from '../../actions';
 
 dom = React.DOM
 
-export default React.createClass
+FacebookLogin = React.createClass
   displayName: 'FacebookLogin'
   componentDidMount: ->
     window.fbAsyncInit = (->
@@ -34,19 +36,12 @@ export default React.createClass
     ) document, 'script', 'facebook-jssdk'
     return
 
-   onStatusChange: (response) ->
-      if response.status == "connected"
-        $.ajax
-          url: '/auth/facebook',
-          type: 'POST', 
-          data: { auth_token: response.authResponse.accessToken },
-          success: (data) =>
-            console.log(data);
-          error: (e) =>
-            console.log(e.responseJSON);
+  onStatusChange: (response) ->
+    if response.status == "connected"
+      this.props.dispatch(authLogin('facebook', response.authResponse.accessToken))
 
-   onLogout: (response) ->
-      console.log 'facebook logout'
+  onLogout: (response) ->
+    console.log 'facebook logout'
 
   render: ->
     dom.div
@@ -64,3 +59,5 @@ export default React.createClass
             'data-auto-logout-link': "true",
             'data-use-continue-as': "true",
             'data-scope': "public_profile,email",
+
+export default connect(null)(FacebookLogin);

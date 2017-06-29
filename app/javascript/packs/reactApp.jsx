@@ -11,9 +11,9 @@ const node = (
     <Root store={store} />
 );
 
-let token = localStorage.getItem('token');
-if (token !== null) {
-  store.dispatch(loginUserSuccess(token));
+let current_user = JSON.parse(localStorage.getItem('current_user'));
+if (current_user !== null) {
+  store.dispatch(loginUserSuccess(current_user));
 }
 
 ReactDOM.render(node, target);
