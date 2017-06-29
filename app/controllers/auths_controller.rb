@@ -1,5 +1,10 @@
 class AuthsController < ApplicationController
 
+  # POST /getToken
+  def getToken
+    render json: { token: 'asdsdasdas' }, status: :ok
+  end
+
   # POST /facebook
   def facebook
     client = OAuth2::Client.new(ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET'], site: 'https://graph.facebook.com')

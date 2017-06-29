@@ -1,11 +1,10 @@
-import { combineReducers } from 'redux'
-import home from './home'
-// import visibilityFilter from './visibilityFilter'
+import {combineReducers} from 'redux';
+import {routerStateReducer} from 'redux-router';
+import auth from './auth';
+import data from './data';
 
-const app = combineReducers({
-  home
-  // todos,
-  // visibilityFilter
-})
-
-export default app
+export default combineReducers({
+ auth,
+ data,
+ router: routerStateReducer
+});
