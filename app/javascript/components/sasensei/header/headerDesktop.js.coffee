@@ -1,7 +1,12 @@
+import React from 'react'
+import { connect } from 'react-redux';
+
+import { logoutAndRedirect } from '../../../actions'
+
 dom = React.DOM 
 
-@HeaderDesktop = React.createClass
-	displayName: 'HeaderDesktop'
+HeaderDesktop = React.createClass
+	displayName: ''
 	getInitialState: ->
 		points: @props.points
 		current_points: []
@@ -12,7 +17,7 @@ dom = React.DOM
 	getDefaultProps: ->
 		points: 0
 	componentDidMount: ->
-		$(document).foundation()
+		# $(document).foundation()
 		if(@props.points == null)
 			@setState(
 				points: 0 
@@ -30,21 +35,26 @@ dom = React.DOM
 		if path == "/questions/new"
 			@setState({kanjis: "支給", title: "submit", description: "Gain more cards by creating cards!"})
 	componentWillMount: ->
-		@fetchPoints()
-		setInterval(@fetchPoints, 1000)
+		# @fetchPoints()
+		# setInterval(@fetchPoints, 1000)
 	fetchPoints: ->
 		$.ajax
-		  url: @props.tokens_wallet_path
-		  type: 'post'
-		  dataType: 'json'
-		  data: points: @state.points
-		  success: (data) =>
-		    @setState({points: data.tokens, total_notifications: data.number_notifications, notifications: data.notifications})
-		    if @state.total_notifications == 0
-		    	@setState({hide_number: "none"})
-	    	else
-	    		@setState({hide_number: "block"})
-		    console.log data
+			url: @props.tokens_wallet_path
+			type: 'post'
+			dataType: 'json'
+			data: points: @state.points
+			success: (data) =>
+				@setState({points: data.tokens, total_notifications: data.number_notifications, notifications: data.notifications})
+				if @state.total_notifications == 0
+					@setState({hide_number: "none"})
+				else
+					@setState({hide_number: "block"})
+				console.log data
+
+	doLogout: (event) ->
+		event.preventDefault()
+		this.props.dispatch(logoutAndRedirect())
+
 	render: ->
 		dom.div 
 			className: "row bottom-60"
@@ -80,7 +90,7 @@ dom = React.DOM
 			dom.div
 				className: "large-3 medium-3 columns button-info-status uppercase text-status"
 				dom.div {}, 
-					"User: #{@props.user.id}"
+					"User: #{@props.current_user.id}"
 				dom.div {}, 
 					"Rank: 1"
 				dom.div {}, 
@@ -88,9 +98,14 @@ dom = React.DOM
 				dom.div 
 					style: {borderTop: "1px solid #8a8a8a", margin: "10px 0"}
 					className: "menu-title uppercase text-center"
-					dom.a 
-						'data-method': "delete",
+					console.log(this.props)
+					dom.a
+						onClick: @doLogout,
 						rel: "nofollow",
-						className: "menu-title"
-						href: @props.sign_out
+						className: "menu-title",
 						"Logout"
+
+mapStateToProps = (state) =>
+	return state.auth
+
+export default connect(mapStateToProps)(HeaderDesktop)

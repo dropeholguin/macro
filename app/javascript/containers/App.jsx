@@ -1,8 +1,10 @@
 import React from 'react';
-import {Link} from 'react-router';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 import * as actionCreators from '../actions';
+import HeaderDesktop from '../components/sasensei/header/headerDesktop.js.coffee';
 
 // import '../styles/core.scss';
 
@@ -13,7 +15,12 @@ export class CoreLayout extends React.Component {
     const {dispatch} = this.props;
 
     return (
-      this.props.children
+      <div>
+        {this.props.isAuthenticated &&
+          <HeaderDesktop />
+        }
+        {this.props.children}
+      </div>
     );
   }
 }

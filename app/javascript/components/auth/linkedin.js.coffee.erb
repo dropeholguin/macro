@@ -1,8 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { authLogin } from '../../actions';
 
 dom = React.DOM
 
-export default React.createClass
+LinkedinLogin = React.createClass
   displayName: 'LinkedinLogin'
   componentDidMount: ->
     liRoot = document.createElement('div')
@@ -24,15 +26,9 @@ export default React.createClass
     return
 
   callbackFunction: ->
+    tempScope = this
     IN.API.Raw('/people/~:(id,firstName,lastName,emailAddress)?format=json').result (data) ->
-      $.ajax
-          url: '/auth/linkedin',
-          type: 'POST', 
-          data: { auth_token: IN.ENV.auth.oauth_token },
-          success: (res) =>
-            console.log res
-          error: (e) =>
-            console.log e.responseJSON
+      tempScope.props.dispatch(authLogin('linkedin', IN.ENV.auth.oauth_token))
     return
 
   handleClick: (e) ->
@@ -49,3 +45,5 @@ export default React.createClass
       dom.span
         style: {color: "#fff"}
         "Sign in With LinkedIn"
+
+export default connect(null)(LinkedinLogin)

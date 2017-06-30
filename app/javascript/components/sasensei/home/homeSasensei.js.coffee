@@ -1,3 +1,5 @@
+import React from 'react'
+
 dom = React.DOM 
 
 @HomeSasensei = React.createClass
@@ -33,7 +35,7 @@ dom = React.DOM
 								for button in @props.buttons
 									React.createElement ButtonMenu, key: button.id, button: button
 
-@ButtonMenu = React.createClass
+ButtonMenu = React.createClass
 	displayName: 'ButtonMenu'
 	render: ->
 		dom.a
@@ -53,4 +55,3 @@ dom = React.DOM
 					dom.div
 						className: "menu-subtitle"
 						@props.button.subtitle
-	

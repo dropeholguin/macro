@@ -12,10 +12,10 @@ FacebookLogin = React.createClass
         xfbml: true
         appId: "<%= ENV['FACEBOOK_APP_ID'] %>"
         version: 'v2.9'
-      FB.getLoginStatus ((response) ->
-        @onStatusChange response
-        return
-      ).bind(this)
+      # FB.getLoginStatus ((response) ->
+      #   @onStatusChange response
+      #   return
+      # ).bind(this)
 
       FB.Event.subscribe 'auth.logout', @onLogout
       FB.Event.subscribe 'auth.statusChange', @onStatusChange
@@ -60,4 +60,4 @@ FacebookLogin = React.createClass
             'data-use-continue-as': "true",
             'data-scope': "public_profile,email",
 
-export default connect(null)(FacebookLogin);
+export default connect(null)(FacebookLogin)

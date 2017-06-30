@@ -1,28 +1,20 @@
 import React from 'react';
-
-window.onGSignIn = (googleUser) ->
-  $.ajax
-      url: '/auth/google',
-      type: 'POST',
-      data: { auth_token: googleUser.getAuthResponse().id_token },
-      success: (data) =>
-        console.log data
-      error: (e) =>
-        console.log e.responseJSON
+import { connect } from 'react-redux';
+import { authLogin } from '../../actions';
 
 dom = React.DOM
 
-export default React.createClass
+GoogleLogin = React.createClass
   displayName: 'GoogleLogin'
-
   customButton: ->
+    tempScope = this
     gapi.load 'auth2', ->
       auth2 = gapi.auth2.init({
         client_id: "<%= ENV['GOOGLE_APP_ID'] %>",
         cookiepolicy: 'single_host_origin'})
-      
+
       auth2.attachClickHandler document.getElementById('gCustomBtn'), {}, ((googleUser) ->
-        window.onGSignIn googleUser
+        tempScope.props.dispatch(authLogin('google', googleUser.getAuthResponse().id_token))
         return
       ), (error) ->
         alert JSON.stringify(error, undefined, 2)
@@ -60,3 +52,5 @@ export default React.createClass
       dom.span
         style: {color: "#fff"}
         "Sign in With Google+"
+
+export default connect(null)(GoogleLogin)
