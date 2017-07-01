@@ -34,14 +34,15 @@ Rails.application.routes.draw do
 
   	namespace :api do
   		namespace :v1 do
-  			get '/cards_index', to: "questions#index"
   			post '/cards', to: "questions#create"
   			patch '/cards/:id', to: "questions#update"
+  			get '/cards_index', to: "questions#index"
   			get '/cards/count', to: "questions#count_cards"
+  			get '/cards/:id', to: "questions#show"
   		end
   	end
 	
-  get 'react', to: 'home#react'
+  	get 'react', to: 'home#react'
 	get "cards_run_filter", to: 'questions#cards_run_filter'
 	get "sessions_stats", to: 'sessions#sessions_stats'
 	get "run_cards", to: 'questions#card'
