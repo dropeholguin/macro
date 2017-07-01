@@ -16,7 +16,7 @@ dom = React.DOM
 		tag_list: @props.tag_list
 		choice: @props.choice
 		animate_tag: "animated fadeInRight"
-		timeLeft: +120
+		timeLeft: +120000
 		streak: @props.streak
 	componentDidMount: ->
 		$(@refs.timer).countdown({since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})  
