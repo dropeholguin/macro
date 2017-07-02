@@ -2,6 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
 
+/*
+  validates if component is accessible to user
+*/
 export function requireAuthentication(Component) {
 
   class AuthenticatedComponent extends React.Component {
@@ -36,11 +39,9 @@ export function requireAuthentication(Component) {
   }
 
   const mapStateToProps = (state) => ({
-    token: state.auth.token,
-    userName: state.auth.userName,
+    current_user: state.auth.current_user,
     isAuthenticated: state.auth.isAuthenticated
   });
 
   return connect(mapStateToProps)(AuthenticatedComponent);
-
 }

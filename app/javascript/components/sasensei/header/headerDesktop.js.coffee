@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux';
 
-import { logoutAndRedirect } from '../../../actions'
+import { getCards, logoutAndRedirect } from '../../../actions'
 
 dom = React.DOM 
 
@@ -17,6 +17,7 @@ HeaderDesktop = React.createClass
 	getDefaultProps: ->
 		points: 0
 	componentDidMount: ->
+		this.props.dispatch(getCards())
 		# $(document).foundation()
 		if(@props.points == null)
 			@setState(
@@ -98,7 +99,6 @@ HeaderDesktop = React.createClass
 				dom.div 
 					style: {borderTop: "1px solid #8a8a8a", margin: "10px 0"}
 					className: "menu-title uppercase text-center"
-					console.log(this.props)
 					dom.a
 						onClick: @doLogout,
 						rel: "nofollow",

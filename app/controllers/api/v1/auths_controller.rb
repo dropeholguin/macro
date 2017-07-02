@@ -1,9 +1,4 @@
-class AuthsController < ApplicationController
-
-  # POST /getToken
-  def getToken
-    render json: { token: 'asdsdasdas' }, status: :ok
-  end
+class Api::V1::AuthsController < ApplicationController
 
   # POST /facebook
   def facebook

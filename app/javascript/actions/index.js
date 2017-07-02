@@ -86,67 +86,38 @@ export function authLogin(provider, auth_token, redirect='/'){
   }
 }
 
-export function loginUser(email, password, redirect="/") {
-  return function(dispatch) {
-    dispatch(loginUserRequest());
-    return fetch('http://localhost:3000/auth/getToken/', {
-      method: 'post',
-      credentials: 'include',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-        body: JSON.stringify({email: email, password: password})
-      })
-      .then(checkHttpStatus)
-      .then(parseJSON)
-      .then(response => {
-        try {
-          dispatch(loginUserSuccess(response.token));
-          dispatch(pushState(null, redirect));
-        } catch (e) {
-          dispatch(loginUserFailure({
-            response: {
-              status: 403,
-              statusText: 'Invalid token'
-            }
-          }));
-        }
-      })
-      .catch(error => {
-        dispatch(loginUserFailure(error));
-      })
-  }
-}
-
-export function receiveProtectedData(data) {
+export function receiveCardsData(data) {
   return {
-    type: CONSTANTS.RECEIVE_PROTECTED_DATA,
+    type: CONSTANTS.RECEIVE_CARDS_DATA,
     payload: {
       data: data
     }
   }
 }
 
-export function fetchProtectedDataRequest() {
+export function fetchCardsRequest() {
   return {
-    type: CONSTANTS.FETCH_PROTECTED_DATA_REQUEST
+    type: CONSTANTS.FETCH_CARDS_REQUEST
   }
 }
 
-export function fetchProtectedData(token) {
+export function getCards() {
   return (dispatch, state) => {
-    dispatch(fetchProtectedDataRequest());
-    return fetch('http://localhost:3000/api/v1/cards_index', {
+    let userToken = state().auth.current_user.authentication_token;
+    let userEmail = state().auth.current_user.email;
+    console.log(state().auth)
+    dispatch(fetchCardsRequest());
+    return fetch(CONSTANTS.BASE_URL + 'cards_index', {
         credentials: 'include',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'X-User-Email': userEmail,
+          'X-User-Token': userToken
         }
       })
       .then(checkHttpStatus)
       .then(parseJSON)
       .then(response => {
-        dispatch(receiveProtectedData(response.data));
+        dispatch(receiveCardsData(response.data));
       })
       .catch(error => {
         if(error.response.status === 401) {

@@ -3,6 +3,9 @@ import { Provider } from 'react-redux';
 import { ReduxRouter } from 'redux-router';
 import routes from '../routes';
 
+/*
+  Main entry point of our SPA
+*/
 export default class Root extends React.Component {
 
   static propTypes = {

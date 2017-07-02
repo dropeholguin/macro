@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router';
 
 dom = React.DOM 
 
@@ -31,17 +32,18 @@ dom = React.DOM
 						dom.div
 							className: "large-12 medium-5 medium-centered small-9 small-centered large-centered columns"
 							dom.div 
-								className: "row"								
+								className: "row"
 								for button in @props.buttons
+									# React.createElement Link, to: button.path, button.title
 									React.createElement ButtonMenu, key: button.id, button: button
 
 ButtonMenu = React.createClass
 	displayName: 'ButtonMenu'
 	render: ->
-		dom.a
-			style: {marginBottom: "25px", float: "left"}
-			className: "button-menu large-4 columns text-left"
-			href: @props.button.path
+		React.createElement Link, 
+			to: @props.button.path, 
+			style: {marginBottom: "25px", float: "left"}, 
+			className: "button-menu large-4 columns text-left", 
 			dom.div 
 				className: "row menu-vertical-center"
 				dom.div 

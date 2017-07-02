@@ -1,8 +1,11 @@
+import React from 'react'
+
 dom = React.DOM
 
 @RunCardFilterPage = React.createClass
 	displayName: 'RunCardFilter'
 	getDefaultProps: ->
+		tag_path: ''
 		buttons: [{title: "pick a topic", subtitle: "cards can be filtered for all or any topics."},
 			{title: "run cards", subtitle: "The Stimer grants 2 minutes to conquer the question"},
 			{title: "earn tokens", subtitle: "achieve 4 correct answers in a row to enter spde mode.", display: "none"}]
@@ -25,7 +28,7 @@ dom = React.DOM
 				for button in @props.buttons
 					React.createElement ButtonExplanation, key: button.id, button: button
 
-@SearchTag = React.createClass
+export SearchTag = React.createClass
 	displayName: 'SearchByTag'
 	render: ->
 		if(@props.tag_path.split("?").length-1 > 0)
@@ -88,7 +91,7 @@ dom = React.DOM
 
 
 
-@SearchCards = React.createClass
+export SearchCards = React.createClass
 	displayName: 'SearchCard'
 	componentDidMount: ->
 		$(@refs.autoComplete).autocomplete source: $('#title_autocomplete').data('autocomplete-source')
@@ -123,7 +126,7 @@ dom = React.DOM
 						value: "Search",
 						'data-disable-with': "Search",
 
-@RunCardFilterCard = React.createClass
+export RunCardFilterCard = React.createClass
 	getDefaultProps: ->
 		number_questions: 0
 	getInitialState: ->
@@ -150,8 +153,8 @@ dom = React.DOM
 								className: "button btn-run menu-title uppercase",
 								href: @props.run_cards_path,
 								"RUN"
-								
-@ButtonExplanation = React.createClass
+
+export ButtonExplanation = React.createClass
 	displayName: 'ButtonExplanation'
 	getInitialState: ->
 		display: @props.button.display

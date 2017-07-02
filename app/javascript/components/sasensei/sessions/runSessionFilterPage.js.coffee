@@ -1,8 +1,13 @@
+import React from 'react'
+
+import { SearchTag, SearchCards, RunCardFilterCard, ButtonExplanation } from '../cards/runCardFilter.js.coffee'
+
 dom = React.DOM
 
 @RunSessionFilterPage = React.createClass
 	displayName: 'RunSessionFilter'
 	getDefaultProps: ->
+		tag_path: ''
 		buttons: [{title: "pick a topic", subtitle: "sessions can be filtered for all or any topics."},
 			{title: "run session", subtitle: "You are graded first on accuracy, and then on speed."},
 			{title: "GAIN PRIVILEGES", subtitle: "A pass will grant the ability to SUBMIT questions.", display: "none"}]

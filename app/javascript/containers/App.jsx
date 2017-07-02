@@ -8,6 +8,10 @@ import HeaderDesktop from '../components/sasensei/header/headerDesktop.js.coffee
 
 // import '../styles/core.scss';
 
+/*
+  Main Layout of our SPA
+  We can include header/footer of our application here
+*/
 export class CoreLayout extends React.Component {
 
   render () {
