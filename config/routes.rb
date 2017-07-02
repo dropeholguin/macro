@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       get '/cards_index', to: "questions#index"
       post '/cards', to: "questions#create"
       patch '/cards/:id', to: "questions#update"
+			get '/cards/count', to: "questions#count_cards"
 
       resource :auth, only: [] do
         collection do
@@ -39,8 +40,8 @@ Rails.application.routes.draw do
           post 'linkedin'
         end
       end
-		end
-	end
+    end
+  end
 	
   get 'react', to: 'home#react'
 	get "cards_run_filter", to: 'questions#cards_run_filter'
