@@ -1,6 +1,6 @@
 import { checkHttpStatus, parseJSON } from '../utils';
 import { pushState } from 'redux-router';
-import * as CONSTANTS from '../constants'
+import * as CONSTANTS from '../constants/index.js'
 
 export function loginUserSuccess(current_user) {
   localStorage.setItem('current_user', JSON.stringify(current_user));

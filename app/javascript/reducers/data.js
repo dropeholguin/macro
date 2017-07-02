@@ -1,5 +1,5 @@
 import { createReducer } from '../utils';
-import { RECEIVE_PROTECTED_DATA, FETCH_PROTECTED_DATA_REQUEST } from '../constants';
+import { RECEIVE_PROTECTED_DATA, FETCH_PROTECTED_DATA_REQUEST } from '../constants/index.js';
 
 const initialState = {
   data: null,
