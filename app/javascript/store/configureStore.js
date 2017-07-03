@@ -15,15 +15,11 @@ export default function configureStore(initialState) {
 
   const logger = createLogger();
 
-  const middleware = applyMiddleware(thunk, logger);
-
-  createStoreWithMiddleware = compose(
-    middleware,
-    reduxReactRouter({routes, createHistory}),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  );
-
-  const store = createStoreWithMiddleware(createStore)(rootReducer, initialState);
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const store = createStore(rootReducer, /* preloadedState, */ composeEnhancers(
+    applyMiddleware(thunk, logger),
+    reduxReactRouter({routes, createHistory})
+  ));
 
   if (module.hot) {
     module.hot
