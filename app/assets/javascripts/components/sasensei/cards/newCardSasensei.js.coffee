@@ -272,6 +272,7 @@ dom = React.DOM
 								dom.div 
 									className: "margin-20 large-10 large-centered columns",																												
 									dom.input
+										'data-topics': "/topics",
 										'data-delimiter': ", ",
 										multiple: "true",
 										name: "question[tag_list][]",

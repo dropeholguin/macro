@@ -36,6 +36,13 @@ class QuestionsController < ApplicationController
 		respond_with @questions
 	end
 
+	def topic
+		@topics = Topic.all.map(&:name)
+		respond_to do |format|
+	    	format.json { render json: @topics }
+	    end
+	end
+
 	def cards_run_filter
 		user = current_user
 		cookies.delete(:cards)
@@ -263,7 +270,7 @@ class QuestionsController < ApplicationController
 		end
 		
 	  	@question.tag_list.each do |tag|
-	  		unless Question.tags.include?(tag)
+	  		unless Topic.all.include?(tag)
 			   state = true
 			end
 	  	end
