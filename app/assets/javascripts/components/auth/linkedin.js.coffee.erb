@@ -1,7 +1,7 @@
 dom = React.DOM
 
-@LinkedinLogin = React.createClass
-  displayName: 'LinkedinLogin'
+@LinkedInButton = React.createClass
+  displayName: 'LinkedInButton'
   componentDidMount: ->
     liRoot = document.createElement('div')
     liRoot.id = 'linkedin-root'
@@ -20,26 +20,23 @@ dom = React.DOM
       return
     ) document, 'script', 'linkedin-sdk'
     return
+
   callbackFunction: ->
     IN.API.Raw('/people/~:(id,firstName,lastName,emailAddress)?format=json').result (data) ->
-      $.ajax
-          url: '/auth/linkedin',
-          type: 'POST', 
-          data: { auth_token: IN.ENV.auth.oauth_token },
-          success: (res) =>
-            console.log res
-          error: (e) =>
-            console.log e.responseJSON
+      authLogin('linkedin', IN.ENV.auth.oauth_token)
     return
+
   handleClick: (e) ->
     e.preventDefault()
     IN.User.authorize @callbackFunction, ''
     return
+
   render: ->
-    dom.div
-      className: '',
-      dom.button
-        onClick: this.handleClick,
-        className: 'button social'
-        "Continue with Linkedin"
-        # className: { "button social " + this.props.name.toLowerCase() + " " + this.props.visibility } > { this.props.text } < i className = { "fi-social-" + this.props.name.toLowerCase() }
+    dom.a
+      onClick: this.handleClick,
+      className: 'button btn-social large btn-block linkedin'
+      dom.i
+        className: "fa fa-linkedin"
+      dom.span
+        style: {color: "#fff"}
+        "Sign in With LinkedIn"
