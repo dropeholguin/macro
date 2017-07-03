@@ -1,4 +1,4 @@
-class AuthsController < ApplicationController
+class Api::V1::AuthsController < ApplicationController
 
   # POST /facebook
   def facebook
