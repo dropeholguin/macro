@@ -1,6 +1,10 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { authLogin } from '../../actions';
+
 dom = React.DOM
 
-@LinkedinLogin = React.createClass
+LinkedinLogin = React.createClass
   displayName: 'LinkedinLogin'
   componentDidMount: ->
     liRoot = document.createElement('div')
@@ -20,26 +24,26 @@ dom = React.DOM
       return
     ) document, 'script', 'linkedin-sdk'
     return
+
   callbackFunction: ->
+    tempScope = this
     IN.API.Raw('/people/~:(id,firstName,lastName,emailAddress)?format=json').result (data) ->
-      $.ajax
-          url: '/auth/linkedin',
-          type: 'POST', 
-          data: { auth_token: IN.ENV.auth.oauth_token },
-          success: (res) =>
-            console.log res
-          error: (e) =>
-            console.log e.responseJSON
+      tempScope.props.dispatch(authLogin('linkedin', IN.ENV.auth.oauth_token))
     return
+
   handleClick: (e) ->
     e.preventDefault()
     IN.User.authorize @callbackFunction, ''
     return
+
   render: ->
-    dom.div
-      className: '',
-      dom.button
-        onClick: this.handleClick,
-        className: 'button social'
-        "Continue with Linkedin"
-        # className: { "button social " + this.props.name.toLowerCase() + " " + this.props.visibility } > { this.props.text } < i className = { "fi-social-" + this.props.name.toLowerCase() }
+    dom.a
+      onClick: this.handleClick,
+      className: 'button btn-social large btn-block linkedin'
+      dom.i
+        className: "fa fa-linkedin"
+      dom.span
+        style: {color: "#fff"}
+        "Sign in With LinkedIn"
+
+export default connect(null)(LinkedinLogin)

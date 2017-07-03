@@ -24,22 +24,24 @@ Rails.application.routes.draw do
 	resources :sessions, only: [:new, :create, :index]
 
 	resources :uploads, only: [:create]
-  resource :auth, only: [] do
-    collection do
-      post 'facebook'
-      post 'google'
-      post 'linkedin'
+
+  namespace :api do
+    namespace :v1 do
+      get '/cards_index', to: "questions#index"
+      post '/cards', to: "questions#create"
+      patch '/cards/:id', to: "questions#update"
+			get '/cards/count', to: "questions#count_cards"
+
+      resource :auth, only: [] do
+        collection do
+          post 'getToken'
+          post 'facebook'
+          post 'google'
+          post 'linkedin'
+        end
+      end
     end
   end
-
-  	namespace :api do
-  		namespace :v1 do
-  			get '/cards_index', to: "questions#index"
-  			post '/cards', to: "questions#create"
-  			patch '/cards/:id', to: "questions#update"
-  			get '/cards/count', to: "questions#count_cards"
-  		end
-  	end
 	
   get 'react', to: 'home#react'
 	get "cards_run_filter", to: 'questions#cards_run_filter'

@@ -1,16 +1,19 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { createStore } from 'redux'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Root from '../containers/Root';
+import configureStore from '../store/configureStore';
+import { loginUserSuccess } from '../actions';
 
-import App from '../app'
-import reducers from '../reducers'
+const target = document.getElementById('app-root');
+const store = configureStore(window.__INITIAL_STATE__);
 
-const store = createStore(
-  reducers,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+const node = (
+    <Root store={store} />
 );
 
-render(
-  <App store={store} />,
-  document.getElementById('app-root')
-)
+let current_user = JSON.parse(localStorage.getItem('current_user'));
+if (current_user !== null) {
+  store.dispatch(loginUserSuccess(current_user));
+}
+
+ReactDOM.render(node, target);

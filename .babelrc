@@ -11,9 +11,13 @@
         "useBuiltIns": true
       }
     ],
-    "react"
+    "react",
+    "stage-0",
+    "es2015"
   ],
   "plugins": [
+    "transform-es2015-destructuring", 
+    "transform-object-rest-spread",
     "syntax-dynamic-import",
     [
       "transform-class-properties",
