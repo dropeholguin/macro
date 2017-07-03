@@ -16,6 +16,7 @@ class Api::V1::AuthsController < ApplicationController
       user = User.from_omniauth(auth)
 
       if user.present? && user.valid?
+        sign_in(user)
         render json: { success: true, user: user.as_json }, status: :ok
       else
         render json: { success: false, error: 'Invalid user or some error occured' }, status: :ok
@@ -43,6 +44,7 @@ class Api::V1::AuthsController < ApplicationController
       user = User.from_omniauth(auth)
 
       if user.present? && user.valid?
+        sign_in(user)
         render json: { success: true, user: user.as_json }, status: :ok
       else
         render json: { success: false, error: 'Invalid user or some error occured' }, status: :ok
@@ -80,6 +82,7 @@ class Api::V1::AuthsController < ApplicationController
       user = User.from_omniauth(auth)
 
       if user.present? && user.valid?
+        sign_in(user)
         render json: { success: true, user: user.as_json }, status: :ok
       else
         render json: { success: false, error: 'Invalid user or some error occured' }, status: :ok

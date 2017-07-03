@@ -26,7 +26,11 @@ dom = React.DOM
 						dom.div
 							className: "large-4 medium-5 medium-centered small-9 small-centered large-centered columns"
 							style: {marginTop: "30px"}	
-							for button in @props.buttons
-								React.createElement LoginButton, key: button.id, button: button
+							# for button in @props.buttons
+							# 	React.createElement LoginButton, key: button.id, button: button
+							React.createElement LinkedInButton
+							React.createElement GoogleButton
+							React.createElement FacebookButton
+
 							
 
