@@ -124,7 +124,7 @@ The jasmine-rails gem includes a Rake task spec:javascripts.
 
 ##Browser
 
-Another benefit with the jasmine-rails gem is that it configures and mounts the Jasmine runner at /specs in your Rails app.
+Another benefit with the jasmine-rails gem is that it configures and mounts the Jasmine runner at `/specs` in your Rails app.
     
     http://localhost:3000/specs
 
