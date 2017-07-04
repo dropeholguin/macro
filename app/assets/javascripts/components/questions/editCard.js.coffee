@@ -151,6 +151,7 @@ dom = React.DOM
 										name: "commit",
 										value: "CONTINUE",
 										'data-disable-with': "CONTINUE",
+										'data-remote': true
 						dom.div
 							className: "large-4 columns"	
 
