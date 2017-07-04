@@ -1,0 +1,56 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { authLogin } from '../../actions';
+
+dom = React.DOM
+
+GoogleLogin = React.createClass
+  displayName: 'GoogleLogin'
+  customButton: ->
+    tempScope = this
+    gapi.load 'auth2', ->
+      auth2 = gapi.auth2.init({
+        client_id: "<%= ENV['GOOGLE_APP_ID'] %>",
+        cookiepolicy: 'single_host_origin'})
+
+      auth2.attachClickHandler document.getElementById('gCustomBtn'), {}, ((googleUser) ->
+        tempScope.props.dispatch(authLogin('google', googleUser.getAuthResponse().id_token))
+        return
+      ), (error) ->
+        alert JSON.stringify(error, undefined, 2)
+        return
+      return
+    return
+
+  componentDidMount: ->
+    tempScope = this
+    ((d, s, id, tempScope2) ->
+      element = d.getElementsByTagName(s)[0]
+      ljs = element
+      js = element
+      if d.getElementById(id)
+        return
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://apis.google.com/js/api:client.js'
+      js.onload = () ->
+        tempScope2.customButton()
+      js.async
+      js.defer
+      ljs.parentNode.insertBefore js, ljs
+      
+      return
+    ) document, 'script', 'google-sdk', tempScope
+    return
+
+  render: ->
+    dom.div
+      className: 'button btn-social large btn-block google-plus',
+      id: 'gCustomBtn'
+      dom.i
+        className: "fa fa-google-plus"
+      dom.span
+        style: {color: "#fff"}
+        "Sign in With Google+"
+
+export default connect(null)(GoogleLogin)

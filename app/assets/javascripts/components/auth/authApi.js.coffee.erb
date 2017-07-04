@@ -1,0 +1,20 @@
+
+window.PROVIDER_URL = {
+	facebook: '/api/v1/auth/facebook'
+	google: '/api/v1/auth/google'
+	linkedin: '/api/v1/auth/linkedin'
+}
+
+window.authLogin = (provider, auth_token) ->
+	$.ajax
+		url: PROVIDER_URL[provider], 
+		type: 'POST', 
+		data: { auth_token: auth_token },
+		success: (data) =>
+			console.log data
+			if(data.success)
+				localStorage.setItem('current_user', JSON.stringify(data.user))
+				location.reload()
+		error: (e) =>
+			console.log e.responseJSON
+			alert e.responseJSON

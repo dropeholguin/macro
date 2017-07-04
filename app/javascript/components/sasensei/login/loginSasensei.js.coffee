@@ -1,9 +1,20 @@
-dom = React.DOM 
+import React from 'react';
+import LoginButton from '../buttons/loginButton.js.coffee';
+
+import LinkedInButton from '../../auth/linkedin.js.coffee';
+import GoogleButton from '../../auth/google.js.coffee';
+import FacebookButton from '../../auth/facebook.js.coffee';
+
+dom = React.DOM
 
 @LoginSasensei = React.createClass
 	displayName: 'Login'
+
+	responseFacebook: (response) ->
+    console.log response
+
 	getDefaultProps: ->
-		buttons: [{name: 'LinkedIn', icon: 'fa fa-linkedin', class: 'linkedin', path: '/users/auth/linkedin'},
+		buttons: [{name: 'LinkedIn', icon: 'fa fa-linkedin', class: 'linkedin'},
 		{name: 'Google+', icon: 'fa fa-google-plus', class: 'google-plus'},
 		{name: 'Facebook', icon: 'fa fa-facebook', class: 'facebook'}]
 	render: ->
@@ -31,6 +42,4 @@ dom = React.DOM
 							React.createElement LinkedInButton
 							React.createElement GoogleButton
 							React.createElement FacebookButton
-
 							
-

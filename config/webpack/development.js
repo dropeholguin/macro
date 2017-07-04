@@ -22,7 +22,7 @@ module.exports = merge(sharedConfig, {
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
+    // new webpack.NoEmitOnErrorsPlugin(),
     devFlagPlugin
   ],
 

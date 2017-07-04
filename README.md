@@ -76,7 +76,7 @@ Now clone this repo
     rails db:create db:migrate
     rails s
 
-then navigate to localhost:3000!
+then navigate to localhost:3000.
 
 For admin features check out http://localhost:3000/admin/login
 
@@ -124,7 +124,7 @@ The jasmine-rails gem includes a Rake task spec:javascripts.
 
 ##Browser
 
-Another benefit with the jasmine-rails gem is that it configures and mounts the Jasmine runner at /specs in your Rails app.
+Another benefit with the jasmine-rails gem is that it configures and mounts the Jasmine runner at `/specs` in your Rails app.
     
     http://localhost:3000/specs
 

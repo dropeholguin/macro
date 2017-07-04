@@ -43,5 +43,10 @@ question_array.each do |question|
     	Answer.create!(question_id: question.id, answer_markdown: Faker::Name.title, is_correct: true)
     end                                                
   end                                                                      
-end                                     
+end
+
+puts "Creating Topics"
+
+Topic.create!([{ name: 'SAS Programming', desc: "Programming"}, {name: 'SAS Macro', desc: "Macro"},{name: 'DI Studio', desc: "Studio"},{name: 'SAS Management Console', desc: "Management Console"},{name: 'Enterprise Guide', desc: "Guide"},{name: 'Workspace Management', desc: "Management"}])
+                                
    
