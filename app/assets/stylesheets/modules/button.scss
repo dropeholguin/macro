@@ -99,6 +99,13 @@
     border: none;
     margin: 5px 0;
 }
+.profile-field{
+    background: transparent url(image_path(#{"profile_field.png"})) no-repeat center !important;
+    min-height: 900px;
+    max-width: 1200px;
+    border: none;
+    margin: 5px 0;
+}
 .font-48{
     font-size: 48px;
 }

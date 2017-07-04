@@ -31,6 +31,13 @@ dom = React.DOM
 		button_3: @props.button_3
 	componentDidMount: ->
 		highlightAllCodes()
+	deleteCard: (event)->
+		$.ajax
+			url: "/question/#{@props.id}"
+			type: "delete"
+			data: id:@props.id
+			success: (data)=>
+				console.log "was deleted"
 	render: ->
 		if(@state.button_2 == "EDIT_D")
 			showButton = "show-hide"
@@ -61,8 +68,10 @@ dom = React.DOM
 					dom.a
 						className: "button small hollow secondary margin-side "+showButton,
 						href: "/question/#{@props.id}",
+						onClick: @deleteCard
 						'data-confirm': "Are you sure?",
 						'data-method': "delete",
+						'data-remote': true
 						rel: "nofollow",
 						@state.button_3,
 			dom.div {},
