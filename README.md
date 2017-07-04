@@ -76,7 +76,7 @@ Now clone this repo
     rails db:create db:migrate
     rails s
 
-then navigate to localhost:3000!
+then navigate to localhost:3000.
 
 For admin features check out http://localhost:3000/admin/login
 
