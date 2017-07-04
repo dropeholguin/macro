@@ -24,7 +24,29 @@ Rails.application.routes.draw do
 	resources :sessions, only: [:new, :create, :index]
 
 	resources :uploads, only: [:create]
+
+  namespace :api do
+    namespace :v1 do
+      get '/cards_index', to: "questions#index"
+      post '/cards', to: "questions#create"
+      patch '/cards/:id', to: "questions#update"
+		get '/cards/count', to: "questions#count_cards"
+		get '/cards/:id', to: "questions#show"
+
+      resource :auth, only: [] do
+        collection do
+          post 'getToken'
+          post 'facebook'
+          post 'google'
+          post 'linkedin'
+        end
+      end
+    end
+  end
+
+
 	
+  	get 'react', to: 'home#react'
 	get "cards_run_filter", to: 'questions#cards_run_filter'
 	get "sessions_stats", to: 'sessions#sessions_stats'
 	get "run_cards", to: 'questions#card'
@@ -32,7 +54,9 @@ Rails.application.routes.draw do
 	get "user_profile", to: 'profile#user_profile'
 	get "questions_list", to: 'questions#questions_list'
 	get 'terms', to: 'home#terms_and_conditions'
-	get 'privacy', to: 'home#privacy_policy'
+	get 'privacy', to: 'home#privacy_policy', as: :privacy
+	get 'topics', to: "questions#topic", as: :topic
+	patch 'privacy/:id/accept', to: 'home#accept_privacy', as: :accept_privacy
 	patch "questions/suspend_question/:id", to: 'questions#suspend', as: :suspend
  	patch "questions/approve_question/:id", to: 'questions#approve', as: :approve
  	post "sessions_next_card", to: 'sessions#next_card'
@@ -43,4 +67,5 @@ Rails.application.routes.draw do
  	post "search_cards", to: 'sessions#search_cards'
  	post "users/lock/:id", to: 'locks#lock_access', as: :lock_access
  	post "notification_state", to: 'questions#notification_state'
+
 end

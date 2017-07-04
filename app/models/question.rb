@@ -14,7 +14,7 @@ class Question < ApplicationRecord
 	has_many :notifications
 	
 	accepts_nested_attributes_for :answers, reject_if: :all_blank, allow_destroy: true
-	validates :title, :description_markdown, :explanation_markdown, presence: true
+	validates :description_markdown, :explanation_markdown, presence: true
 	has_reputation :votes, source: :user, aggregated_by: :sum
 
 	enum tags: ["SAS Programming", "SAS Macro", "DI Studio", "SAS Management Console", "Enterprise Guide", "Workspace Management"]

@@ -10,7 +10,7 @@ gem 'rails', '~> 5.0.2'
 # Use pg as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 3.8.2'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -19,6 +19,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem 'webpacker', '~> 2.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -38,10 +40,14 @@ gem 'jquery-countdown-rails'
 gem 'react-rails' # gem for react.js
 gem 'webpack-rails'
 # gem for user sign in and sign up
-gem 'devise'
+gem 'devise', '~> 4.2.0'
+# gem for token based authentication with devise
+gem 'simple_token_authentication', '~> 1.0'
+gem 'omniauth', '~> 1.6.1'
+gem 'oauth2', '~> 1.4'
 # gems for sign in with linkedin
-gem 'omniauth'
-gem 'omniauth-linkedin'
+gem 'omniauth-linkedin', '~> 0.2.0'
+gem 'linkedin', '~> 1.1.0'
 # gem for markdown
 gem 'simplemde-rails'
 gem 'redcarpet'
@@ -82,6 +88,7 @@ end
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'pry'
   gem 'dotenv-rails'
   gem 'jasmine-rails'
   gem 'poltergeist'

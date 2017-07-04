@@ -5,18 +5,10 @@ jQuery ->
   $('#title_autocomplete').autocomplete source: $('#title_autocomplete').data('autocomplete-source')
 
 @initTagInput = ->
-  tags_array = [
-    'SAS Management Console'
-    'SAS Macro'
-    'DI Studio'
-    'Enterprise Guide'
-    'SAS Programming'
-    'Workspace Management'
-  ]
   $('#question_tag_list').tagsInput
     'defaultText': 'add...'
     'autocomplete_url': ''
-    'autocomplete': 'source': tags_array
+    'autocomplete': 'source': $('#question_tag_list').data("topics")
   return
 
 notification = ->

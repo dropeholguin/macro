@@ -110,21 +110,7 @@ dom = React.DOM
 										});		
 									dom.div
 										className: "row"
-										dom.div
-											className: "small-9 columns"									
-											dom.label 												
-												"TITLE"
-									dom.div
-										className: "row"
-										dom.div
-											className: "small-8 columns"
-											dom.input
-												id: "question_title",
-												type: "text"
-												placeholder: "CARD Tilte",
-												name: "question[title]",
-												onClick: @tutoForTitleClicked,
-												required: true
+										
 										dom.div
 											className: "small-4 columns"
 											dom.select 
@@ -323,12 +309,14 @@ dom = React.DOM
 													"Help"																						
 										dom.input
 											'data-delimiter': ", ",
+											type: "text",
 											multiple: "true",
 											name: "question[tag_list][]",
 											id: "question_tag_list",
 											className: "tagsinput",
 											ref: "tagsInput",		
-											required: true,									
+											required: true,
+											
 									dom.input
 										className: "button large green-btn",
 										type: "submit",

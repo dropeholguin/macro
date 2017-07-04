@@ -1,9 +1,12 @@
 class QuestionsController < ApplicationController
 	before_action :set_question, only: [:show, :edit, :update, :destroy]
-	before_filter :authenticate_user!, except: [:suspend, :approve]
-	before_filter :authenticate_admin_user!, only: [:suspend, :approve]
+	before_action :authenticate_user!, except: [:suspend, :approve]
+	before_action :authenticate_admin_user!, only: [:suspend, :approve]
+	before_action :card_time
 	include ApplicationHelper
 	include ActionView::Helpers::DateHelper
+	include ActionView::Helpers::TextHelper
+
 
 	def index
 		user = current_user
@@ -29,6 +32,15 @@ class QuestionsController < ApplicationController
 				end
 			end
 		end
+
+		respond_with @questions
+	end
+
+	def topic
+		@topics = Topic.all.map(&:name)
+		respond_to do |format|
+	    	format.json { render json: @topics }
+	    end
 	end
 
 	def cards_run_filter
@@ -132,7 +144,8 @@ class QuestionsController < ApplicationController
 		comments = card.comments.order("created_at desc")
 		state = card.evaluators_for(:votes).include?(@user)
 		votes = card.reputation_for(:votes).to_i
-		
+		time_long = true
+
 		time = (Time.now.to_i - DateTime.parse(cookies[:time]).to_i)
 		@card_time = Time.at(time).to_datetime
 		cookies.delete(:time)
@@ -143,7 +156,7 @@ class QuestionsController < ApplicationController
 			answers_correct = card.answers.select { |answer| answer.is_correct == true }
 			is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
 		end
-		if is_passed == true
+		if is_passed == true && @card_time <= @time
 			@user.update_attributes(streak: @user.streak + 1)
 			if @user.streak < 9 && @user.streak >= 5
 				@user.update_attributes(points: @user.points + 1)
@@ -154,6 +167,10 @@ class QuestionsController < ApplicationController
 				@notification = Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +2 tokens", category: "tokens_positive", source: "#{question_path(card)}")
 				@notification.save
 			end
+		elsif @card_time >= @time
+			time_long = false
+			is_passed = false
+			@user.update_attributes(streak: 0)
 		else
 			@user.update_attributes(streak: 0)
 		end
@@ -184,7 +201,7 @@ class QuestionsController < ApplicationController
 		@percentage_people =  ((@peoples_number_answered_correct.to_f / @people_number) * 100).round(2)
 
 		respond_to do |format|
-		 	format.json  { render json: { creator: @creator, created_at: @created_at, percentage_people: @percentage_people, people_number: @people_number, comments: comments, streak: @user.streak, state: state, is_passed: is_passed, votes: votes, time: @card.time_at.strftime("%M:%S") } }
+		 	format.json  { render json: { creator: @creator, created_at: @created_at, percentage_people: @percentage_people, people_number: @people_number, comments: comments, streak: @user.streak, state: state, is_passed: is_passed, votes: votes, time: @card.time_at.strftime("%M:%S"), time_long: time_long } }
 		end
 	end
 
@@ -232,6 +249,7 @@ class QuestionsController < ApplicationController
 		@user = current_user
 		@question = Question.new(question_params)
 		@question.user = @user
+		@question.title = truncate(strip_tags(markdown(@question.description_markdown)), length: 15)
 		count = 0
 		state = false
 
@@ -252,7 +270,7 @@ class QuestionsController < ApplicationController
 		end
 		
 	  	@question.tag_list.each do |tag|
-	  		unless Question.tags.include?(tag)
+	  		unless Topic.all.include?(tag)
 			   state = true
 			end
 	  	end
@@ -355,12 +373,15 @@ class QuestionsController < ApplicationController
     end
 
 	private
+		def card_time
+			@time = 2.minutes
+		end
 
 		def set_question
 		  @question = Question.find(params[:id])
 		end
 
 		def question_params
-		  params.require(:question).permit(:title, :description_markdown, :explanation_markdown, :choice, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
+		  params.require(:question).permit(:description_markdown, :explanation_markdown, :choice, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
 		end
 end

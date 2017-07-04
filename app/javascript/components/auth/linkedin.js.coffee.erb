@@ -1,0 +1,49 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { authLogin } from '../../actions';
+
+dom = React.DOM
+
+LinkedinLogin = React.createClass
+  displayName: 'LinkedinLogin'
+  componentDidMount: ->
+    liRoot = document.createElement('div')
+    liRoot.id = 'linkedin-root'
+    document.body.appendChild liRoot
+    ((d, s, id) ->
+      element = d.getElementsByTagName(s)[0]
+      ljs = element
+      js = element
+      if d.getElementById(id)
+        return
+      js = d.createElement(s)
+      js.id = id
+      js.src = '//platform.linkedin.com/in.js'
+      js.text = "api_key: <%= ENV['LINKEDIN_ID'] %> \n authorize: true"
+      ljs.parentNode.insertBefore js, ljs
+      return
+    ) document, 'script', 'linkedin-sdk'
+    return
+
+  callbackFunction: ->
+    tempScope = this
+    IN.API.Raw('/people/~:(id,firstName,lastName,emailAddress)?format=json').result (data) ->
+      tempScope.props.dispatch(authLogin('linkedin', IN.ENV.auth.oauth_token))
+    return
+
+  handleClick: (e) ->
+    e.preventDefault()
+    IN.User.authorize @callbackFunction, ''
+    return
+
+  render: ->
+    dom.a
+      onClick: this.handleClick,
+      className: 'button btn-social large btn-block linkedin'
+      dom.i
+        className: "fa fa-linkedin"
+      dom.span
+        style: {color: "#fff"}
+        "Sign in With LinkedIn"
+
+export default connect(null)(LinkedinLogin)

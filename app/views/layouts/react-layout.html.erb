@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= content_for?(:title) ? yield(:title) : "Macro-people" %></title>
+
+    <meta name="google-signin-client_id" content="<%= ENV['GOOGLE_APP_ID'] %>">
+
+    <%= stylesheet_link_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body class="sassensei">
+    <div id="fb-root"></div>
+
+    <div id="app-root"></div>
+
+    <%= yield %>
+
+    <%= javascript_pack_tag 'reactApp' %>
+  </body>
+</html>

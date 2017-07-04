@@ -40,17 +40,33 @@ Install the following:
 
  * elasticsearch 2.4.4 (download from here - https://www.elastic.co/downloads/past-releases)
 
-ImageMagick can be installed by
-    Ubuntu: sudo apt-get install imagemagick
-    Mac: brew install imagemagick
+ * Yarn
 
-For elastic search, unzip the download, enter the directory, and start the server by running:
+**ImageMagick** can be installed by
+
+    Ubuntu: sudo apt-get install imagemagick
+    macOS: brew install imagemagick
+
+For **ElasticSearch**, unzip the download, enter the directory, and start the server by running:
 
     ./bin/elasticsearch
 
 to test, open a different terminal and run:
 
      curl 'http://localhost:9200/?pretty'
+
+To install **Yarn**
+on Ubuntu: 
+    
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    sudo apt-get update && sudo apt-get install yarn
+    yarn --version
+
+on macOS:
+
+    brew install yarn
+
 
 Now clone this repo
 
@@ -63,6 +79,13 @@ Now clone this repo
 then navigate to localhost:3000!
 
 For admin features check out http://localhost:3000/admin/login
+
+For client-side SPA, in a new terminal window
+
+    yarn install
+    ./bin/webpack-dev-server
+
+then navigate (for now) to localhost:3000/react to visit SPA
 
 ##Deploy process to Heroku
 
@@ -88,3 +111,20 @@ Make some changes to the code you just cloned and deploy them to Heroku using Gi
 	$ git add .
 	$ git commit -am "make it better"
 	$ git push heroku master
+
+###Running Tests
+
+Now to run tests we have two options: Rake task and browser.
+
+##Rake task
+
+The jasmine-rails gem includes a Rake task spec:javascripts.
+
+    $ bundle exec rake spec:javascripts
+
+##Browser
+
+Another benefit with the jasmine-rails gem is that it configures and mounts the Jasmine runner at /specs in your Rails app.
+    
+    http://localhost:3000/specs
+
