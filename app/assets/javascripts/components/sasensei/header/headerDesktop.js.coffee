@@ -29,6 +29,8 @@ dom = React.DOM
 			@setState({kanjis: "試験", title: "sessions", description: "Prove your sas power! It costs 16 tokens to enter the dojo."})
 		if path == "/questions/new"
 			@setState({kanjis: "支給", title: "submit", description: "Gain more cards by creating cards!"})
+		if path == "/user_profile"
+			@setState({kanjis: "支給", title: "Profile", description: "Show information about your profile and recent activity!"})
 	componentWillMount: ->
 		@fetchPoints()
 		setInterval(@fetchPoints, 1000)
