@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   protected
     # check if user has accepted latest privacy
     def privacy_acceptance_check
-      if user_signed_in? && controller_path != 'home' && !controller_path.starts_with?('admin/')
+      if user_signed_in? && !['privacies', 'home'].include?(controller_name) && !controller_path.starts_with?('admin/')
         latest_privacy = Privacy.order(created_at: :desc).first
 
         if latest_privacy.present? && latest_privacy.version != current_user.privacy_version
