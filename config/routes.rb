@@ -30,12 +30,14 @@ Rails.application.routes.draw do
       get '/cards_index', to: "questions#index"
       post '/cards', to: "questions#create"
       patch '/cards/:id', to: "questions#update"
-		get '/cards/count', to: "questions#count_cards"
-		get '/cards/:id', to: "questions#show"
+      get '/cards/count', to: "questions#count_cards"
+      get '/cards/:id', to: "questions#show"
 
+      get 'privacy', to: 'privacies#index', as: :privacy
+      patch 'privacy/:id/accept', to: 'privacies#accept', as: :accept_privacy
+      
       resource :auth, only: [] do
         collection do
-          post 'getToken'
           post 'facebook'
           post 'google'
           post 'linkedin'
