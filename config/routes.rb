@@ -30,8 +30,8 @@ Rails.application.routes.draw do
       get '/cards_index', to: "questions#index"
       post '/cards', to: "questions#create"
       patch '/cards/:id', to: "questions#update"
-				get '/cards/count', to: "questions#count_cards"
-				get '/cards/:id', to: "questions#show"
+			get '/cards/count', to: "questions#count_cards"
+			get '/cards/:id', to: "questions#show"
 
       resource :auth, only: [] do
         collection do
