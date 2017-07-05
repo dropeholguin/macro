@@ -76,6 +76,8 @@ gem "paperclip", "~> 5.0.0"
 gem 'faker'
 gem 'active_admin_editor', github: 'ejholmes/active_admin_editor'
 
+gem 'rack-cors', require: 'rack/cors'
+
 source 'https://rails-assets.org' do
     gem 'rails-assets-alt'
     gem 'rails-assets-react-router'

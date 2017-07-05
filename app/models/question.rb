@@ -31,9 +31,14 @@ class Question < ApplicationRecord
 
 	def self.search(params)
 		tire.search(load: true) do
-			query { string params[:query] } if params[:query].present?
-
-			filter :terms, tag_list: [params[:the_tag]] if params[:the_tag].present?
+			query do
+				boolean do
+					must { string params[:query] } if params[:query].present?
+					must { string params[:tags_all], default_operator: 'AND'} if params[:tags_all].present?
+					must { string params[:tags_any], default_operator: 'OR'} if params[:tags_any].present?
+					must { terms :tag_list, [params[:the_tag]]} if params[:the_tag].present?
+				end
+			end
 			sort do
 				by :create_at, :desc
 			end
