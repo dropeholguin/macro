@@ -6,8 +6,9 @@ dom = React.DOM
     tempScope = this
     gapi.load 'auth2', ->
       auth2 = gapi.auth2.init({
-        client_id: "<%= ENV['GOOGLE_APP_ID'] %>",
-        cookiepolicy: 'single_host_origin'})
+        cookiepolicy: 'single_host_origin',
+        client_id: "<%= ENV['GOOGLE_APP_ID'] %>"
+      })
 
       auth2.attachClickHandler document.getElementById('gCustomBtn'), {}, ((googleUser) ->
         authLogin('google', googleUser.getAuthResponse().id_token)
