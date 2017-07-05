@@ -18,6 +18,12 @@ class Api::V1::QuestionsController < ApplicationController
 		card.user = current_user
 		card.tag_list = params[:tag_list]
 
+		if params[:answers].present?
+			params[:answers].each do |answer_attributes|
+	            answer = card.answers.new(answer_markdown: answer_attributes[:answer_markdown], is_correct: answer_attributes[:is_correct])
+	            answer.save
+	        end
+		end
 		if !params[:tag_list].empty?
 			if card.save
 				render status: 200, json: {
