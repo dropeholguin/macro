@@ -56,8 +56,8 @@ to test, open a different terminal and run:
      curl 'http://localhost:9200/?pretty'
 
 To install **Yarn**
-on Ubuntu: 
-    
+on Ubuntu:
+
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
     sudo apt-get update && sudo apt-get install yarn
@@ -125,6 +125,13 @@ The jasmine-rails gem includes a Rake task spec:javascripts.
 ##Browser
 
 Another benefit with the jasmine-rails gem is that it configures and mounts the Jasmine runner at `/specs` in your Rails app.
-    
+
     http://localhost:3000/specs
+
+
+### API
+
+The API needs to be built with the knowledge that we will be separating the front end from the backend - so that the backend can service multiple domains.  All API definitions are to be kept up to date on swagger - https://app.swaggerhub.com/apis/rawsas/macro-cards/1.0.0
+The swagger UI also allows APIs to be tested, using CURL.  Indeed, this is how API definitions will be tested before they are accepted as 'done' in JIRA.  To test an API you need the user email address, and the auth token.  To get the auth token, first log into the application / launch console / Application tab / Local Storage, and extract the `authentication_token` key.
+
 
