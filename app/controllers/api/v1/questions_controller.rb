@@ -15,7 +15,7 @@ class Api::V1::QuestionsController < ApplicationController
 
 	def create
 		card = Question.new(card_params)
-		card.user = User.find_by_email(params[:email])
+		card.user = current_user
 		card.tag_list = params[:tag_list]
 
 		if !params[:tag_list].empty?
@@ -51,10 +51,24 @@ class Api::V1::QuestionsController < ApplicationController
 	end
 
 	def count_cards
-	
-		user = User.find_by_email(params[:email])
-		if user.present? && user.valid?	      	
-			if params[:query].present? || params[:the_tag].present?
+		user = current_user
+		if user.present? && user.valid?
+			tags = ""
+			if params[:tags_all].present?
+		        params[:tags_all].each do |id_tag|
+		            tag = Topic.find(id_tag.to_i)
+		            tags = tags + tag.name + " "
+		            params[:tags_all] = tags
+		        end
+			elsif params[:tags_any].present?
+				params[:tags_any].each do |id_tag|
+		            tag = Topic.find(id_tag.to_i)
+		            tags = tags + tag.name + " "
+		            params[:tags_any] = tags
+		        end
+			end
+			
+			if params[:tags_all].present? || params[:tags_any].present?
 				questions = Question.search(params)
 				questions_sort = []
 
@@ -67,7 +81,7 @@ class Api::V1::QuestionsController < ApplicationController
 				number_questions = questions_sort.count
 				render status: 200, json: {
 					message: "Available Cards",
-					countCards: number_questions
+					tagCount: number_questions
 				}.to_json
 			else
 				render status: 400, json: {
@@ -76,7 +90,7 @@ class Api::V1::QuestionsController < ApplicationController
 		    end
 		else
 			render status: 400, json: {
-				errors: "Invalid email user"
+				errors: "Invalid user"
 			}.to_json
 		end
 	end
