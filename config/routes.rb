@@ -30,8 +30,11 @@ Rails.application.routes.draw do
       get '/cards_index', to: "questions#index"
       post '/cards', to: "questions#create"
       patch '/cards/:id', to: "questions#update"
-		get '/cards/count', to: "questions#count_cards"
-		get '/cards/:id', to: "questions#show"
+				get '/cards_index', to: "questions#index"
+				post '/cards', to: "questions#create"
+				patch '/cards/:id', to: "questions#update"
+				get '/cards/count', to: "questions#count_cards"
+				get '/cards/:id', to: "questions#show"
 
       resource :auth, only: [] do
         collection do
@@ -41,6 +44,15 @@ Rails.application.routes.draw do
           post 'linkedin'
         end
       end
+					resource :auth, only: [] do
+							collection do
+								post 'getToken'
+								post 'facebook'
+								post 'google'
+								post 'linkedin'
+							end
+						end
+						resources :tags, only:[:index,:update]
     end
   end
 
