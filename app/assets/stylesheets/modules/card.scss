@@ -1,5 +1,58 @@
 .question-background{
 	background: transparent url(image_path(#{"question_field.png"})) no-repeat center;
-    min-height: 146px; 
+    min-height: 463px; 
     padding: 50px;
+}
+.answer_field{	
+     
+    input[type=checkbox]:not(old),
+	input[type=radio   ]:not(old){
+	  margin  : 0;
+	  padding : 0;
+	  opacity : 0;
+	}
+
+	input[type=checkbox]:not(old) + label,
+	input[type=radio   ]:not(old) + label{
+	  display      : inline-block;
+	  min-height: 65px;
+	  width: 906px;
+	  margin-left  : 6px;
+	  padding-left : 28px;
+	  background: transparent url(image_path(#{"answer.png"})) no-repeat center;
+	  line-height  : 50px;
+	}
+
+	input[type=checkbox]:not(old):checked + label{
+      opacity: 0.5;
+	}
+
+	input[type=radio]:not(old):checked + label{
+	  opacity: 0.5;
+	}
+}
+
+.upvote{
+	width: 51px;
+	height: 49px;
+	background-image: url(image_path(#{"upvote.png"}));
+	margin-right: 15px;
+	cursor: pointer;
+}
+.upvote:hover{
+	opacity: 0.6;
+}
+.downvote{
+	width: 51px;
+	height: 49px;
+	background-image: url(image_path(#{"downvote.png"}));
+	cursor: pointer;
+}
+.downvote:hover{
+	opacity: 0.6;
+}
+
+.correct-bg{
+	background: url(image_path(#{"right_answer.png"})) no-repeat center !important;
+	color: #fff !important;
 }
