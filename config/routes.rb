@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       patch '/cards/:id', to: "questions#update"
       get '/cards/count', to: "questions#count_cards"
       get '/cards/:id', to: "questions#show"
+
       get 'privacy', to: 'privacies#index', as: :privacy
       patch 'privacy/:id/accept', to: 'privacies#accept', as: :accept_privacy
       
@@ -42,15 +43,8 @@ Rails.application.routes.draw do
           post 'linkedin'
         end
       end
-					resource :auth, only: [] do
-							collection do
-								post 'getToken'
-								post 'facebook'
-								post 'google'
-								post 'linkedin'
-							end
-						end
-						resources :tags, only:[:index,:update]
+
+      resources :tags, only:[:index, :update]
     end
   end
 
