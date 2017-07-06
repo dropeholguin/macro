@@ -1,6 +1,9 @@
 class Api::V1::QuestionsController < ApplicationController
-	 before_action :authenticate_user!
-
+	before_action :authenticate_user!
+	include ApplicationHelper
+	include ActionView::Helpers::DateHelper
+	include ActionView::Helpers::TextHelper
+	
 	def index
 		render json: Question.all
 	end
@@ -16,7 +19,7 @@ class Api::V1::QuestionsController < ApplicationController
 	def create
 		card = Question.new(card_params)
 		card.user = current_user
-
+		card.title = truncate(strip_tags(markdown(card.description_markdown)), length: 15)
 		tags = []
 		if params[:tags].present?
 	        params[:tags].each do |id_tag|
