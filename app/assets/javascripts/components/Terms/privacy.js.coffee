@@ -41,7 +41,7 @@ dom = React.DOM
             "PRIVACY POLICY"
           dom.p 
             dangerouslySetInnerHTML: __html: @props.privacy_body.toString()
-          dom.button
-            className: 'button expanded primary radius-40 white'
-            onClick: @handleClick
-            'I Accept'
+          # dom.button
+          #   className: 'button expanded primary radius-40 white'
+          #   onClick: @handleClick
+          #   'I Accept'

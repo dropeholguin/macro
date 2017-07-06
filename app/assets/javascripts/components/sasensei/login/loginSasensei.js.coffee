@@ -2,10 +2,11 @@ dom = React.DOM
 
 @LoginSasensei = React.createClass
 	displayName: 'Login'
+
 	getDefaultProps: ->
-		buttons: [{name: 'LinkedIn', icon: 'fa fa-linkedin', class: 'linkedin', path: '/users/auth/linkedin'},
-		{name: 'Google+', icon: 'fa fa-google-plus', class: 'google-plus'},
-		{name: 'Facebook', icon: 'fa fa-facebook', class: 'facebook'}]
+		privacy_path: ''
+		terms_path: ''
+
 	render: ->
 		dom.div
 			className: "root"
@@ -25,12 +26,10 @@ dom = React.DOM
 						className: "button-field row margin-top-40"
 						dom.div
 							className: "large-4 medium-5 medium-centered small-9 small-centered large-centered columns"
-							style: {marginTop: "30px"}	
-							# for button in @props.buttons
-							# 	React.createElement LoginButton, key: button.id, button: button
+							style: { marginTop: "30px" }
 							React.createElement LinkedInButton
 							React.createElement GoogleButton
 							React.createElement FacebookButton
-
-							
-
+							dom.div
+								className: 'privacy-text'
+								dangerouslySetInnerHTML: __html: "By using sasensei you agree to our <a href=#{@props.privacy_path}>Privacy Policy</a> and <a href=#{@props.terms_path}>Terms and Conditions</a>"

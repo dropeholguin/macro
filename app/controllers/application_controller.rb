@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   acts_as_token_authentication_handler_for User, fallback_to_devise: false#, if: lambda { |controller| controller.request.format.json? }
 
-  before_action :privacy_acceptance_check
+  # before_action :privacy_acceptance_check
 
   protected
     # check if user has accepted latest privacy

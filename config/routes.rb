@@ -57,7 +57,7 @@ Rails.application.routes.draw do
 	get "run_sessions", to: 'sessions#run_sessions'
 	get "user_profile", to: 'profile#user_profile'
 	get "questions_list", to: 'questions#questions_list'
-	get 'terms', to: 'home#terms_and_conditions'
+	get 'terms', to: 'home#terms_and_conditions', as: :terms
 	get 'privacy', to: 'home#privacy_policy', as: :privacy
 	get 'topics', to: "questions#topic", as: :topic
 	patch 'privacy/:id/accept', to: 'home#accept_privacy', as: :accept_privacy
