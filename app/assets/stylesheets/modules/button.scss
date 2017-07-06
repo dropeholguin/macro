@@ -6,8 +6,15 @@
     margin: auto;
 }
 .button-menu{
-	background: transparent url(image_path(#{"login_button_field.png"})) no-repeat left;
+	background: transparent url(image_path(#{"menu_field.png"})) no-repeat left;
     min-height: 146px; 
+}
+.button-soon-menu{
+    background: url(image_path(#{"menu_soon_field.png"})) no-repeat left !important;
+    min-height: 146px; 
+    .kanjis-text, .menu-title, .menu-subtitle{
+        color: #fff !important;
+    }
 }
 .button-menu:hover{
     opacity: 0.7;
