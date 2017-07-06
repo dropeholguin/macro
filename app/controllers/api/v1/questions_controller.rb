@@ -1,5 +1,5 @@
 class Api::V1::QuestionsController < ApplicationController
-	skip_before_action :verify_authenticity_token
+	 before_action :authenticate_user!
 
 	def index
 		render json: Question.all
@@ -16,7 +16,15 @@ class Api::V1::QuestionsController < ApplicationController
 	def create
 		card = Question.new(card_params)
 		card.user = current_user
-		card.tag_list = params[:tag_list]
+
+		tags = []
+		if params[:tags].present?
+	        params[:tags].each do |id_tag|
+	            tag = Topic.find(id_tag.to_i)
+	            tags << tag.name
+	        end
+	    end
+		card.tag_list = tags
 
 		if params[:answers].present?
 			params[:answers].each do |answer_attributes|
@@ -24,7 +32,7 @@ class Api::V1::QuestionsController < ApplicationController
 	            answer.save
 	        end
 		end
-		if !params[:tag_list].empty?
+		if !params[:tags].empty?
 			if card.save
 				render status: 200, json: {
 					message: "Successfully created Card.",
