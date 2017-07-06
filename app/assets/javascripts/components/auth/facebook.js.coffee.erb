@@ -5,8 +5,8 @@ dom = React.DOM
   componentDidMount: ->
     window.fbAsyncInit = (->
       FB.init
-        xfbml: true
         appId: "<%= ENV['FACEBOOK_APP_ID'] %>"
+        xfbml: true
         version: 'v2.9'
       # FB.getLoginStatus ((response) ->
       #   @statusChangeCallback response
@@ -52,6 +52,5 @@ dom = React.DOM
             'data-size': "large",
             'data-button-type': "continue_with",
             'data-show-faces': "false",
-            'data-auto-logout-link': "true",
             'data-use-continue-as': "true",
             'data-scope': "public_profile,email",

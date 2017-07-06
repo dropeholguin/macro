@@ -270,7 +270,7 @@ class QuestionsController < ApplicationController
 		end
 		
 	  	@question.tag_list.each do |tag|
-	  		unless Topic.all.include?(tag)
+	  		unless Topic.all.pluck(:name).include?(tag)
 			   state = true
 			end
 	  	end
