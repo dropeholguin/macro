@@ -8,19 +8,19 @@ dom = React.DOM
 			dom.div
 				className: "row"
 				dom.div
-					className: "large-11 large-centered columns"
+					className: "large-10 large-centered columns"
 					dom.div 
 						className: "text-left row"								
 						dom.a
 							style:{marginRight: "15px"}
-							className: "button large btn-run menu-title uppercase",
+							className: "button large button-medium menu-title uppercase",
 							"profile"
 						dom.a
 							style:{marginRight: "15px"}
-							className: "button large btn-run menu-title uppercase",
+							className: "button large button-medium menu-title uppercase",
 							"activity"
 						dom.a
-							className: "button large btn-run menu-title uppercase",
+							className: "button large button-medium  menu-title uppercase",
 							"settings"
 					dom.div
 						className: "profile-field row"
@@ -72,7 +72,7 @@ dom = React.DOM
 							dom.div
 								className: "large-4 columns"
 								dom.a 
-									className: "button large"
+									className: "button large normal-title"
 									href: "#"
 									"SAS MACRO"
 								dom.p 
@@ -90,7 +90,7 @@ dom = React.DOM
 							dom.div
 								className: "large-4 columns"
 								dom.a 
-									className: "button large"
+									className: "button large normal-title"
 									href: "#"
 									"SAS MACRO"
 								dom.p 
@@ -108,7 +108,7 @@ dom = React.DOM
 							dom.div
 								className: "large-4 columns"
 								dom.a 
-									className: "button large"
+									className: "button large normal-title"
 									href: "#"
 									"SAS MACRO"
 								dom.p 
