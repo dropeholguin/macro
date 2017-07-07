@@ -33,8 +33,8 @@ Rails.application.routes.draw do
       get '/cards/count', to: "questions#count_cards"
       get '/cards/:id', to: "questions#show"
 
-      get 'privacy', to: 'privacies#index', as: :privacy
-      patch 'privacy/:id/accept', to: 'privacies#accept', as: :accept_privacy
+      get 'privacy', to: 'home#privacy_policy', as: :privacy
+      get 'terms', to: 'home#terms_and_conditions', as: :terms
       
       resource :auth, only: [] do
         collection do
@@ -50,7 +50,7 @@ Rails.application.routes.draw do
 
 
 	
-  	get 'react', to: 'home#react'
+	get 'react', to: 'home#react'
 	get "cards_run_filter", to: 'questions#cards_run_filter'
 	get "sessions_stats", to: 'sessions#sessions_stats'
 	get "run_cards", to: 'questions#card'
@@ -60,7 +60,6 @@ Rails.application.routes.draw do
 	get 'terms', to: 'home#terms_and_conditions', as: :terms
 	get 'privacy', to: 'home#privacy_policy', as: :privacy
 	get 'topics', to: "questions#topic", as: :topic
-	patch 'privacy/:id/accept', to: 'home#accept_privacy', as: :accept_privacy
 	patch "questions/suspend_question/:id", to: 'questions#suspend', as: :suspend
  	patch "questions/approve_question/:id", to: 'questions#approve', as: :approve
  	post "sessions_next_card", to: 'sessions#next_card'

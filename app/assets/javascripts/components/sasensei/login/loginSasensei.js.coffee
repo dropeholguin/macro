@@ -31,5 +31,5 @@ dom = React.DOM
 							React.createElement GoogleButton
 							React.createElement FacebookButton
 							dom.div
-								className: 'privacy-text'
+								className: 'login-privacy-text'
 								dangerouslySetInnerHTML: __html: "By using sasensei you agree to our <a href=#{@props.privacy_path}>Privacy Policy</a> and <a href=#{@props.terms_path}>Terms and Conditions</a>"
