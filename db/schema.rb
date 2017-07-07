@@ -127,11 +127,11 @@ ActiveRecord::Schema.define(version: 20170707123721) do
   end
 
   create_table "privacies", force: :cascade do |t|
-    t.integer  "category",   null: false
     t.text     "body"
     t.string   "version"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "category",   null: false
   end
 
   create_table "questions", force: :cascade do |t|
