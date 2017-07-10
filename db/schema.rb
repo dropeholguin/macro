@@ -131,7 +131,7 @@ ActiveRecord::Schema.define(version: 20170707123721) do
     t.string   "version"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "category",   null: false
+    t.integer  "category"
   end
 
   create_table "questions", force: :cascade do |t|
