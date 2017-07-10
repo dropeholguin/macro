@@ -7,7 +7,6 @@ class User < ApplicationRecord
     :trackable, :validatable, :omniauthable, :confirmable, :lockable
 
   has_many :identities
-  has_many :accepted_privacies
   has_many :questions
   has_many :badges, through: :levels 
   has_many :levels

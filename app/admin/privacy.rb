@@ -6,7 +6,7 @@ permit_params :body, :category, :version
 
 	form do |f|
 	    f.inputs 'Details' do
-	      f.input :category, as: :select, collection: ["Privacy Policy","T&C"], include_blank: false
+	      f.input :category, as: :select, include_blank: false
 	      f.input :version
 	      f.input :body, as: :html_editor
 	    end
