@@ -79,7 +79,7 @@ dom = React.DOM
 					else
 						$('#' + answer.id).siblings('label').addClass("this-ansn")
 
-				@setState({ creator: data.creator.name, created_at: data.created_at, people_number: data.people_number, percentage_people: data.percentage_people, state: data.state, streak: data.streak, votes: data.votes, is_passed: data.is_passed, time: data.time }) 
+				@setState({ state: data.state, streak: data.streak, votes: data.votes, is_passed: data.is_passed, time: data.time })
 				if(data.state == false and data.streak >=5)
 					$(@refs.showVotes).show()
 					$(@refs.cardStats).hide()

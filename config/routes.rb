@@ -27,9 +27,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get '/cards_index', to: "questions#index"
-
-      resources :cards, controller: :questions, only: [:create, :update, :show] do
+      resources :cards, controller: :questions, only: [:index, :create, :update, :show] do
         member do
           put 'verify'
         end
