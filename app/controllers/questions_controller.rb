@@ -102,7 +102,7 @@ class QuestionsController < ApplicationController
 
       @question = Question.find first_question_id.to_i
       if @question.present?
-        @answers = @question.answers
+        @answers = @question.answers.select(:id, :answer_markdown)
         @comments = @question.comments.order("created_at desc")
         if @user.streak == 0
           @user.update_attributes(points: @user.points - 2)
@@ -121,19 +121,20 @@ class QuestionsController < ApplicationController
     end
   end
 
-	def next_card
-		question_ids_array = cookies[:cards].split("-")
-        question_id = question_ids_array.shift
-        question_array_string = question_ids_array.join("-")
-        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
-        cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
+  def next_card
+    question_ids_array = cookies[:cards].split("-")
+    question_id = question_ids_array.shift
+    question_array_string = question_ids_array.join("-")
+    cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
+    cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
 
-        @question = Question.find question_id.to_i
-        @description = markdown(@question.description_markdown)
-        @explanation = markdown(@question.explanation_markdown)
+    @question = Question.find question_id.to_i
+    @description = markdown(@question.description_markdown)
+    @explanation = markdown(@question.explanation_markdown)
+    @answers = @question.answers.select(:id, :answer_markdown)
 
 		respond_to do |format|
-		 	format.json  { render json: { question: @question, answers: @question.answers, tag_list: @question.tag_list, description: @description, explanation: @explanation } }
+		 	format.json  { render json: { question: @question, answers: @answers, tag_list: @question.tag_list, description: @description, explanation: @explanation } }
 		end
 	end
 

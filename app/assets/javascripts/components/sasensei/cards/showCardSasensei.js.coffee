@@ -31,18 +31,14 @@ dom = React.DOM
 			typeOption = "text"
 			hide = "none"
 			msg = "type your answer"
-		if(@props.answer.is_correct)
-			rightColor = "this-ans" 
-		else
-			rightColor = "this-ansn"
 		dom.div
-			className: "answer_field",	
+			className: "answer_field",
 			dom.input
 				id: "#{@props.answer.id}",
 				name: "option",
 				type: typeOption,
 				placeholder: msg
 			dom.label
-				className: "uppercase menu-title "+rightColor
+				className: "uppercase menu-title"
 				htmlFor: "#{@props.answer.id}",
 				dangerouslySetInnerHTML: __html: @props.answer.answer_markdown.toString()
