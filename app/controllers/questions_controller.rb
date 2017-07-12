@@ -133,10 +133,10 @@ class QuestionsController < ApplicationController
     @explanation = markdown(@question.explanation_markdown)
     @answers = @question.answers.select(:id, :answer_markdown)
 
-		respond_to do |format|
-		 	format.json  { render json: { question: @question, answers: @answers, tag_list: @question.tag_list, description: @description, explanation: @explanation } }
-		end
-	end
+    respond_to do |format|
+      format.json  { render json: { question: @question, answers: @answers, tag_list: @question.tag_list, description: @description, explanation: @explanation } }
+    end
+  end
 
 	def run_question
 		@user = current_user

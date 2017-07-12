@@ -33,7 +33,7 @@ dom = React.DOM
 			@setState({kanjis: "支給", title: "Profile", description: "Show information about your profile and recent activity!"})
 	componentWillMount: ->
 		@fetchPoints()
-		# setInterval(@fetchPoints, 1000)
+		setInterval(@fetchPoints, 1000)
 	fetchPoints: ->
 		$.ajax
 		  url: @props.tokens_wallet_path
