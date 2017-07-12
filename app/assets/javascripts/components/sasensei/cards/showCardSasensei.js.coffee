@@ -12,7 +12,7 @@ dom = React.DOM
 						className: "question-background"
 						dom.div
 							style:	{fontSize: "16px"}
-							className: "large-8 large-centered columns uppercase menu-subtitle"
+							className: "large-8 large-centered columns"
 							dangerouslySetInnerHTML: __html: @props.description.toString(),
 					dom.div
 						className: "answers"
@@ -40,5 +40,6 @@ dom = React.DOM
 				placeholder: msg
 			dom.label
 				className: "uppercase menu-title"
+				style: {display: hide}
 				htmlFor: "#{@props.answer.id}",
 				dangerouslySetInnerHTML: __html: @props.answer.answer_markdown.toString()
