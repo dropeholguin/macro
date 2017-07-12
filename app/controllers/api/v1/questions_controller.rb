@@ -9,11 +9,22 @@ class Api::V1::QuestionsController < ApplicationController
 	end
 
 	def show
-		card = Question.find(params[:id])
-		render status: 200, json: {
-			Card: card.as_json(include: [:answers]),
-			Tags: card.tag_list
-		}.to_json
+		card = Question.where(id: params[:id]).select(:id, :choice, :description_markdown, :explanation_markdown).take 
+		
+		if card.present?
+			answers = card.answers.map{ |answer| {answerText: answer.answer_markdown, isCorrect: answer.is_correct }}
+			tags = card.tags.map(&:id)
+
+			render status: 200, json: {
+				Card: card,
+				answers: answers,
+				tags: tags
+			}.to_json
+		else
+			render status: 405, json: {
+				errors: "Invalid input"
+			}.to_json
+		end
 	end
 
 	def create

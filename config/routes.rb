@@ -43,8 +43,8 @@ Rails.application.routes.draw do
           post 'linkedin'
         end
       end
-
-      resources :tags, only:[:index, :update]
+    
+      get '/tags', to: "tags#index"
     end
   end
 
