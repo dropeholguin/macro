@@ -14,8 +14,8 @@ dom = React.DOM
 				React.createElement SearchTag, tag_path: @props.tag_path
 			dom.div
 				className: "large-4 columns"
-				React.createElement SearchCards, path: @props.questions_path, title: "Return cards with all these tags:"
-				React.createElement SearchCards, path: @props.questions_path, title: "Return cards with any of these tags"
+				React.createElement SearchCards, path: @props.questions_path, title: "Include cards with all these tags:"
+				React.createElement SearchCards, path: @props.questions_path, title: "Exclude cards with any of these tags"
 				dom.div 
 					className: "sasensei-title text-center uppercase"
 					"Number of Cards Available"	

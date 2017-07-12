@@ -211,7 +211,7 @@ dom = React.DOM
 					dom.div
 						className: "question-background"
 						dom.div
-							style:	{fontSize: "20px"}
+							style:	{fontSize: "16px"}
 							className: "large-8 large-centered columns uppercase menu-subtitle"
 							dangerouslySetInnerHTML: __html: @state.description.toString(),
 					dom.div
@@ -233,7 +233,7 @@ dom = React.DOM
 						style: {display: 'none'}
 						className: "question-background"
 						dom.div
-							style:	{fontSize: "20px"}
+							style:	{fontSize: "16px"}
 							className: "large-8 large-centered columns uppercase menu-subtitle"
 							dangerouslySetInnerHTML: __html: @state.explanation.toString()
 					dom.div

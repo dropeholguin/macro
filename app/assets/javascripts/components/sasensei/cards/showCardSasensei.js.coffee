@@ -11,9 +11,9 @@ dom = React.DOM
 					dom.div
 						className: "question-background"
 						dom.div
-							style:	{fontSize: "20px"}
-							className: "large-8 large-centered columns uppercase menu-subtitle"
-							dangerouslySetInnerHTML: __html: @props.card.description_markdown.toString(),
+							style:	{fontSize: "16px"}
+							className: "large-8 large-centered columns"
+							dangerouslySetInnerHTML: __html: @props.description.toString(),
 					dom.div
 						className: "answers"
 						for answer in @props.answers
@@ -43,6 +43,7 @@ dom = React.DOM
 				type: typeOption,
 				placeholder: msg
 			dom.label
+				style: {display: hide}
 				className: "uppercase menu-title "+rightColor
 				htmlFor: "#{@props.answer.id}",
 				dangerouslySetInnerHTML: __html: @props.answer.answer_markdown.toString()

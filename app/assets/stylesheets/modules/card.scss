@@ -3,6 +3,34 @@
     min-height: 463px; 
     padding: 50px;
 }
+.card-background{
+	background: transparent url(image_path(#{"card_field.png"})) no-repeat center;
+    min-height: 181px; 
+    max-height: 181px;
+    min-width: 601px;
+    margin-bottom: 20px;
+    padding: 30px;
+    overflow: hidden; 
+    .button-edit:hover{
+    	background-color: transparent;
+    	opacity: 0.7;
+    }
+    .button-delete:hover{
+    	background-color: transparent;
+    	opacity: 0.7;
+    }
+}
+.button-edit{
+	background: transparent url(image_path(#{"Edit.png"})) no-repeat center;
+    min-height: 13px;
+    min-width: 13px; 
+}
+.button-delete{
+	background: transparent url(image_path(#{"Delete.png"})) no-repeat center;
+    min-height: 13px;
+    min-width: 13px; 
+}
+
 .answer_field{	
      
     input[type=checkbox]:not(old),

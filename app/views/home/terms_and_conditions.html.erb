@@ -1,1 +1,8 @@
-<%= react_component 'Terms' %>
+<%=
+  react_component 'Terms', {
+    terms_id: @terms.id,
+    terms_body: @terms.body,
+    terms_version: @terms.version,
+    terms_category: @terms.category
+  }
+%>
