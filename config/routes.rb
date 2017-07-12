@@ -29,9 +29,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       get '/cards_index', to: "questions#index"
       post '/cards', to: "questions#create"
-      patch '/cards/:id', to: "questions#update"
+      put '/cards/:id/edit', to: "questions#update"
       get '/cards/count', to: "questions#count_cards"
-      get '/cards/:id', to: "questions#show"
+      get '/cards/:id/edit', to: "questions#show"
 
       get 'privacy', to: 'home#privacy_policy', as: :privacy
       get 'terms', to: 'home#terms_and_conditions', as: :terms
