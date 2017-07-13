@@ -241,6 +241,32 @@ class Api::V1::QuestionsController < ApplicationController
 		end
 	end
 
+	def vote
+		value = params[:type] == "up" ? 1 : -1
+		reason = params[:reason] || "Default Reason"
+		@question = Question.find(params[:id])
+		author = @question.user
+
+		if value == 1
+			message = "+#{value} #{current_user.name} has voted his card"
+		else
+			message = "#{value} #{current_user.name} has voted his card"
+		end
+
+		if author != current_user
+			@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: message, category: "vote", source: "#{question_path(@question)}")
+			@notification.save
+			@question.add_or_update_evaluation(:votes, value, current_user)
+			if (value == -1)
+				VoteReason.create(question_id: @question.id, user_id: current_user.id, reason: reason)
+			end
+
+			if @question.reputation_for(:votes).to_i == 4
+				author.update_attributes(points: author.points + 32)
+			end
+		end
+	end
+
 	private
 		def tokens
 			@one_token = 1

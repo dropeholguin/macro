@@ -7,7 +7,7 @@ class Ability
     else
       can :read, :all
 
-      can [:read, :count, :verify], Question
+      can [:read, :count, :verify, :vote], Question
       can :manage, Question, user_id: user.id
     end
   end

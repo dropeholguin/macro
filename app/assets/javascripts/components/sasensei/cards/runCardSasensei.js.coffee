@@ -103,6 +103,7 @@ dom = React.DOM
 				$("input").prop('disabled', true)
 				$("#comment_comment_markdown").prop('disabled', false)
 				$("#flag_form_input").prop('disabled', false)
+				$(@refs.votesShow).show()
 
 	nextQuestionClicked: (event) ->	
 		if(@state.is_passed == false)
@@ -152,12 +153,16 @@ dom = React.DOM
 		$(@refs.voteTitle).text("Currently Rating:")
 		$.amaran content: {'title': "You rated +1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	voteDownClicked: (event) ->
+		$(@refs.reasonCardHolder).show()
+	reasonSelected: (event) ->
 		$(@refs.showVotes).hide()
 		$(@refs.cardStats).show()
 		$(@refs.cardStats).addClass('animated fadeInDown')
+		reasonValue = $(@refs.reasonCard).prop('disabled', true).val()
 		$.ajax
-			url: "/questions/#{@state.card_id}/vote?type=down"
-			type: 'post'		
+			url: "/api/v1/cards/#{@state.card_id}/vote",
+			type: 'PUT',
+			data: { type: 'down', reason: reasonValue }
 		@setState(
 			votes:  @state.votes - 1
 			state: true
@@ -247,14 +252,36 @@ dom = React.DOM
 						className: "row"
 						dom.div
 							ref: "votesShow"
+							className: "small-4 columns text-center"
 							style: {display: "none"}
-							className: "large-4 columns text-center"
 							dom.button 
 								className: "upvote"
+								# onClick: @voteUpClicked,
 							dom.button 
 								className: "downvote"
+								onClick: @voteDownClicked,
 						dom.div
-							className: "large-4 large-centered columns text-center"
+							ref: "reasonCardHolder",
+							className: "small-4 columns text-center"
+							style: {display: "none"}
+							dom.select
+								ref: "reasonCard",
+								className: "btn-run menu-title",
+								onChange: @reasonSelected
+								dom.option
+									value: "reason1", 
+									"reason1"
+								dom.option
+									value: "reason2",
+									"reason2"
+								dom.option
+									value: "reason3",
+									"reason3"
+								dom.option
+									value: "reason4",
+									"reason4"
+						dom.div
+							className: "small-4 columns text-center pull-right"
 							dom.a
 								style: {width: "100%", display: "none"}
 								className: "button btn-run menu-title uppercase",

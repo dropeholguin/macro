@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       resources :cards, controller: :questions do
         member do
           put 'verify'
+          put 'vote'
         end
         collection do
           get 'count'
