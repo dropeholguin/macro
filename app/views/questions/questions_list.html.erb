@@ -1,12 +1,15 @@
 <div class="row">
-	<div class="large-10 large-centered columns">
+	<div class="large-12 large-centered columns">
 		<div class="row">
-			<div class="large-4 columns">
-				
+			<div class="large-3 columns">
+				<%= react_component 'SearchCards', {title: "Search Cards", align: "left", font_size: "11px"}%>
+				<%= react_component 'SearchCards', {title: "Include Cards with all of these tags", align: "left", font_size: "11px"}%>
+				<%= react_component 'SearchCards', {title: "Include Cards with any of these tags", align: "left", font_size: "11px"}%>
+				<%= react_component 'SearchCards', {title: "Exlude Cards with any of these tags", align: "left", font_size: "11px"}%>
 			</div>
 			<div class="large-5 columns">
 				<% @questions.each do |question| %>
-					<%= react_component 'ViewCardSasensei',{description: markdown(question.description_markdown)} %>
+					<%= react_component 'ViewCardSasensei',{description: markdown(question.description_markdown), id: question.id} %>
 				<% end %>
 			</div>
 			<div class="large-3 columns">

@@ -8,11 +8,13 @@ dom = React.DOM
 			{title: "earn tokens", subtitle: "achieve 4 correct answers in a row to enter spde mode.", display: "none"}]
 	render: ->
 		dom.div 
+			id: "run_card_filter"
 			className: "row bottom-60"
 			dom.div
+				id: "search_run_card_filter"
 				className: "large-4 columns"
 				React.createElement SearchTag, tag_path: @props.tag_path
-			dom.div
+			dom.div				
 				className: "large-4 columns"
 				React.createElement SearchCards, path: @props.questions_path, title: "Include cards with all these tags:"
 				React.createElement SearchCards, path: @props.questions_path, title: "Exclude cards with any of these tags"
@@ -21,6 +23,7 @@ dom = React.DOM
 					"Number of Cards Available"	
 				React.createElement RunCardFilterCard, number_questions: @props.number_questions, total: @props.total, run_cards_path: @props.run_cards_path
 			dom.div
+				id: "explanation_run_card_filter"
 				className: "large-4 columns"
 				for button in @props.buttons
 					React.createElement ButtonExplanation, key: button.id, button: button
@@ -90,6 +93,8 @@ dom = React.DOM
 
 @SearchCards = React.createClass
 	displayName: 'SearchCard'
+	getDefaultProps:->
+		align: 'center'
 	componentDidMount: ->
 		$(@refs.autoComplete).autocomplete source: $('#title_autocomplete').data('autocomplete-source')
 	render: ->
@@ -105,7 +110,8 @@ dom = React.DOM
 					value: "✓",
 				dom.p {}
 					dom.label
-						className: "weight title-tag-sasensei uppercase text-center",
+						style: {padding: @props.padding, fontSize: @props.font_size}
+						className: "weight title-tag-sasensei uppercase text-#{@props.align}",
 						@props.title,      
 					dom.input
 						style: {padding: "0 18px", fontSize: "13px"}

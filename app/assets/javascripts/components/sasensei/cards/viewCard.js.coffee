@@ -13,7 +13,9 @@ dom = React.DOM
 			onMouseLeave: @cardOnHoverOut
 			dom.div
 				className: "large-10 columns"
-				dangerouslySetInnerHTML: __html: @props.description.toString()
+				dom.a 
+					href: "/questions/#{@props.id}"
+					dangerouslySetInnerHTML: __html: @props.description.toString()
 			dom.div
 				ref: 'actions'
 				style: {display: "none"}

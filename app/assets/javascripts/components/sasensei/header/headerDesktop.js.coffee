@@ -48,51 +48,59 @@ dom = React.DOM
 	    		@setState({hide_number: "block"})
 		    console.log data
 	render: ->
-		dom.div 
-			className: "row bottom-60"
+		dom.div
+			className: "root"
 			dom.div
-				className: "large-3 medium-3 columns"
-				dom.a
-					ref: "logo" 
-					className: "logo margin-top-40",
-					href: "/"
-			dom.div
-				className: "large-6 medium-6 columns text-center"
-				dom.div 
-					className: "row"
-					ref: "titlePath"
-					dom.div
-						style: {minHeight: "190px", margin: "auto", background: "#fff", maxWidth: "80%"}
-						className: "large-10 large-centered columns"
+				id: "header_responsive"
+				style: {display: "none"}
+				className: "row bottom-60"
+				React.createElement HeaderResponsive, kanjis: @state.kanjis, title: @state.title, description: @state.description
+			dom.div 		
+				id: "header_desktop"	
+				className: "row bottom-60"			
+				dom.div
+					className: "large-3 medium-3 columns"
+					dom.a
+						ref: "logo" 
+						className: "logo margin-top-40",
+						href: "/"
+				dom.div
+					className: "large-6 medium-6 columns text-center"
+					dom.div 
+						className: "row"
+						ref: "titlePath"
 						dom.div
-							className: "row"
+							style: {minHeight: "190px", margin: "auto", background: "#fff", maxWidth: "80%"}
+							className: "large-10 large-centered columns"
 							dom.div
-								className: "large-5 columns kanjis-text font-48"
-								@state.kanjis
+								className: "row"
+								dom.div
+									className: "large-5 columns kanjis-text font-48"
+									@state.kanjis
+								dom.div
+									className: "large-7 columns uppercase menu-title weight text-left font-48" 
+									@state.title
 							dom.div
-								className: "large-7 columns uppercase menu-title weight text-left font-48" 
-								@state.title
-						dom.div
-							className: "row"
-							dom.p
-								style: {padding: "18px", fontSize: "16px"}
-								className: "uppercase text-left menu-subtitle"
-								@state.description
+								className: "row"
+								dom.p
+									style: {padding: "18px", fontSize: "16px"}
+									className: "uppercase text-left menu-subtitle"
+									@state.description
 
-			dom.div
-				className: "large-3 medium-3 columns button-info-status uppercase text-status"
-				dom.div {}, 
-					"User: #{@props.user.id}"
-				dom.div {}, 
-					"Rank: 1"
-				dom.div {}, 
-					"Tokens: #{@state.points}"
-				dom.div 
-					style: {borderTop: "1px solid #8a8a8a", margin: "10px 0"}
-					className: "menu-title uppercase text-center"
-					dom.a 
-						'data-method': "delete",
-						rel: "nofollow",
-						className: "menu-title"
-						href: @props.sign_out
-						"Logout"
+				dom.div
+					className: "large-3 medium-3 columns button-info-status uppercase text-status"
+					dom.div {}, 
+						"User: #{@props.user.id}"
+					dom.div {}, 
+						"Rank: 1"
+					dom.div {}, 
+						"Tokens: #{@state.points}"
+					dom.div 
+						style: {borderTop: "1px solid #8a8a8a", margin: "10px 0"}
+						className: "menu-title uppercase text-center"
+						dom.a 
+							'data-method': "delete",
+							rel: "nofollow",
+							className: "menu-title"
+							href: @props.sign_out
+							"Logout"
