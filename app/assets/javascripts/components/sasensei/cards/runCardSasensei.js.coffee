@@ -35,7 +35,7 @@ dom = React.DOM
 		$(@refs.votesDiv).hide()
 		$("input").prop('disabled', false)
 	answersUpdate: (data) ->
-		console.log ("Answers: "+data.answers[0].id)
+		console.log ("Answers: "+data.answers[0])
 		@setState({answers: data.answers, choice: data.question.choice})
 	tagsUpdate: (data) ->
 		@setState({tag_list: data.tag_list})		
@@ -43,60 +43,67 @@ dom = React.DOM
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	handleClickVoteDown: (event) ->
 		$.amaran content: {'title': 'Your vote', 'message': 'You have recently rated this card', 'info': "#{@props.votes} Votes", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
-	handleClick: (event) ->
-		@setState({animate_tag: "none", timeLeft: 0})
-		$(@refs.timer).countdown('toggle')				
-		$(@refs.votesDiv).show()
-		$(@refs.votesDiv).addClass("small-12 text-center animated bounce")
-		$(@refs.flagButton).show()
-		$(@refs.flagButton).addClass('animated bounceIn')
-		document.getElementById('explanation-card').style.display = 'block'
-		document.getElementById('run-card').style.display = 'none'
-		document.getElementById('back-card').style.display = 'inline-block'
-		$(@refs.animateTitle).removeClass('animated fadeInLeft')
-		$(@refs.animateDescription).removeClass('animated fadeInRight')
-		$(@refs.explanationDiv).addClass('animated fadeInDown')
-		if ($('.this-ans').length > 0)
-			$('.this-ans').addClass "correct-bg animated bounceIn"
-		#if ($('.this-ansn').length > 0)
-			#$('.this-ansn').addClass "wrong-color"
-		selected = $('input[name=option]:checked').map(-> @id).get()
-		if (@state.choice == "user input")
-			user_input = $('input[name=option]').val()
-			console.log ("User input: " + user_input)
-		$.ajax 
-			url: '/run_question'
-			type: 'POST'
+
+	verifyAnswer: (event) ->
+		if @state.choice == 'user input'
+			answerText = $('input[name=option]').val()
+		else
+			answerIds = $('input[name=option]:checked').map(-> @id).get()
+			if answerIds.length < 1
+				alert 'Select at least one answer'
+				return
+		$.ajax
+			url: '/api/v1/cards/' + @state.card_id + '/verify'
+			type: 'PUT'
 			dataType: 'json'
-			data: checkbox: selected, card_id: @state.card_id, user_input: user_input
+			data: answerIds: answerIds, answerText: answerText
 			error: ->
-				console.log("AJAX Error:")
+				console.log "AJAX Error:"
 			success: (data) =>
-			    console.log(data)
-			    @setState({creator: data.creator.name, created_at: data.created_at, people_number: data.people_number, percentage_people: data.percentage_people, state: data.state, streak: data.streak, votes: data.votes, is_passed: data.is_passed, time: data.time }) 
-			    if(data.state == false and data.streak >=5)
-			    	$(@refs.showVotes).show()
-			    	$(@refs.cardStats).hide()
-			    	$(@refs.cardStats).removeClass('animated fadeInDown')
-		    	if (data.is_passed && data.time_long)
-		    		$.amaran content: {'title': 'Well done!', 'message': '', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
-		    		if(@state.streak < 9 and @state.streak >=5)
-            			$.amaran content: {'title': 'Well done!', 'message': '+1 TOKEN', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
-	    			if(@state.streak > 9)
-	    				$.amaran content: {'title': 'Well done!', 'message': '+2 TOKEN', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
-		    	if (data.time_long == false)
-		    		$.amaran content: {'title': 'Sorry!', 'message': '', 'info': "you took too long to answer this question! #{@state.title}", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
-		    	if (data.is_passed == false && data.time_long == true)
-	    			$.amaran content: {'title': 'Sorry!', 'message': '', 'info': "You have answered wrong #{@state.title}", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
-		    	if (data.state == true)
-		    		$(@refs.showVotes).hide()
-		    		$(@refs.showComments).show()
-		    		$(@refs.cardStats).show()
-					$(@refs.cardStats).addClass('animated fadeInDown')
-      	console.log ("This is selected: "+selected) 
-		$("input").prop('disabled', true) 
-		$("#comment_comment_markdown").prop('disabled', false)
-		$("#flag_form_input").prop('disabled', false)    		
+				@setState({ animate_tag: "none", timeLeft: 0 })
+				$(@refs.timer).countdown('toggle')
+				$(@refs.votesDiv).show()
+				$(@refs.votesDiv).addClass("small-12 text-center animated bounce")
+				$(@refs.flagButton).show()
+				$(@refs.flagButton).addClass('animated bounceIn')
+				document.getElementById('explanation-card').style.display = 'block'
+				document.getElementById('run-card').style.display = 'none'
+				document.getElementById('back-card').style.display = 'inline-block'
+				$(@refs.animateTitle).removeClass('animated fadeInLeft')
+				$(@refs.animateDescription).removeClass('animated fadeInRight')
+				$(@refs.explanationDiv).addClass('animated fadeInDown')
+
+				data.answers.forEach (answer) ->
+					if answer.is_correct
+						$('#' + answer.id).siblings('label').addClass("this-ans correct-bg animated bounceIn")
+					else
+						$('#' + answer.id).siblings('label').addClass("this-ansn")
+
+				@setState({ state: data.state, streak: data.streak, votes: data.votes, is_passed: data.is_passed, time: data.time })
+				if(data.state == false and data.streak >=5)
+					$(@refs.showVotes).show()
+					$(@refs.cardStats).hide()
+					$(@refs.cardStats).removeClass('animated fadeInDown')
+				if (data.is_passed && data.time_long)
+					$.amaran content: {'title': 'Well done!', 'message': '', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
+					if(@state.streak < 9 and @state.streak >=5)
+						$.amaran content: {'title': 'Well done!', 'message': '+1 TOKEN', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
+					if(@state.streak > 9)
+						$.amaran content: {'title': 'Well done!', 'message': '+2 TOKEN', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
+				if (data.time_long == false)
+					$.amaran content: {'title': 'Sorry!', 'message': '', 'info': "you took too long to answer this question! #{@state.title}", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
+				if (data.is_passed == false && data.time_long == true)
+					$.amaran content: {'title': 'Sorry!', 'message': '', 'info': "You have answered wrong #{@state.title}", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
+				if (data.state == true)
+					$(@refs.showVotes).hide()
+					$(@refs.showComments).show()
+					$(@refs.cardStats).show()
+				$(@refs.cardStats).addClass('animated fadeInDown')
+
+				$("input").prop('disabled', true)
+				$("#comment_comment_markdown").prop('disabled', false)
+				$("#flag_form_input").prop('disabled', false)
+
 	nextQuestionClicked: (event) ->	
 		if(@state.is_passed == false)
 			window.location.replace("/")	
@@ -116,13 +123,13 @@ dom = React.DOM
 					console.log("AJAX Error:")
 					window.location.replace("/")
 				success: (data) =>
-				    console.log(data)
-				    @setState({quest: data, timeLeft: +120})
-		    		$(@refs.timer).countdown({since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})   		
+				    @setState({ quest: data, timeLeft: +120 })
+		    		$(@refs.timer).countdown({ since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})
 				    @infoUpdate(data)
 				    @answersUpdate(data)
 				    @tagsUpdate(data)
 				    highlightAllCodes()
+
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
 		console.log ("It Works!")
@@ -217,13 +224,13 @@ dom = React.DOM
 					dom.div
 						className: "answers"
 						for answer in @state.answers
-							React.createElement CardAnswerSasensei,  key: answer.id, answer: answer, choice: @state.choice
+							React.createElement CardAnswerSasensei, key: answer.id, answer: answer, choice: @state.choice
 					dom.div 
 						className: "text-center"
 						dom.a
 							style: {width: "100%"}
 							className: "button btn-run menu-title uppercase",
-							onClick: @handleClick,
+							onClick: @verifyAnswer,
 							ref: "runCard",
 							id: "run-card",
 							"RUN"

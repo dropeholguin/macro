@@ -75,6 +75,7 @@ gem 'aws-sdk', '~> 2.3'
 gem "paperclip", "~> 5.0.0"
 gem 'faker'
 gem 'active_admin_editor', github: 'ejholmes/active_admin_editor'
+gem 'aasm'
 
 gem 'rack-cors', require: 'rack/cors'
 

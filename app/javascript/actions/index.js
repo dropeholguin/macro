@@ -107,7 +107,7 @@ export function getCards() {
     let userEmail = state().auth.current_user.email;
     console.log(state().auth)
     dispatch(fetchCardsRequest());
-    return fetch(CONSTANTS.BASE_URL + 'cards_index', {
+    return fetch(CONSTANTS.BASE_URL + 'cards', {
         credentials: 'include',
         headers: {
           'X-User-Email': userEmail,
