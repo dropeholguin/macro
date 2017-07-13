@@ -9,9 +9,10 @@ class Api::V1::QuestionsController < ApplicationController
 	end
 
 	def show
-		card = Question.where(id: params[:id]).select(:id, :choice, :description_markdown, :explanation_markdown).take 
+		card = Question.where(id: params[:id]).select(:id, :state).take 
 		
-		if card.present?
+		if card.present? && card.activated?
+			card = Question.where(id: card.id).select(:id, :choice, :description_markdown, :explanation_markdown).take 
 			answers = card.answers.map{ |answer| {answerText: answer.answer_markdown, isCorrect: answer.is_correct }}
 			tags = card.tags.map(&:id)
 
@@ -66,14 +67,20 @@ class Api::V1::QuestionsController < ApplicationController
 
 	def update
 		card = Question.find(params[:id])
-		if card.update(card_params)
-			render status: 200, json: {
-				message: "Successfully updated Card.",
-				Card: card
-			}.to_json
+		if card.activated?
+			if card.update(card_params)
+				render status: 200, json: {
+					message: "Successfully updated Card.",
+					Card: card
+				}.to_json
+			else
+				render status: 405, json: {
+					errors: card.errors
+				}.to_json
+			end
 		else
 			render status: 405, json: {
-				errors: card.errors
+				errors: "Invalid input"
 			}.to_json
 		end
 	end
@@ -101,12 +108,13 @@ class Api::V1::QuestionsController < ApplicationController
 				questions_sort = []
 
 				cards = Card.number_cards_submitted(user.id).pluck(:question_id)
-				questions.each do |question|
-					if !cards.include?(question.id)
-						questions_sort << question
+				questions.each do |card|
+					if !cards.include?(card.id) && card.activated?
+						questions_sort << card
 					end
 				end
 				number_questions = questions_sort.count
+
 				render status: 200, json: {
 					message: "Available Cards",
 					tagCount: number_questions
@@ -120,6 +128,25 @@ class Api::V1::QuestionsController < ApplicationController
 			render status: 400, json: {
 				errors: "Invalid user"
 			}.to_json
+		end
+	end
+
+	def delete
+		card = Question.find(params[:id])
+
+		if card.deleting?
+			render status: 404, json: {
+				errors: "Question not found"
+			}.to_json	
+		elsif card.present?
+			card.delete!
+			render status: 200, json: {
+				message: "Success",
+			}.to_json
+		else
+			render status: 400, json: {
+				errors: "Invalid ID supplied"
+			}.to_json			
 		end
 	end
 

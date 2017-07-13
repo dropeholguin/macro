@@ -1,6 +1,8 @@
 class Question < ApplicationRecord
 	include Tire::Model::Search
   	include Tire::Model::Callbacks
+  	include AASM
+
   	ac_field :title
   	acts_as_taggable
   	acts_as_taggable_on :tags
@@ -20,6 +22,15 @@ class Question < ApplicationRecord
 	enum tags: ["SAS Programming", "SAS Macro", "DI Studio", "SAS Management Console", "Enterprise Guide", "Workspace Management"]
 
 	scope :questions_list, -> (user_id) { where(user_id: user_id) }
+
+	aasm column: "state" do
+        state :activated, initial: true
+        state :deleting
+        
+        event :delete do
+            transitions from: :activated, to: :deleting
+        end
+    end
 
 	index_name("questions")
 	mapping do

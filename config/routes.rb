@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       put '/cards/:id/edit', to: "questions#update"
       get '/cards/count', to: "questions#count_cards"
       get '/cards/:id/edit', to: "questions#show"
+      delete '/cards/:id', to: "questions#delete"
 
       get 'privacy', to: 'home#privacy_policy', as: :privacy
       get 'terms', to: 'home#terms_and_conditions', as: :terms
@@ -43,7 +44,7 @@ Rails.application.routes.draw do
           post 'linkedin'
         end
       end
-    
+
       get '/tags', to: "tags#index"
     end
   end

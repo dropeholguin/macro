@@ -1,6 +1,6 @@
 class Api::V1::TagsController < ApplicationController
 	before_action :authenticate_user!
-	
+
 	def index
 		tags = Topic.all
 		if tags.present?
@@ -9,7 +9,7 @@ class Api::V1::TagsController < ApplicationController
 			render status: 404, json: {
 					message: "No tags found"
 			}.to_json
-		end 
+		end
 	end
 	
 	def update
