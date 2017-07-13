@@ -27,12 +27,14 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get '/cards_index', to: "questions#index"
-      post '/cards', to: "questions#create"
-      put '/cards/:id/edit', to: "questions#update"
-      get '/cards/count', to: "questions#count_cards"
-      get '/cards/:id/edit', to: "questions#show"
-      delete '/cards/:id', to: "questions#delete"
+      resources :cards, controller: :questions do
+        member do
+          put 'verify'
+        end
+        collection do
+          get 'count'
+        end
+      end
 
       get 'privacy', to: 'home#privacy_policy', as: :privacy
       get 'terms', to: 'home#terms_and_conditions', as: :terms

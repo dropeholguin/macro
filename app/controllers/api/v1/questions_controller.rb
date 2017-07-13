@@ -1,13 +1,17 @@
 class Api::V1::QuestionsController < ApplicationController
 	before_action :authenticate_user!
+	load_and_authorize_resource
+
 	include ApplicationHelper
 	include ActionView::Helpers::DateHelper
 	include ActionView::Helpers::TextHelper
 	
+	# GET /cards
 	def index
-		render json: Question.all
+		render json: @questions
 	end
 
+	# GET /cards/:id
 	def show
 		card = Question.where(id: params[:id]).select(:id, :state).take 
 		
@@ -20,11 +24,11 @@ class Api::V1::QuestionsController < ApplicationController
 				Card: card,
 				answers: answers,
 				tags: tags
-			}.to_json
+			}
 		else
 			render status: 405, json: {
 				errors: "Invalid input"
-			}.to_json
+			}
 		end
 	end
 
@@ -52,16 +56,16 @@ class Api::V1::QuestionsController < ApplicationController
 				render status: 200, json: {
 					message: "Successfully created Card.",
 					card: card
-				}.to_json
+				}
 			else
 				render status: 405, json: {
 					errors: card.errors
-				}.to_json
+				}
 			end
 		else
 			render status: 405, json: {
 				errors: "Invalid input"
-			}.to_json
+			}
 		end
 	end
 
@@ -72,20 +76,21 @@ class Api::V1::QuestionsController < ApplicationController
 				render status: 200, json: {
 					message: "Successfully updated Card.",
 					Card: card
-				}.to_json
+				}
 			else
 				render status: 405, json: {
 					errors: card.errors
-				}.to_json
+				}
 			end
 		else
 			render status: 405, json: {
 				errors: "Invalid input"
-			}.to_json
+			}
 		end
 	end
 
-	def count_cards
+	# GET /cards/count
+	def count
 		user = current_user
 		if user.present? && user.valid?
 			tags = ""
@@ -118,17 +123,49 @@ class Api::V1::QuestionsController < ApplicationController
 				render status: 200, json: {
 					message: "Available Cards",
 					tagCount: number_questions
-				}.to_json
+				}
 			else
 				render status: 400, json: {
 					errors: "Invalid tag value"
-				}.to_json
+				}
 		    end
 		else
 			render status: 400, json: {
 				errors: "Invalid user"
-			}.to_json
+			}
 		end
+	end
+
+	# PUT /cards/:id/verify
+	def verify
+		comments = @question.comments.order("created_at desc")
+		state    = @question.evaluators_for(:votes).include?(current_user)
+		votes    = @question.reputation_for(:votes).to_i
+
+		result = @question.verify?(
+								answer_ids: params[:answerIds], 
+								answer_text: params[:answerText],
+								card_time: cookies[:time],
+								user_id: current_user.id
+							)
+		cookies.delete(:time)
+
+		# total_answers_count   = Card.question_cards(@question.id).select(:user_id).distinct.count
+		# correct_answers_count = Card.questions_right(@question.id).select(:user_id).distinct.count
+		# percentage_people     = ((correct_answers_count.to_f / total_answers_count) * 100).round(2)
+
+		answers = @question.answers.select(:id, :is_correct)
+
+		render json: {
+			answers: answers,
+			comments: comments,
+			is_passed: result[:is_passed],
+			state: state,
+			streak: current_user.streak,
+			time: result[:new_card_time],
+			time_long: result[:time_long],
+			votes: votes
+		}
 	end
 
 	def delete
@@ -137,21 +174,21 @@ class Api::V1::QuestionsController < ApplicationController
 		if card.deleting?
 			render status: 404, json: {
 				errors: "Question not found"
-			}.to_json	
+			}
 		elsif card.present?
 			card.delete!
 			render status: 200, json: {
 				message: "Success",
-			}.to_json
+			}
 		else
 			render status: 400, json: {
 				errors: "Invalid ID supplied"
-			}.to_json			
+			}
 		end
 	end
 
 	private
-	def card_params
-		params.require(:question).permit(:title, :description_markdown, :explanation_markdown, :choice, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
-	end
+		def card_params
+			params.require(:question).permit(:title, :description_markdown, :explanation_markdown, :choice, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
+		end
 end

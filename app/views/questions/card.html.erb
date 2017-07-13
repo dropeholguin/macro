@@ -1,2 +1,26 @@
 
-<%= react_component 'RunCardSasensei', {card_id: @question.id,title: @question.title, answers: @answers, description: markdown(@question.description_markdown), choice: @question.choice, tag_list: @question.tag_list, img: image_path('SPDEMODE/Allanbowe-Anim-01.svg'), explanation: markdown(@question.explanation_markdown), vote_up: vote_question_path(@question, type: "up"), vote_down: vote_question_path(@question, type: "down"), votes: @question.reputation_for(:votes).to_i, current_user: current_user, current_user_voted: !current_user.voted_for?(@question), csrfToken: form_authenticity_token, state: @state, comments: @comments,run_cards_path: next_card_path, streak: @user.streak, img: image_path('SPDEMODE/Allanbowe-Anim-01.svg'), root_path: root_path, csrfTokenFlag: form_authenticity_token} %>
+<%= 
+  react_component 'RunCardSasensei', {
+    card_id: @question.id,
+    title: @question.title,
+    answers: @answers,
+    description: markdown(@question.description_markdown),
+    choice: @question.choice,
+    tag_list: @question.tag_list,
+    img: image_path('SPDEMODE/Allanbowe-Anim-01.svg'),
+    explanation: markdown(@question.explanation_markdown),
+    vote_up: vote_question_path(@question, type: "up"),
+    vote_down: vote_question_path(@question, type: "down"),
+    votes: @question.reputation_for(:votes).to_i,
+    current_user: current_user,
+    current_user_voted: !current_user.voted_for?(@question),
+    csrfToken: form_authenticity_token,
+    state: @state, 
+    comments: @comments,
+    run_cards_path: next_card_path,
+    streak: @user.streak,
+    img: image_path('SPDEMODE/Allanbowe-Anim-01.svg'),
+    root_path: root_path,
+    csrfTokenFlag: form_authenticity_token
+  }
+%>
