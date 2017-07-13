@@ -94,10 +94,20 @@
 			display: none;
 		}
 	}
+	#run_session_filter{
+		#search_run_session_filter{
+			display: none;
+		}
+		#explanation_run_session_filter{
+			display: none;
+		}
+	}
 	#header_responsive{
 		display: block !important;
 	}
 	#header_desktop{
 		display: none;
 	}
+
+
 }

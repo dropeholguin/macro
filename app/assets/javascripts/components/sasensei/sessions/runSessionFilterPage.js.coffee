@@ -8,8 +8,10 @@ dom = React.DOM
 			{title: "GAIN PRIVILEGES", subtitle: "A pass will grant the ability to SUBMIT questions.", display: "none"}]
 	render: ->
 		dom.div 
+			id: "run_session_filter"
 			className: "row bottom-60"
 			dom.div
+				id: "search_run_session_filter"
 				className: "large-4 columns"
 				React.createElement SearchTag, tag_path: @props.tag_path
 			dom.div
@@ -21,6 +23,7 @@ dom = React.DOM
 					"Number of Sessions Available"	
 				React.createElement RunCardFilterCard, number_questions: @props.number_questions, total: @props.total, run_cards_path: @props.run_cards_path
 			dom.div
+				id: "explanation_run_session_filter"
 				className: "large-4 columns"
 				for button in @props.buttons
 					React.createElement ButtonExplanation, key: button.id, button: button
