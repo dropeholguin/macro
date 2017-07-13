@@ -1,5 +1,6 @@
 class Api::V1::QuestionsController < ApplicationController
 	before_action :authenticate_user!
+	before_action :tokens
 	include ApplicationHelper
 	include ActionView::Helpers::DateHelper
 	include ActionView::Helpers::TextHelper
@@ -20,11 +21,11 @@ class Api::V1::QuestionsController < ApplicationController
 				Card: card,
 				answers: answers,
 				tags: tags
-			}.to_json
+			}
 		else
 			render status: 405, json: {
 				errors: "Invalid input"
-			}.to_json
+			}
 		end
 	end
 
@@ -52,16 +53,16 @@ class Api::V1::QuestionsController < ApplicationController
 				render status: 200, json: {
 					message: "Successfully created Card.",
 					card: card
-				}.to_json
+				}
 			else
 				render status: 405, json: {
 					errors: card.errors
-				}.to_json
+				}
 			end
 		else
 			render status: 405, json: {
 				errors: "Invalid input"
-			}.to_json
+			}
 		end
 	end
 
@@ -72,16 +73,16 @@ class Api::V1::QuestionsController < ApplicationController
 				render status: 200, json: {
 					message: "Successfully updated Card.",
 					Card: card
-				}.to_json
+				}
 			else
 				render status: 405, json: {
 					errors: card.errors
-				}.to_json
+				}
 			end
 		else
 			render status: 405, json: {
 				errors: "Invalid input"
-			}.to_json
+			}
 		end
 	end
 
@@ -118,16 +119,16 @@ class Api::V1::QuestionsController < ApplicationController
 				render status: 200, json: {
 					message: "Available Cards",
 					tagCount: number_questions
-				}.to_json
+				}
 			else
 				render status: 400, json: {
 					errors: "Invalid tag value"
-				}.to_json
+				}
 		    end
 		else
 			render status: 400, json: {
 				errors: "Invalid user"
-			}.to_json
+			}
 		end
 	end
 
@@ -137,21 +138,79 @@ class Api::V1::QuestionsController < ApplicationController
 		if card.deleting?
 			render status: 404, json: {
 				errors: "Question not found"
-			}.to_json	
+			}	
 		elsif card.present?
 			card.delete!
 			render status: 200, json: {
 				message: "Success",
-			}.to_json
+			}
 		else
 			render status: 400, json: {
 				errors: "Invalid ID supplied"
-			}.to_json			
+			}		
+		end
+	end
+
+	def verify_card
+		user = current_user
+		answers = params[:answerIds]
+		card = Question.find params[:id]
+		tokens_earned = 0
+
+		if card.deleting?
+			render status: 404, json: {
+				errors: "Question not found"
+			}	
+		elsif card.present?
+			votes = card.reputation_for(:votes).to_i
+
+			if card.choice == "user input"
+				is_passed = card.answers.first.answer_markdown.eql? params[:answerText]
+			else
+				answers_correct = card.answers.select { |answer| answer.is_correct == true }
+				is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+			end
+			if is_passed == true
+				user.update_attributes(streak: user.streak + 1)
+				if user.streak < 9 && user.streak >= 5
+					user.update_attributes(points: user.points + @one_token)
+					tokens_earned = @one_token
+					notification = Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +1 tokens", category: "tokens_positive", source: "#{question_path(card)}")
+					notification.save
+				elsif user.streak >= 9
+					user.update_attributes(points: user.points + @two_token)
+					tokens_earned = @two_token
+					notification = Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +2 tokens", category: "tokens_positive", source: "#{question_path(card)}")
+					notification.save
+				end
+			else
+				user.update_attributes(streak: 0)
+			end
+			@card = Card.new(user_id: user.id, question_id: card.id, is_passed: is_passed)
+			@card.save
+
+			render status: 200, json: {
+				message: "Successful operation",
+				result: is_passed,
+				explanationText: card.explanation_markdown,
+				voteResultPrevious: votes,
+				voteLock: 0,
+				tokensEarned: tokens_earned
+			}
+		else
+			render status: 400, json: {
+				errors: "Invalid ID supplied"
+			}		
 		end
 	end
 
 	private
-	def card_params
-		params.require(:question).permit(:title, :description_markdown, :explanation_markdown, :choice, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
-	end
+		def tokens
+			@one_token = 1
+			@two_token = 2
+		end
+
+		def card_params
+			params.require(:question).permit(:title, :description_markdown, :explanation_markdown, :choice, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
+		end
 end

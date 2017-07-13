@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       get '/cards/count', to: "questions#count_cards"
       get '/cards/:id/edit', to: "questions#show"
       delete '/cards/:id', to: "questions#delete"
+      put '/cards/:id/verify', to: "questions#verify_card"
 
       get 'privacy', to: 'home#privacy_policy', as: :privacy
       get 'terms', to: 'home#terms_and_conditions', as: :terms
