@@ -2,6 +2,10 @@ class Api::V1::QuestionsController < ApplicationController
 	before_action :authenticate_user!
 	load_and_authorize_resource
 
+	include ApplicationHelper
+	include ActionView::Helpers::DateHelper
+	include ActionView::Helpers::TextHelper
+	
 	# GET /cards
 	def index
 		render json: @questions
@@ -9,16 +13,29 @@ class Api::V1::QuestionsController < ApplicationController
 
 	# GET /cards/:id
 	def show
-		render json: {
-			Card: @question.as_json(include: [:answers]),
-			Tags: @question.tag_list
-		}
+		card = Question.where(id: params[:id]).select(:id, :state).take 
+		
+		if card.present? && card.activated?
+			card = Question.where(id: card.id).select(:id, :choice, :description_markdown, :explanation_markdown).take 
+			answers = card.answers.map{ |answer| {answerText: answer.answer_markdown, isCorrect: answer.is_correct }}
+			tags = card.tags.map(&:id)
+
+			render status: 200, json: {
+				Card: card,
+				answers: answers,
+				tags: tags
+			}
+		else
+			render status: 405, json: {
+				errors: "Invalid input"
+			}
+		end
 	end
 
 	def create
 		card = Question.new(card_params)
 		card.user = current_user
-
+		card.title = truncate(strip_tags(markdown(card.description_markdown)), length: 15)
 		tags = []
 		if params[:tags].present?
 	        params[:tags].each do |id_tag|
@@ -54,14 +71,20 @@ class Api::V1::QuestionsController < ApplicationController
 
 	def update
 		card = Question.find(params[:id])
-		if card.update(card_params)
-			render status: 200, json: {
-				message: "Successfully updated Card.",
-				Card: card
-			}
+		if card.activated?
+			if card.update(card_params)
+				render status: 200, json: {
+					message: "Successfully updated Card.",
+					Card: card
+				}
+			else
+				render status: 405, json: {
+					errors: card.errors
+				}
+			end
 		else
 			render status: 405, json: {
-				errors: card.errors
+				errors: "Invalid input"
 			}
 		end
 	end
@@ -90,12 +113,13 @@ class Api::V1::QuestionsController < ApplicationController
 				questions_sort = []
 
 				cards = Card.number_cards_submitted(user.id).pluck(:question_id)
-				questions.each do |question|
-					if !cards.include?(question.id)
-						questions_sort << question
+				questions.each do |card|
+					if !cards.include?(card.id) && card.activated?
+						questions_sort << card
 					end
 				end
 				number_questions = questions_sort.count
+
 				render status: 200, json: {
 					message: "Available Cards",
 					tagCount: number_questions
@@ -142,6 +166,25 @@ class Api::V1::QuestionsController < ApplicationController
 			time_long: result[:time_long],
 			votes: votes
 		}
+	end
+
+	def delete
+		card = Question.find(params[:id])
+
+		if card.deleting?
+			render status: 404, json: {
+				errors: "Question not found"
+			}
+		elsif card.present?
+			card.delete!
+			render status: 200, json: {
+				message: "Success",
+			}
+		else
+			render status: 400, json: {
+				errors: "Invalid ID supplied"
+			}
+		end
 	end
 
 	private

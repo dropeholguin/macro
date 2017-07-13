@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :cards, controller: :questions, only: [:index, :create, :update, :show] do
+      resources :cards, controller: :questions do
         member do
           put 'verify'
         end
@@ -47,7 +47,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :tags, only:[:index, :update]
+      get '/tags', to: "tags#index"
     end
   end
 

@@ -1,13 +1,15 @@
 class Api::V1::TagsController < ApplicationController
+	before_action :authenticate_user!
+
 	def index
-		tags = Tag.all
+		tags = Topic.all
 		if tags.present?
-			render json: tags
+			render json: tags.map{ |tag| {tagID: tag.id, tagName: tag.name, tagDesc: tag.desc }}
 		else
 			render status: 404, json: {
-					Description: "No tags found"
+					message: "No tags found"
 			}.to_json
-		end 
+		end
 	end
 	
 	def update
@@ -16,29 +18,29 @@ class Api::V1::TagsController < ApplicationController
 			if tag.present?
 				if tag.update(tag_params)
 					render status: 200, json: {
-						Description: "Successful operation",
+						message: "Successful operation",
 						Tag: tag
 					}.to_json
 				else
 					render status: 405, json: {
-						Description: "Validation exception",
+						message: "Validation exception",
 						messgae: tag.errors
 					}.to_json
 				end
 			else
 				render status: 404, json: {
-						Description: "Tag not Found"
+						message: "Tag not Found"
 				}.to_json
 			end
 		else
 			render status: 400, json: {
-						Description: "Invalid ID/Data supplied"
+						message: "Invalid ID/Data supplied"
 			}.to_json
 		end
 	end
 
 	private
 	def tag_params
-		params.require(:tag).permit(:name)
+		params.require(:topic).permit(:name, :desc)
 	end
 end
