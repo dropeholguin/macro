@@ -39,7 +39,7 @@ dom = React.DOM
 				type: typeOption,
 				placeholder: msg
 			dom.label
-				className: "uppercase menu-title"
+				className: ""
 				style: {display: hide}
 				htmlFor: "#{@props.answer.id}",
 				dangerouslySetInnerHTML: __html: @props.answer.answer_markdown.toString()
