@@ -1,14 +1,18 @@
 class Api::V1::QuestionsController < ApplicationController
 	before_action :authenticate_user!
 	before_action :tokens
+	load_and_authorize_resource
+
 	include ApplicationHelper
 	include ActionView::Helpers::DateHelper
 	include ActionView::Helpers::TextHelper
 	
+	# GET /cards
 	def index
-		render json: Question.all
+		render json: @questions
 	end
 
+	# GET /cards/:id
 	def show
 		card = Question.where(id: params[:id]).select(:id, :state).take 
 		
@@ -86,7 +90,8 @@ class Api::V1::QuestionsController < ApplicationController
 		end
 	end
 
-	def count_cards
+	# GET /cards/count
+	def count
 		user = current_user
 		if user.present? && user.valid?
 			tags = ""
@@ -132,13 +137,45 @@ class Api::V1::QuestionsController < ApplicationController
 		end
 	end
 
+	# PUT /cards/:id/verify
+	def verify
+		comments = @question.comments.order("created_at desc")
+		state    = @question.evaluators_for(:votes).include?(current_user)
+		votes    = @question.reputation_for(:votes).to_i
+
+		result = @question.verify?(
+								answer_ids: params[:answerIds], 
+								answer_text: params[:answerText],
+								card_time: cookies[:time],
+								user_id: current_user.id
+							)
+		cookies.delete(:time)
+
+		# total_answers_count   = Card.question_cards(@question.id).select(:user_id).distinct.count
+		# correct_answers_count = Card.questions_right(@question.id).select(:user_id).distinct.count
+		# percentage_people     = ((correct_answers_count.to_f / total_answers_count) * 100).round(2)
+
+		answers = @question.answers.select(:id, :is_correct)
+
+		render json: {
+			answers: answers,
+			comments: comments,
+			is_passed: result[:is_passed],
+			state: state,
+			streak: current_user.streak,
+			time: result[:new_card_time],
+			time_long: result[:time_long],
+			votes: votes
+		}
+	end
+
 	def delete
 		card = Question.find(params[:id])
 
 		if card.deleting?
 			render status: 404, json: {
 				errors: "Question not found"
-			}	
+			}
 		elsif card.present?
 			card.delete!
 			render status: 200, json: {
@@ -152,9 +189,9 @@ class Api::V1::QuestionsController < ApplicationController
 	end
 
 	def verify_card
-		user = current_user
+		user 	= current_user
 		answers = params[:answerIds]
-		card = Question.find params[:id]
+		card 	= Question.find params[:id]
 		tokens_earned = 0
 
 		if card.deleting?
@@ -168,19 +205,19 @@ class Api::V1::QuestionsController < ApplicationController
 				is_passed = card.answers.first.answer_markdown.eql? params[:answerText]
 			else
 				answers_correct = card.answers.select { |answer| answer.is_correct == true }
-				is_passed = answers_correct.map(&:id) == answers.map(&:to_i)
+				is_passed 		= answers_correct.map(&:id) == answers.map(&:to_i)
 			end
 			if is_passed == true
 				user.update_attributes(streak: user.streak + 1)
 				if user.streak < 9 && user.streak >= 5
 					user.update_attributes(points: user.points + @one_token)
-					tokens_earned = @one_token
-					notification = Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +1 tokens", category: "tokens_positive", source: "#{question_path(card)}")
+					tokens_earned 	= @one_token
+					notification 	= Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +1 tokens", category: "tokens_positive", source: "#{question_path(card)}")
 					notification.save
 				elsif user.streak >= 9
 					user.update_attributes(points: user.points + @two_token)
-					tokens_earned = @two_token
-					notification = Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +2 tokens", category: "tokens_positive", source: "#{question_path(card)}")
+					tokens_earned	= @two_token
+					notification 	= Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +2 tokens", category: "tokens_positive", source: "#{question_path(card)}")
 					notification.save
 				end
 			else

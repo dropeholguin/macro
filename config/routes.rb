@@ -35,6 +35,15 @@ Rails.application.routes.draw do
       delete '/cards/:id', to: "questions#delete"
       put '/cards/:id/verify', to: "questions#verify_card"
 
+      resources :cards, controller: :questions do
+        member do
+          put 'verify'
+        end
+        collection do
+          get 'count'
+        end
+      end
+
       get 'privacy', to: 'home#privacy_policy', as: :privacy
       get 'terms', to: 'home#terms_and_conditions', as: :terms
       
