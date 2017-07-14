@@ -6,8 +6,17 @@ dom = React.DOM
 		$(@refs.actions).show()
 	cardOnHoverOut: (event)->
 		$(@refs.actions).hide()
+	deleteCard: (event)->
+		$(@refs.cardSasensei).fadeOut()
+		$.ajax
+			type: "POST"
+			url: "/questions/" + @props.id
+			dataType: "json"
+			data: {"_method":"delete"}
+			success: (data)=>
 	render: ->
 		dom.div
+			ref: "cardSasensei"
 			className: "card-background"
 			onMouseEnter: @cardOnHover
 			onMouseLeave: @cardOnHoverOut
@@ -23,4 +32,10 @@ dom = React.DOM
 				dom.a
 					className: 'button button-edit'
 				dom.a
+					onClick: @deleteCard
 					className: "button button-delete"
+					'data-confirm': "Are you sure?",
+					'data-method': "delete",
+					'data-remote': true
+					rel: "nofollow",
+
