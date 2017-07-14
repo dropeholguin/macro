@@ -33,11 +33,12 @@ dom = React.DOM
 		highlightAllCodes()
 	deleteCard: (event)->
 		$.ajax
-			url: "/question/#{@props.id}"
-			type: "delete"
-			data: id:@props.id
+			type: "POST"
+			url: "/questions/" + @props.id
+			dataType: "json"
+			data: {"_method":"delete"}
 			success: (data)=>
-				console.log "was deleted"
+				
 	render: ->
 		if(@state.button_2 == "EDIT_D")
 			showButton = "show-hide"
@@ -67,7 +68,6 @@ dom = React.DOM
 						@state.button_2,
 					dom.a
 						className: "button small hollow secondary margin-side "+showButton,
-						href: "/question/#{@props.id}",
 						onClick: @deleteCard
 						'data-confirm': "Are you sure?",
 						'data-method': "delete",
