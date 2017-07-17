@@ -219,7 +219,7 @@ dom = React.DOM
 						className: "question-background"
 						dom.div
 							style:	{fontSize: "16px"}
-							className: "large-8 large-centered columns uppercase menu-subtitle"
+							className: "large-8 large-centered columns"
 							dangerouslySetInnerHTML: __html: @state.description.toString(),
 					dom.div
 						className: "answers"
