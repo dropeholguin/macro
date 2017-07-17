@@ -193,7 +193,7 @@ class Api::V1::QuestionsController < ApplicationController
 		answers = params[:answerIds]
 		card 	= Question.find params[:id]
 		tokens_earned = 0
-
+	
 		if card.deleting?
 			render status: 404, json: {
 				errors: "Question not found"

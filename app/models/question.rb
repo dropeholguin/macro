@@ -23,6 +23,14 @@ class Question < ApplicationRecord
 
   scope :questions_list, -> (user_id) { where(user_id: user_id) }
 
+  aasm column: "state" do
+      state :activated, initial: true
+      state :deleting
+      event :delete do
+          transitions from: :activated, to: :deleting
+      end
+  end
+
   index_name("questions")
   mapping do
     indexes :id, index: :not_analyzed
