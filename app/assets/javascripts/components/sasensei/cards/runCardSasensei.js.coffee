@@ -18,7 +18,7 @@ dom = React.DOM
 		animate_tag: "animated fadeInRight"
 		timeLeft: +120000
 		streak: @props.streak
-		voteReaons: []
+		voteReasons: []
 	componentDidMount: ->
 		$(@refs.timer).countdown({since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})  
 		$(@refs.showVotes).hide()
@@ -30,7 +30,7 @@ dom = React.DOM
 			url: "/api/v1/vote_reasons"
 			type: 'GET'
 			success: (data) =>
-				@setState({ voteReaons: data })
+				@setState({ voteReasons: data })
 	infoUpdate: (data) ->	
 		console.log (data)		
 		@setState({title: data.question.title, description: data.description, explanation: data.explanation, card_id: data.question.id})
@@ -282,7 +282,7 @@ dom = React.DOM
 								dom.option
 									value: "0", 
 									"Choose Issue"
-								@state.voteReaons.map (reason) -> 
+								@state.voteReasons.map (reason) -> 
 									dom.option
 										value: reason.id, 
 										reason.text
