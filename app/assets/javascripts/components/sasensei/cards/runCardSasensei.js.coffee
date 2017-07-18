@@ -18,6 +18,7 @@ dom = React.DOM
 		animate_tag: "animated fadeInRight"
 		timeLeft: +120000
 		streak: @props.streak
+		voteReaons: []
 	componentDidMount: ->
 		$(@refs.timer).countdown({since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})  
 		$(@refs.showVotes).hide()
@@ -25,6 +26,11 @@ dom = React.DOM
 		$(@refs.cardStats).hide()
 		if(@state.state)
 			$(@refs.showVotes).hide()	
+		$.ajax
+			url: "/api/v1/vote_reasons"
+			type: 'GET'
+			success: (data) =>
+				@setState({ voteReaons: data })
 	infoUpdate: (data) ->	
 		console.log (data)		
 		@setState({title: data.question.title, description: data.description, explanation: data.explanation, card_id: data.question.id})
@@ -118,7 +124,7 @@ dom = React.DOM
 			$(@refs.animateDescription).addClass('animated fadeInRight')
 			$.ajax
 				url: @props.run_cards_path
-				type: 'POST'
+				type: 'GET'
 				dataType: 'json'
 				error: ->
 					console.log("AJAX Error:")
@@ -130,6 +136,8 @@ dom = React.DOM
 				    @answersUpdate(data)
 				    @tagsUpdate(data)
 				    highlightAllCodes()
+				    $(@refs.votesShow).hide()
+						$(@refs.reasonCardHolder).hide()
 
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
@@ -139,8 +147,9 @@ dom = React.DOM
 		$(@refs.cardStats).show()
 		$(@refs.cardStats).addClass('animated fadeInDown')
 		$.ajax
-			url: "/questions/#{@state.card_id}/vote?type=up"
-			type: 'post'
+			url: "api/v1/cards/#{@state.card_id}/vote"
+			type: 'PUT',
+			data: { vote_direction: 'up' }
 		@setState(
 			votes:  @state.votes + 1,
 			state: true
@@ -155,6 +164,8 @@ dom = React.DOM
 	voteDownClicked: (event) ->
 		$(@refs.reasonCardHolder).show()
 	reasonSelected: (event) ->
+		if ($(@refs.reasonCard).val() == "0")
+			return
 		$(@refs.showVotes).hide()
 		$(@refs.cardStats).show()
 		$(@refs.cardStats).addClass('animated fadeInDown')
@@ -162,7 +173,7 @@ dom = React.DOM
 		$.ajax
 			url: "/api/v1/cards/#{@state.card_id}/vote",
 			type: 'PUT',
-			data: { type: 'down', reason: reasonValue }
+			data: { vote_direction: 'down', vote_reason_id: reasonValue }
 		@setState(
 			votes:  @state.votes - 1
 			state: true
@@ -256,7 +267,7 @@ dom = React.DOM
 							style: {display: "none"}
 							dom.button 
 								className: "upvote"
-								# onClick: @voteUpClicked,
+								onClick: @voteUpClicked,
 							dom.button 
 								className: "downvote"
 								onClick: @voteDownClicked,
@@ -267,19 +278,14 @@ dom = React.DOM
 							dom.select
 								ref: "reasonCard",
 								className: "btn-run menu-title",
-								onChange: @reasonSelected
+								onChange: @reasonSelected,
 								dom.option
-									value: "reason1", 
-									"reason1"
-								dom.option
-									value: "reason2",
-									"reason2"
-								dom.option
-									value: "reason3",
-									"reason3"
-								dom.option
-									value: "reason4",
-									"reason4"
+									value: "0", 
+									"Choose Issue"
+								@state.voteReaons.map (reason) -> 
+									dom.option
+										value: reason.id, 
+										reason.text
 						dom.div
 							className: "small-4 columns text-center pull-right"
 							dom.a

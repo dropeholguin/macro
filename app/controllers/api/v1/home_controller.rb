@@ -13,4 +13,11 @@ class Api::V1::HomeController < ApplicationController
 
     render json: { privacy: @privacy.as_json }
   end
+
+  # GET /vote_reasons
+  def vote_reasons
+    @reasons = Reason.all.select(:id, :text)
+
+    render json: @reasons.as_json
+  end
 end
