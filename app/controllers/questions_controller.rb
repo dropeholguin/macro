@@ -329,6 +329,7 @@ class QuestionsController < ApplicationController
 
 	def vote
 		value = params[:type] == "up" ? 1 : -1
+		reason = params[:reason] || "Default Reason"
 		@question = Question.find(params[:id])
 		author = @question.user
 
@@ -342,6 +343,9 @@ class QuestionsController < ApplicationController
 			@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: message, category: "vote", source: "#{question_path(@question)}")
 			@notification.save
 			@question.add_or_update_evaluation(:votes, value, current_user)
+			if (value == -1)
+				VoteReason.create(question_id: @question.id, user_id: current_user.id, reason: reason)
+			end
 
 			if @question.reputation_for(:votes).to_i == 4
 				author.update_attributes(points: author.points + 32)

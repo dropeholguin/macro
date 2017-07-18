@@ -27,25 +27,28 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get '/cards_index', to: "questions#index"
-      post '/cards', to: "questions#create"
-      put '/cards/:id/edit', to: "questions#update"
-      get '/cards/count', to: "questions#count_cards"
-      get '/cards/:id/edit', to: "questions#show"
-      delete '/cards/:id', to: "questions#delete"
-      put '/cards/:id/verify', to: "questions#verify_card"
+      # get '/cards_index', to: "questions#index"
+      # post '/cards', to: "questions#create"
+      # put '/cards/:id/edit', to: "questions#update"
+      # get '/cards/count', to: "questions#count_cards"
+      # get '/cards/:id/edit', to: "questions#show"
+      # delete '/cards/:id', to: "questions#delete"
+      # put '/cards/:id/verify', to: "questions#verify_card"
 
       resources :cards, controller: :questions do
         member do
           put 'verify'
+          put 'vote'
         end
         collection do
           get 'count'
+          get 'next_card'
         end
       end
 
       get 'privacy', to: 'home#privacy_policy', as: :privacy
       get 'terms', to: 'home#terms_and_conditions', as: :terms
+      get 'vote_reasons', to: 'home#vote_reasons', as: :reasons
       
       resource :auth, only: [] do
         collection do

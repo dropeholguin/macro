@@ -18,6 +18,7 @@ dom = React.DOM
 		animate_tag: "animated fadeInRight"
 		timeLeft: +120000
 		streak: @props.streak
+		voteReasons: []
 	componentDidMount: ->
 		$(@refs.timer).countdown({since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})  
 		$(@refs.showVotes).hide()
@@ -25,6 +26,11 @@ dom = React.DOM
 		$(@refs.cardStats).hide()
 		if(@state.state)
 			$(@refs.showVotes).hide()	
+		$.ajax
+			url: "/api/v1/vote_reasons"
+			type: 'GET'
+			success: (data) =>
+				@setState({ voteReasons: data })
 	infoUpdate: (data) ->	
 		console.log (data)		
 		@setState({title: data.question.title, description: data.description, explanation: data.explanation, card_id: data.question.id})
@@ -103,6 +109,7 @@ dom = React.DOM
 				$("input").prop('disabled', true)
 				$("#comment_comment_markdown").prop('disabled', false)
 				$("#flag_form_input").prop('disabled', false)
+				$(@refs.votesShow).show()
 
 	nextQuestionClicked: (event) ->	
 		if(@state.is_passed == false)
@@ -117,7 +124,7 @@ dom = React.DOM
 			$(@refs.animateDescription).addClass('animated fadeInRight')
 			$.ajax
 				url: @props.run_cards_path
-				type: 'POST'
+				type: 'GET'
 				dataType: 'json'
 				error: ->
 					console.log("AJAX Error:")
@@ -129,6 +136,8 @@ dom = React.DOM
 				    @answersUpdate(data)
 				    @tagsUpdate(data)
 				    highlightAllCodes()
+				    $(@refs.votesShow).hide()
+						$(@refs.reasonCardHolder).hide()
 
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
@@ -138,8 +147,9 @@ dom = React.DOM
 		$(@refs.cardStats).show()
 		$(@refs.cardStats).addClass('animated fadeInDown')
 		$.ajax
-			url: "/questions/#{@state.card_id}/vote?type=up"
-			type: 'post'
+			url: "api/v1/cards/#{@state.card_id}/vote"
+			type: 'PUT',
+			data: { vote_direction: 'up' }
 		@setState(
 			votes:  @state.votes + 1,
 			state: true
@@ -152,12 +162,18 @@ dom = React.DOM
 		$(@refs.voteTitle).text("Currently Rating:")
 		$.amaran content: {'title': "You rated +1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	voteDownClicked: (event) ->
+		$(@refs.reasonCardHolder).show()
+	reasonSelected: (event) ->
+		if ($(@refs.reasonCard).val() == "0")
+			return
 		$(@refs.showVotes).hide()
 		$(@refs.cardStats).show()
 		$(@refs.cardStats).addClass('animated fadeInDown')
+		reasonValue = $(@refs.reasonCard).prop('disabled', true).val()
 		$.ajax
-			url: "/questions/#{@state.card_id}/vote?type=down"
-			type: 'post'		
+			url: "/api/v1/cards/#{@state.card_id}/vote",
+			type: 'PUT',
+			data: { vote_direction: 'down', vote_reason_id: reasonValue }
 		@setState(
 			votes:  @state.votes - 1
 			state: true
@@ -247,14 +263,31 @@ dom = React.DOM
 						className: "row"
 						dom.div
 							ref: "votesShow"
+							className: "small-4 columns text-center"
 							style: {display: "none"}
-							className: "large-4 columns text-center"
 							dom.button 
 								className: "upvote"
+								onClick: @voteUpClicked,
 							dom.button 
 								className: "downvote"
+								onClick: @voteDownClicked,
 						dom.div
-							className: "large-4 large-centered columns text-center"
+							ref: "reasonCardHolder",
+							className: "small-4 columns text-center"
+							style: {display: "none"}
+							dom.select
+								ref: "reasonCard",
+								className: "btn-run menu-title",
+								onChange: @reasonSelected,
+								dom.option
+									value: "0", 
+									"Choose Issue"
+								@state.voteReasons.map (reason) -> 
+									dom.option
+										value: reason.id, 
+										reason.text
+						dom.div
+							className: "small-4 columns text-center pull-right"
 							dom.a
 								style: {width: "100%", display: "none"}
 								className: "button btn-run menu-title uppercase",

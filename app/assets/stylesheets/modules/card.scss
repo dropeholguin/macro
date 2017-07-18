@@ -60,24 +60,22 @@
 	}
 }
 
-.upvote{
-	width: 51px;
-	height: 49px;
-	background-image: url(image_path(#{"upvote.png"}));
-	margin-right: 15px;
-	cursor: pointer;
-}
-.upvote:hover{
-	opacity: 0.6;
-}
-.downvote{
-	width: 51px;
-	height: 49px;
-	background-image: url(image_path(#{"downvote.png"}));
-	cursor: pointer;
-}
-.downvote:hover{
-	opacity: 0.6;
+.upvote, .downvote{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+
+  background-size: 100% 100%;
+  &.upvote{
+    margin-right: 15px;
+    background-image: url(image_path(#{"upvote.png"}));
+  }
+  &.downvote{
+    background-image: url(image_path(#{"downvote.png"}));
+  }
+  &:hover{
+    opacity: 0.6;
+  }
 }
 
 .correct-bg{
