@@ -1,0 +1,248 @@
+
+samples:
+  - |
+    /***
+      @brief assigns libraries
+    ***/
+    %macro assignlib(libref=__ALL__);
+      %if &libref=BAF_CNTL %then %do;
+      libname BAF_CNTL "&bafcontroldata/baf_cntl";
+      %end;
+      %else %do;
+      data _null_;
+        set BAF_CNTL.library_locations;
+      %if &libref ne __ALL__ %then %do;
+        where upcase(lib)="%upcase(&libref)";
+      %end;
+          rc=libname(lib,cats("&bafdata/",loc));
+        put lib= rc=;
+      run;
+      %end;
+    %mend;
+  - |
+    %* note that the below syntax changes within a macro ;
+      proc print data=sashelp.class;
+      quit;
+      %macro x;
+        proc print data=sashelp.class;
+        quit;
+      %mend;
+  - |
+    data ACISASUS.filesec ;
+    attrib
+    userid                        length= $8  format=$8. label="User ID"
+    file                          length= $10 format=$10. label="Name of File"
+    readonly                      length= $1 label="Read Only Access"
+    ;
+    infile cards dsd delimiter=',';
+    input
+       userid                         :$char.
+       file                           :$char.
+       readonly                       :$char.
+    ;
+    datalines4;
+    jimdemo,acc_agg,
+    jimdemo,filedesc,
+    ;;;;
+    run;
+  - |
+    data _null_;
+      file _webout mod;
+      put "mac=&mac";
+    run;
+    filename _webout clear;
+    endsas;
+  - |
+    data _null_;
+      length lib_uri engine $256;
+      call missing (of _all_);
+      /* get URI for the particular library */
+      rc1=metadata_getnobj("omsobj:SASLibrary?@Libref ='&libref'",1,lib_uri);
+      /* get the Engine attribute of the previous object */
+      &mD.put rc1= lib_uri= rc2= engine=;
+      call symputx("liburi",lib_uri,'l');
+      call symputx("engine",engine,'l');
+    run;
+  - |
+    %macro mf_getquotedstr(IN_STR,DLM=%str(,),QUOTE=S);
+      %if &quote=S %then %let quote=%str(%');
+      %else %if &quote=D %then %let quote=%str(%");
+      %put look here - unbalanced quotes are just fine!!!!;
+      %put if they are prefixed with a % sign.
+    %mend;
+  - |
+    proc metadata in=
+     '<GetMetadataObjects>
+      <Reposid>$METAREPOSITORY</Reposid>
+      <Type>SASLibrary</Type>
+      <Flags>&flags</Flags>
+      <Options/>
+      </GetMetadataObjects>'
+      out=response;
+    run;
+  - |
+    proc sql noprint;
+      select max(processed_dttm)-1 format=datetime19. into: tstamp 
+      from &mpelib..mpe_dataloads 
+      where libref="&libref" and dsn="&ds" and ETLSOURCE="&TABLE";
+    quit;
+  - |
+    proc sql;
+      create table &inner_table as
+      select * from work.bitemp5c_updates;
+  - |
+    PROC FORMAT;
+      picture yymmddhhmmss other='%0Y-%0m-%0d %0H:%0M:%0S' (datatype=datetime);
+    RUN;
+  - |
+    proc sql noprint;
+    select upcase(loadtype)
+        ,var_txfrom,var_txto
+        ,var_busfrom,var_busto
+        ,var_processed,rk_underlying,buskey
+        ,coalesce(rk_underlying,buskey)
+        ,pre_edit_hook
+      ,case when rk_underlying is null then buskey else rk_underlying end
+    into: loadtype,:var_txfrom,:var_txto
+      ,:var_busfrom ,:var_busto
+        ,:var_processed,:rk_underlying,:buskey, :sortPK, :pre_edit_hook,:pk
+    from &mpelib..mpe_tables
+    where TX_FROM le %sysfunc(datetime()) lt TX_TO
+      and upcase(libref)="%upcase(&libref)";
+  - |
+    %mp_dirlist()
+  - |
+    %mp_dirlist(outds=dirs, path=&mpelocapprovals/staging/&TABLE);
+  - |
+    data _null_;
+      set dirs;
+      if scan(name,-1,'.') ne 'sas7bdat';
+      retain str1
+        "ods package(ProdOutput) add file='&mpelocapprovals/staging/&TABLE/";
+      retain str2 "' mimetype='text/plain' path='contents/';";
+      call execute(cats(str1,filename,str2));
+      run;
+      %let archive_path=%sysfunc(pathname(work));
+      ods package(ProdOutput) publish archive  properties
+            (archive_name=  "&table..zip" archive_path="&archive_path");
+      ods package(ProdOutput) close;
+  - |
+    data have;
+    input group replicate $ sex $ count;
+    datalines;
+    1 A F 3
+    1 A M 2
+    ;
+    run;
+  - |
+    Proc Freq
+      DATA=LIB.TABLE_IN
+      ORDER=FREQ;
+      TABLES FIELD / MISSING OUT = LIB.TABLE_OUT; /* outputs to a SAS data table */
+    RUN;
+  - |
+    ods output summary=class_means_ods;
+    proc means data=sashelp.class stackodsoutput;
+      class sex;
+      types sex;
+      var height weight;
+      output out=class_means mean= sum= /autoname;
+    run;
+    ods output close;
+    filename ft15f001 temp;
+    options nodate pageno=1 linesize=80 pagesize=60;
+  - |
+    proc explode;
+    parmcards;
+    HELLO WORLD
+    ;
+  - |
+    PROC SQL;
+    CREATE TABLE  STATS_NEW AS
+    SELECT        memname AS TABLE_NAME,a.*
+    FROM          STATS a
+    LEFT JOIN     SOURCES b
+    ON            a.name = b.name
+    GROUP BY      a.name
+    ORDER BY      a.name;
+    QUIT;
+  - |
+    /* comment */
+    %* comment;
+     
+    data _null_;
+      *another comment;
+      putlog 'yeah';
+    run;
+  - |
+    PROC CPORT LIBRARY=sasuser FILE='C:\temp\trans.exp' memtype=catalog;
+        select batchaf;
+    RUN;
+  - |
+    libname sasuser "%sysfunc(pathname(sasuser))";
+    PROC CIMPORT LIBRARY=sasuser INFILE="/your/landing/area/trans.exp"; RUN;
+
+    proc build batch c=sasuser.batchaf;
+      compile select=builder.scl;run;
+     
+    proc display c=sasuser.batchaf.builder.scl;run;
+  - |
+    %global type libds;
+    %let libref=%scan(&libds,1,.);
+    data _null_;
+      length lib_uri LibName $200;
+      if metadata_getnobj("omsobj:SASLibrary?@Libref='&libref'",1,lib_uri) then do;
+        rc=metadata_getattr(lib_uri,"Name",LibName);
+      call symputx('libname',libname);
+      end;
+    run;
+    libname &libref meta library="&libname";
+  - |
+    /* set content type if CSV */
+    data _null_;
+      if "%upcase(&type)"="CSV" then
+        rc=stpsrv_header("Content-type"
+        ,"Content-Type: text/csv; encoding=utf-8"
+      );
+    run;
+    PROC EXPORT DATA=&libds OUTFILE=_webout DBMS=&type REPLACE; run;
+  - |
+    proc fcmp outlib=work.myfuncs.test;
+      function minC(a $, b $, c $) $;
+      length result $1000;
+        result=a><b><c; 
+      return (result);
+      endsub;
+    quit;
+  - |
+    options sastrace=',,,d' sastraceloc=saslog nostsuffix;
+    proc metalib tl=4095; /* max is 4094 for 9.2 */
+      omr (libid="B900004R" repid="A5HOSDWY");
+      report(type = summary);
+      update_rule = (noadd);
+      select (A5GF9HGW.AD00016K);
+    Run;
+  - |
+    %macro ascii();
+      %local i asciichars;
+      /* adjust here to include any additional chars */
+      %do i=32 %to 126;
+        %let asciichars=&asciichars%qsysfunc(byte(&i));
+      %end;
+      %str(&asciichars)
+    %mend;
+  - |
+    data AD_USERS;
+      infile "%sysfunc(pathname(work))\ad_users.csv" dsd
+      firstobs=3 lrecl=10000;
+      input SamAccountName:$100. name:$100. GivenName:$50.
+        SurName:$50. UserPrincipalName:$200.
+        DistinguishedName:$500. Title:$100. LockedOut:$5.
+        created:$25. Department:$50. EmailAddress:$100.;
+      if index(DistinguishedName,'OU=Employees') then EMPLOYEE_FLG=1;
+      else EMPLOYEE_FLG=0;
+    run;
+  - |
+    data "c:\MyDataset";
+      put 'SAS datasets can be created directly, without using the libname engine';
+    run;
