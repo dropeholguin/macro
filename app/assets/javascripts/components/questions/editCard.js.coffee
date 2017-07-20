@@ -52,7 +52,7 @@ dom = React.DOM
 									dom.input
 										name: "_method",
 										type: "hidden",
-										method: "patch",
+										value: "patch",
 									dom.div
 										className: "row"
 										dom.div
