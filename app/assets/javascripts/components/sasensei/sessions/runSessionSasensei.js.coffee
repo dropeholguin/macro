@@ -17,7 +17,7 @@ dom = React.DOM
 		tag_list: @props.tag_list
 		choice: @props.choice
 		animate_tag: "animated fadeInRight"
-		timeLeft: +120000
+		timeLeft: +120
 		streak: @props.streak
 		voteReasons: []
 	componentDidMount: ->
