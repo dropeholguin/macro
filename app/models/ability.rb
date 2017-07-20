@@ -9,6 +9,7 @@ class Ability
 
       can [:read, :count, :verify, :verify_card, :vote, :next_card], Question
       can :manage, Question, user_id: user.id
+      can :destroy, User, id: user.id
     end
   end
 end
