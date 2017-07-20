@@ -101,9 +101,9 @@ dom = React.DOM
 									value: @props.csrfToken
 									});	
 								dom.div
-									className: "row question-background"
+									className: "row"
 									dom.div
-										className: "large-11 large-centered columns"								
+										className: "large-11 large-centered medium-10 medium-centered small-11 small-centered columns question-background"								
 										dom.textarea
 											id: "description",
 											name: "question[description_markdown]",
@@ -111,7 +111,7 @@ dom = React.DOM
 								dom.div
 									className: "row"									
 									dom.div
-										className: "large-10 large-centered columns"
+										className: "large-10 large-centered medium-10 medium-centered small-11 small-centered columns"
 										dom.select 
 											ref: "choiceSelected",
 											id: "choice"
@@ -143,7 +143,7 @@ dom = React.DOM
 												onClick: @userInputClicked,
 								dom.div 
 									ref: "multipleChoice",
-									className: "margin-20  large-10 large-centered columns",
+									className: "margin-20  large-10 large-centered medium-10 medium-centered small-11 small-centered columns",
 									dom.div
 										className: "row"
 										dom.div
@@ -262,15 +262,15 @@ dom = React.DOM
 											className: "add_fields",
 											'+'
 								dom.div
-									className: "row question-background"
+									className: "row"
 									dom.div
-										className: "large-11 large-centered columns"
+										className: "large-11 large-centered medium-10 medium-centered small-11 small-centered columns question-background"
 										dom.textarea
 											id: "explanation",
 											name: "question[explanation_markdown]",
 											placeholder: "Start typing your explanation..."
 								dom.div 
-									className: "margin-20 large-10 large-centered columns",																												
+									className: "margin-20 large-10 large-centered medium-10 medium-centered small-11 small-centered columns",																												
 									dom.input
 										'data-topics': "/topics",
 										'data-delimiter': ", ",
