@@ -113,3 +113,8 @@ input[type=radio]:not(old):checked + label{
   border: 1px solid #FFFF33; 
   margin-bottom: 10px; 
 }
+.statsHolder{
+  height: 100px;
+  width: 100%;
+  background-color: white;
+}
