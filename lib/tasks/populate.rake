@@ -17,7 +17,8 @@ namespace :populate do
         CHOICES = ['multiple', 'simple', 'multiple', 'user input', 'multiple']
         TAGS = ["SAS Programming", "SAS Macro", "DI Studio", "SAS Management Console", "Enterprise Guide", "Workspace Management"]
 
-        500.times do
+
+        2000.times do
           # random choices for this questions
           use_sas_sample = true || Faker::Boolean.boolean
           current_choice = CHOICES[Faker::Number.number(1).to_i % CHOICES.size]
