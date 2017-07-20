@@ -24,6 +24,7 @@ dom = React.DOM
 		$(@refs.showVotes).hide()
 		$(@refs.showComments).hide()
 		$(@refs.cardStats).hide()
+		$(document).foundation();
 		if(@state.state)
 			$(@refs.showVotes).hide()	
 		$.ajax
@@ -143,9 +144,11 @@ dom = React.DOM
 		$("#my_popup").popup() 
 		console.log ("It Works!")
 	voteUpClicked: (event) ->
+		$(@refs.reasonCardHolder).hide()
 		$(@refs.showVotes).hide()
 		$(@refs.cardStats).show()
 		$(@refs.cardStats).addClass('animated fadeInDown')
+		$(@refs.votesShow).find('button').prop('disabled', true)	# disables both voteUp/voteDown buttons
 		$.ajax
 			url: "api/v1/cards/#{@state.card_id}/vote"
 			type: 'PUT',
@@ -170,6 +173,7 @@ dom = React.DOM
 		$(@refs.cardStats).show()
 		$(@refs.cardStats).addClass('animated fadeInDown')
 		reasonValue = $(@refs.reasonCard).prop('disabled', true).val()
+		$(@refs.votesShow).find('button').prop('disabled', true)	# disables both voteUp/voteDown buttons
 		$.ajax
 			url: "/api/v1/cards/#{@state.card_id}/vote",
 			type: 'PUT',
@@ -297,10 +301,15 @@ dom = React.DOM
 								"Next"
 						dom.div
 							ref: "st"
-							style: {display: "none"}
-							className: "large-4 columns"
+							className: "large-12 columns text-center"
 							dom.a
-								className: "uppercase link-stats" 
+								'data-tooltip': '',
+								'aria-haspopup': 'true',
+								'data-disable-hover': 'false',
+								'data-hover-delay': '0',
+								tabIndex: '1', 
+								title: "You will not be able to vote after seeing stats.",
+								className: "uppercase link-stats has-tip tip-top",
 								"Show stats"
 					
 
