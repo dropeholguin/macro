@@ -25,4 +25,4 @@ dom = React.DOM
             className: "bold"
             "SASENSEI TERMS OF USE"
           dom.p 
-            dangerouslySetInnerHTML: __html: @props.terms_body.toString()
+            dangerouslySetInnerHTML: __html: @props.terms_body
