@@ -24,7 +24,7 @@ dom = React.DOM
 		$(@refs.showVotes).hide()
 		$(@refs.showComments).hide()
 		$(@refs.cardStats).hide()
-		$(document).foundation();
+		$(document).foundation()
 		if(@state.state)
 			$(@refs.showVotes).hide()	
 		$.ajax
@@ -111,6 +111,7 @@ dom = React.DOM
 				$("#comment_comment_markdown").prop('disabled', false)
 				$("#flag_form_input").prop('disabled', false)
 				$(@refs.votesShow).show()
+				$(@refs.statsButton).show()
 
 	nextQuestionClicked: (event) ->	
 		if(@state.is_passed == false)
@@ -139,7 +140,12 @@ dom = React.DOM
 				    highlightAllCodes()
 				    $(@refs.votesShow).hide()
 						$(@refs.reasonCardHolder).hide()
-
+	statsClicked: (event) ->
+		$(@refs.reasonCardHolder).hide()
+		$(@refs.votesShow).find('button').prop('disabled', true)	# disables both voteUp/voteDown buttons
+		$(@refs.statsButton).find('a').toggle()
+		$(@refs.statsHolder).toggle()
+		$("html, body").animate({ scrollTop: $(document).height() }, 1000);
 	flagButtonClicked: (event)->
 		$("#my_popup").popup() 
 		console.log ("It Works!")
@@ -300,8 +306,9 @@ dom = React.DOM
 								onClick: @nextQuestionClicked,
 								"Next"
 						dom.div
-							ref: "st"
+							ref: "statsButton"
 							className: "large-12 columns text-center"
+							style: {display: "none"}
 							dom.a
 								'data-tooltip': '',
 								'aria-haspopup': 'true',
@@ -310,8 +317,18 @@ dom = React.DOM
 								tabIndex: '1', 
 								title: "You will not be able to vote after seeing stats.",
 								className: "uppercase link-stats has-tip tip-top",
+								onClick: @statsClicked,
 								"Show stats"
-					
+							dom.a
+								style: {display: "none"},
+								className: "uppercase link-stats",
+								onClick: @statsClicked,
+								"Hide stats"
+					dom.div
+						ref: "statsHolder",
+						className: "statsHolder",
+						style: {display: "none"}
+
 
 							
 
