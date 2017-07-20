@@ -20,7 +20,7 @@ namespace :populate do
 
         2000.times do
           # random choices for this questions
-          use_sas_sample = true || Faker::Boolean.boolean
+          use_sas_sample = Faker::Boolean.boolean
           current_choice = CHOICES[Faker::Number.number(1).to_i % CHOICES.size]
 
           question_attributes = {
