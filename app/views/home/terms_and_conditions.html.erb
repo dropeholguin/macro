@@ -1,8 +1,8 @@
 <%=
   react_component 'Terms', {
-    terms_id: @terms.id,
-    terms_body: @terms.body,
-    terms_version: @terms.version,
-    terms_category: @terms.category
+    terms_id: @terms.try(:id),
+    terms_body: @terms.try(:body),
+    terms_version: @terms.try(:version),
+    terms_category: @terms.try(:category)
   }
 %>

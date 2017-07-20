@@ -25,4 +25,4 @@ dom = React.DOM
             className: "bold"
             "PRIVACY POLICY"
           dom.p 
-            dangerouslySetInnerHTML: __html: @props.privacy_body.toString()
+            dangerouslySetInnerHTML: __html: @props.privacy_body
