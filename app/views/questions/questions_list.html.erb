@@ -18,15 +18,4 @@
 		</div>		
 	</div>
 </div>
-<div class="row">
-	<div class="large-10 large-centered columns">
-		<%= react_component 'IndexCard', {title_page:"SUBMITTED CARDS", question: @questions, questions_path: questions_path, tag_path: request.url}%>
-		<div class="row white-background">			
-			<div class="small-8 columns">
-				<% @questions.each do |question| %>
-					<%= react_component 'Card', {title: question.title, id: question.id, description: markdown(question.description_markdown), tag_list: question.tag_list,tag_path: request.url, button_1: "VIEW", button_2: "EDIT", button_3: "DELETE", owner: question.user, user: current_user} %>
-				<% end %>
-			</div>
-		</div>
-	</div>
-</div>
+

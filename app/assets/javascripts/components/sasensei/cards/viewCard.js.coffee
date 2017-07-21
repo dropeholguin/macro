@@ -30,6 +30,7 @@ dom = React.DOM
 				style: {display: "none"}
 				className: "large-2 columns"
 				dom.a
+					href: "/questions/#{@props.id}/edit"
 					className: 'button button-edit'
 				dom.a
 					onClick: @deleteCard

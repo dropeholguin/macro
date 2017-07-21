@@ -1,4 +1,4 @@
-<h4>Edit Question</h4>
+<!--<h4>Edit Question</h4>
 <%= form_for(@question, html: { multipart: true }) do |f| %>
   
   	<%= f.label :title %>
@@ -11,6 +11,6 @@
   <div class="actions">
     <%= f.submit "Continue" %>
   </div>
-<% end %>
+<% end %>-->
 
-<%= react_component 'EditCard', {card_id: @question.id,title: @question.title, answers: @question.answers, description: @question.description_markdown, choice: @question.choice, tag_list: @question.tag_list, submit_img: image_path('submit.png'), explanation: @question.explanation_markdown,csrfToken: form_authenticity_token} %>
+<%= react_component 'EditCardSasensei', {card_id: @question.id,title: @question.title, answers: @question.answers, description: @question.description_markdown, choice: @question.choice, tag_list: @question.tag_list, submit_img: image_path('submit.png'), explanation: @question.explanation_markdown,csrfToken: form_authenticity_token} %>

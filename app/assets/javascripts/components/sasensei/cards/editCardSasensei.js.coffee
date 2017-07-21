@@ -1,10 +1,14 @@
 dom = React.DOM 	
 
-@NewCardSasensei = React.createClass
-	displayName: 'NewCard'
+@EditCardSasensei = React.createClass
+	displayName: 'EditCard'
 	getInitialState: ->
-		name: 'New Card'
+		name: 'Edit Card'
 		columns: "large-8"
+		title:  @props.title
+		description: @props.description
+		explanation: @props.explanation
+		tag_list: @props.tag_list 
 	getDefaultProps: ->
 		url: '/questions'
 	componentDidMount: ->
@@ -87,8 +91,12 @@ dom = React.DOM
 						dom.div
 							id: "card-new"
 							dom.form 
+								className: "edit_question"
+								id: "edit_question_#{@props.card_id}"
+								encType: "multipart/form-data"
 								method: 'POST',
-								action: @props.url,
+								action: "#{@props.url}/#{@props.card_id}"
+								acceptCharset: "UTF-8"
 								dom.input
 									key: "utf8"
 									name: "utf8"
@@ -100,6 +108,10 @@ dom = React.DOM
 									type: "hidden"
 									value: @props.csrfToken
 									});	
+								dom.input
+										name: "_method",
+										type: "hidden",
+										value: "patch",
 								dom.div
 									className: "row"
 									dom.div
@@ -108,6 +120,7 @@ dom = React.DOM
 											id: "description",
 											name: "question[description_markdown]",
 											placeholder: "Start typing your question..."
+											@state.description
 								dom.div
 									className: "row"									
 									dom.div
@@ -150,90 +163,9 @@ dom = React.DOM
 											className: "small-9 columns"									
 											dom.label 												
 												"ANSWERS"
-									dom.div
-										className: "nested-fields",
-										dom.div
-											className: "row",
-											dom.div
-												className: "#{@state.columns} columns",
-												dom.input
-													onClick: @tutoForAnswerClicked
-													type: "text",
-													id: "question_answers_attributes_0_answer_markdown",
-													name: "question[answers_attributes][0][answer_markdown]",
-											dom.div
-												ref: "optionAnswer0"
-												className: "large-4 columns"
-												dom.select 
-													name: "question[answers_attributes][0][is_correct]",
-													dom.option
-														value: "0",															
-														"Incorrect",
-													dom.option
-														value: "1",
-														id: "question_answers_attributes_0_is_correct",
-														"Correct",
-											dom.input
-												type: "hidden",
-												id: "question_answers_attributes_0_answer_markdown",
-												name: "question[answers_attributes][0][_destroy]",
-												value: "false",
-									dom.div
-										ref: "answer1"
-										className: "nested-fields",
-										dom.div
-											id: "answer1",
-											className: "row",
-											dom.div
-												className: "large-8 columns",
-												dom.input
-													type: "text",
-													id: "question_answers_attributes_1_answer_markdown",
-													name: "question[answers_attributes][1][answer_markdown]",
-											dom.div
-												className: "large-4 columns"
-												dom.select
-													name: "question[answers_attributes][1][is_correct]",
-													dom.option
-														value: "false",
-														"Incorrect",
-													dom.option
-														value: "true",
-														id: "question_answers_attributes_1_is_correct",
-														"Correct",
-											dom.input
-												type: "hidden",
-												id: "question_answers_attributes_1_answer_markdown",
-												name: "question[answers_attributes][1][_destroy]",
-												value: "false",
-									dom.div
-										ref: "answer2"
-										className: "nested-fields",
-										dom.div
-											id: "answer2",
-											className: "row",
-											dom.div
-												className: "large-8 columns",
-												dom.input
-													type: "text",
-													id: "question_answers_attributes_2_answer_markdown",
-													name: "question[answers_attributes][2][answer_markdown]",
-											dom.div
-												className: "large-4 columns"
-												dom.select 
-													name: "question[answers_attributes][2][is_correct]",
-													dom.option
-														value: "false",
-														"Incorrect",
-													dom.option
-														value: "true",
-														id: "question_answers_attributes_2_is_correct",
-														"Correct",
-											dom.input
-												type: "hidden",
-												id: "question_answers_attributes_2_answer_markdown",
-												name: "question[answers_attributes][2][_destroy]",
-												value: "false",		
+									if @props.choice == "multiple" or @props.choice == "simple"
+										for answer in @props.answers
+											React.createElement AnswerMultipleChoice, key: answer.id, answer: answer
 									dom.div	
 										ref: "addOther"	
 										className: "nested-fields text-center add-other",											
@@ -269,6 +201,7 @@ dom = React.DOM
 											id: "explanation",
 											name: "question[explanation_markdown]",
 											placeholder: "Start typing your explanation..."
+											@state.explanation
 								dom.div 
 									className: "margin-20 large-10 large-centered medium-10 medium-centered small-11 small-centered columns",																												
 									dom.input
@@ -280,6 +213,7 @@ dom = React.DOM
 										className: "tagsinput",
 										ref: "tagsInput",		
 										required: true,	
+										value: @state.tag_list
 								dom.div 
 									className: "text-center"								
 									dom.input
@@ -288,4 +222,37 @@ dom = React.DOM
 										name: "commit",
 										value: "SUBMIT",
 										ref: "submit"
+
+@AnswerMultipleChoice = React.createClass
+	render: ->
+		dom.div
+			className: "nested-fields",
+			dom.div
+				className: "row",
+				dom.div
+					className: "large-8 columns",
+					dom.input
+						onClick: @tutoForAnswerClicked
+						type: "text",
+						id: "question_answers_attributes_#{@props.answer.id}_answer_markdown",
+						name: "question[answers_attributes][#{@props.answer.id}][answer_markdown]",
+						defaultValue: @props.answer.answer_markdown
+				dom.div
+					ref: "optionAnswer0"
+					className: "large-4 columns"
+					dom.select 
+						name: "question[answers_attributes][#{@props.answer.id}][is_correct]",
+						dom.option
+							value: "0",															
+							"Incorrect",
+						dom.option
+							value: "1",
+							id: "question_answers_attributes_#{@props.answer.id}_is_correct",
+							"Correct",
+				dom.input
+					type: "hidden",
+					id: "question_answers_attributes_#{@props.answer.id}_answer_markdown",
+					name: "question[answers_attributes][#{@props.answer.id}][_destroy]",
+					value: "false",
+
 					

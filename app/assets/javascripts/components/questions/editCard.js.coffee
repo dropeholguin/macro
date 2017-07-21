@@ -52,7 +52,7 @@ dom = React.DOM
 									dom.input
 										name: "_method",
 										type: "hidden",
-										method: "patch",
+										value: "patch",
 									dom.div
 										className: "row"
 										dom.div
@@ -154,37 +154,3 @@ dom = React.DOM
 										'data-remote': true
 						dom.div
 							className: "large-4 columns"	
-
-@AnswerMultipleChoice = React.createClass
-
-	render: ->
-		dom.div
-			className: "nested-fields",
-			dom.div
-				className: "row",
-				dom.div
-					className: "large-8 columns",
-					dom.input
-						onClick: @tutoForAnswerClicked
-						type: "text",
-						id: "question_answers_attributes_#{@props.answer.id}_answer_markdown",
-						name: "question[answers_attributes][#{@props.answer.id}][answer_markdown]",
-						defaultValue: @props.answer.answer_markdown
-				dom.div
-					ref: "optionAnswer0"
-					className: "large-4 columns"
-					dom.select 
-						name: "question[answers_attributes][#{@props.answer.id}][is_correct]",
-						dom.option
-							value: "0",															
-							"Incorrect",
-						dom.option
-							value: "1",
-							id: "question_answers_attributes_#{@props.answer.id}_is_correct",
-							"Correct",
-				dom.input
-					type: "hidden",
-					id: "question_answers_attributes_#{@props.answer.id}_answer_markdown",
-					name: "question[answers_attributes][#{@props.answer.id}][_destroy]",
-					value: "false",
-
