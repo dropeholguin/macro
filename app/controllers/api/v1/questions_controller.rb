@@ -138,38 +138,38 @@ class Api::V1::QuestionsController < ApplicationController
 	end
 
 	# PUT /cards/:id/verify
-	def verify
-		comments = @question.comments.order("created_at desc")
-		state    = @question.evaluators_for(:votes).include?(current_user)
-		votes    = @question.reputation_for(:votes).to_i
+	# def verify
+	# 	comments = @question.comments.order("created_at desc")
+	# 	state    = @question.evaluators_for(:votes).include?(current_user)
+	# 	votes    = @question.reputation_for(:votes).to_i
 
-		result = @question.verify?(
-								answer_ids: params[:answerIds], 
-								answer_text: params[:answerText],
-								card_time: cookies[:time],
-								user_id: current_user.id
-							)
-		cookies.delete(:time)
+	# 	result = @question.verify?(
+	# 							answer_ids: params[:answerIds], 
+	# 							answer_text: params[:answerText],
+	# 							card_time: cookies[:time],
+	# 							user_id: current_user.id
+	# 						)
+	# 	cookies.delete(:time)
 
-		# total_answers_count   = Card.question_cards(@question.id).select(:user_id).distinct.count
-		# correct_answers_count = Card.questions_right(@question.id).select(:user_id).distinct.count
-		# percentage_people     = ((correct_answers_count.to_f / total_answers_count) * 100).round(2)
+	# 	# total_answers_count   = Card.question_cards(@question.id).select(:user_id).distinct.count
+	# 	# correct_answers_count = Card.questions_right(@question.id).select(:user_id).distinct.count
+	# 	# percentage_people     = ((correct_answers_count.to_f / total_answers_count) * 100).round(2)
 
-		answers = @question.answers.select(:id, :is_correct)
+	# 	answers = @question.answers.select(:id, :is_correct)
 
-		render json: {
-			answers: answers,
-			comments: comments,
-			is_passed: result[:is_passed],
-			state: state,
-			streak: current_user.streak,
-			time: result[:new_card_time],
-			time_long: result[:time_long],
-			votes: votes
-		}
-	end
+	# 	render json: {
+	# 		answers: answers,
+	# 		comments: comments,
+	# 		is_passed: result[:is_passed],
+	# 		state: state,
+	# 		streak: current_user.streak,
+	# 		time: result[:new_card_time],
+	# 		time_long: result[:time_long],
+	# 		votes: votes
+	# 	}
+	# end
 
-	def delete
+	def destroy
 		card = Question.find(params[:id])
 
 		if card.deleting?
@@ -188,7 +188,7 @@ class Api::V1::QuestionsController < ApplicationController
 		end
 	end
 
-	def verify_card
+	def verify
 		user 	= current_user
 		answers = params[:answerIds]
 		card 	= Question.find params[:id]
@@ -205,7 +205,7 @@ class Api::V1::QuestionsController < ApplicationController
 				is_passed = card.answers.first.answer_markdown.eql? params[:answerText]
 			else
 				answers_correct = card.answers.select { |answer| answer.is_correct == true }
-				is_passed 		= answers_correct.map(&:id) == answers.map(&:to_i)
+				is_passed		= answers_correct.map(&:id).any? {|answer| answers.map(&:to_i).include?(answer) }
 			end
 			if is_passed == true
 				user.update_attributes(streak: user.streak + 1)
@@ -229,6 +229,8 @@ class Api::V1::QuestionsController < ApplicationController
 			render status: 200, json: {
 				message: "Successful operation",
 				result: is_passed,
+				answerIds: params[:answerIds],
+				answerText: params[:answerText],
 				explanationText: card.explanation_markdown,
 				voteResultPrevious: votes,
 				voteLock: 0,
@@ -240,49 +242,6 @@ class Api::V1::QuestionsController < ApplicationController
 			}		
 		end
 	end
-
-	def vote
-		value = params[:vote_direction] == "up" ? 1 : -1
-		reason_id = params[:vote_reason_id] || "Default Reason"
-		@question = Question.find(params[:id])
-		author = @question.user
-
-		if value == 1
-			message = "Your card #{@question.title} received an upvote"
-		else
-			message = "Your card #{@question.title} received a downvote"
-		end
-
-		if author != current_user
-			@notification = Notification.new(owner: @question.user, user: current_user, question: @question, message: message, category: "vote", source: "#{question_path(@question)}")
-			@notification.save
-			@question.add_or_update_evaluation(:votes, value, current_user)
-			if (value == -1)
-				VoteReason.create(question_id: @question.id, user_id: current_user.id, vote_reason_id: reason_id)
-			end
-
-			if @question.reputation_for(:votes).to_i == 4
-				author.update_attributes(points: author.points + 32)
-			end
-		end
-	end
-
-  def next_card
-    question_ids_array = cookies[:cards].split("-")
-    question_id = question_ids_array.shift
-    question_array_string = question_ids_array.join("-")
-    cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
-    cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
-
-    @question = Question.find question_id.to_i
-    @description = markdown(@question.description_markdown)
-    @explanation = markdown(@question.explanation_markdown)
-    @answers = @question.answers.select(:id, :answer_markdown)
-
-    respond_to do |format|
-      format.json  { render json: { question: @question, answers: @answers, tag_list: @question.tag_list, description: @description, explanation: @explanation } }
-    end
-  end
 
 	private
 		def tokens
