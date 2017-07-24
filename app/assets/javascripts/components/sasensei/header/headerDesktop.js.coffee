@@ -95,12 +95,17 @@ dom = React.DOM
 						"Rank: 1"
 					dom.div {}, 
 						"Tokens: #{@state.points}"
-					dom.div 
-						style: {borderTop: "1px solid #8a8a8a", margin: "10px 0"}
+					dom.div
+						style: { borderTop: "1px solid #8a8a8a", margin: "10px 0", display: 'table', width: '100%' }
 						className: "menu-title uppercase text-center"
+						dom.a 
+							rel: "nofollow",
+							className: "menu-title pull-left"
+							href: @props.profile_path
+							"Profile"
 						dom.a 
 							'data-method': "delete",
 							rel: "nofollow",
-							className: "menu-title"
+							className: "menu-title pull-right"
 							href: @props.sign_out
 							"Logout"

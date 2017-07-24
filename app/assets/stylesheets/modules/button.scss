@@ -47,7 +47,7 @@
 }
 
 .button-medium{
-    background: transparent url(image_path(#{"medium-button.png"})) no-repeat left;
+    background: transparent url(image_path(#{"medium-button.png"})) no-repeat left !important;
     min-height: 58px;
     min-width: 182px; 
 }

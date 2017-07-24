@@ -1,13 +1,18 @@
 class Api::V1::UsersController < ApplicationController
   load_and_authorize_resource
 
-  # DELETE /users/delete
+  # GET /users/:id
+  def show
+    respond_with @user
+  end
+
+  # DELETE /users/:id
   def destroy
     @user.soft_delete
-    Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
+    sign_out @user
     
     render status: 200, json: { 
-      message: 'you have deleted your account'
+      message: 'your account has been deleted'
     }
   end
 end

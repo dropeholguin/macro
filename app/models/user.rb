@@ -118,9 +118,17 @@ end
     user
   end
 
-  # instead of deleting, indicate the user requested a delete & timestamp it  
+  # instead of deleting user, replace user details & timestamp action
   def soft_delete
-    update_attribute(:deleted_at, Time.current)
+    self.transaction do
+      self.identities.destroy_all
+      self.update(
+        email: "#{TEMP_EMAIL_PREFIX}-#{(Time.now.to_f * 100000).to_i}-sasensei.com",
+        name: self.id,
+        username: self.id,
+        deleted_at: Time.current
+      )
+    end
   end
   
   # ensure user account is active
