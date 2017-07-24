@@ -117,4 +117,27 @@ end
     user.save!
     user
   end
+
+  # instead of deleting user, replace user details & timestamp action
+  def soft_delete
+    self.transaction do
+      self.identities.destroy_all
+      self.update(
+        email: "#{TEMP_EMAIL_PREFIX}-#{(Time.now.to_f * 100000).to_i}-sasensei.com",
+        name: self.id,
+        username: self.id,
+        deleted_at: Time.current
+      )
+    end
+  end
+  
+  # ensure user account is active
+  def active_for_authentication?
+    super && !deleted_at
+  end
+  
+  # provide a custom message for a deleted account
+  def inactive_message
+    !deleted_at ? super : :deleted_account
+  end
 end

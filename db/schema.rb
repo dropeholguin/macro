@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170718092354) do
+ActiveRecord::Schema.define(version: 20170720204412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -317,6 +317,8 @@ ActiveRecord::Schema.define(version: 20170718092354) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token",   limit: 30
+    t.datetime "deleted_at"
+    t.string   "username",                          default: ""
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree

@@ -58,6 +58,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :users, only: [:show, :destroy]
+
       get '/tags', to: "tags#index"
     end
   end

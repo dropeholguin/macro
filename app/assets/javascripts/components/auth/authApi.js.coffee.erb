@@ -16,5 +16,13 @@ window.authLogin = (provider, auth_token) ->
 				localStorage.setItem('current_user', JSON.stringify(data.user))
 				location.reload()
 		error: (e) =>
-			console.log e.responseJSON
-			alert e.responseJSON
+			if e.responseJSON
+				console.log e.responseJSON
+				alert e.responseJSON
+			else if e.responseText
+				console.log e.responseText
+				alert e.responseText
+			else
+				console.log e
+				alert 'Unknown error occurred'
+

@@ -17,9 +17,19 @@
     <div id="fb-root"></div>
     <%= render partial: 'layouts/flash' %>
     <% if user_signed_in? %>      
-      <%= react_component 'HeaderDesktop', {user: current_user, sign_out: destroy_user_session_path,  points: current_user.points, profile_settings: edit_user_registration_path, img: image_path('logo-macro.png'), root_path: root_path, tokens_wallet_path: tokens_wallet_path} %>
-    <% else %>  
-    <%end%>    
+      <%= 
+        react_component 'HeaderDesktop', {
+          user: current_user,
+          profile_path: user_profile_path,
+          sign_out: destroy_user_session_path,
+          points: current_user.points,
+          profile_settings: edit_user_registration_path,
+          img: image_path('logo-macro.png'),
+          root_path: root_path,
+          tokens_wallet_path: tokens_wallet_path
+        }
+      %>
+    <% end %>
     <%= yield %>
   </body>
 </html>
