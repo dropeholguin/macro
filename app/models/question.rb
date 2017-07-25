@@ -68,24 +68,20 @@ class Question < ApplicationRecord
     answer_text = args[:answer_text]
     user_id     = args[:user_id]
 
-    time = Time.now.to_i - DateTime.parse(args[:card_time]).to_i
-    card_time = Time.at(time).to_datetime
+    card_time = Time.at(Time.now).to_datetime
 
     result = {
       is_passed: false,
       time_long: true,
+      tokensEarned: 0,
       new_card_time: ''
     }
 
-    if card_time < CARD_TIME
-      if self.choice == 'user input'
-        result[:is_passed] = self.answers.first.answer_markdown.eql? answer_text
-      else
-        correct_answers_ids = self.answers.where(is_correct: true).map(&:id)
-        result[:is_passed] = correct_answers_ids.sort == answer_ids.map(&:to_i).sort 
-      end
+    if self.choice == 'user input'
+      result[:is_passed]  = self.answers.first.answer_markdown.eql? answer_text
     else
-      result[:time_long] = false
+      correct_answers_ids = self.answers.where(is_correct: true).map(&:id)
+      result[:is_passed]  = correct_answers_ids.sort == answer_ids.map(&:to_i).sort 
     end
 
     user = User.find_by(id: user_id)
@@ -93,10 +89,12 @@ class Question < ApplicationRecord
       user.increment!(:streak, 1)
       if user.streak >= 5 && user.streak < 9
         user.increment!(:points, 1)
+        result[:tokensEarned] = 1
         notification = Notification.new(owner: self.user, user: user, question: self, message: "You've earned +1 tokens", category: "tokens_positive", source: "#{Rails.application.routes.url_helpers.question_path(self.id)}")
         notification.save
       elsif user.streak >= 9
         user.increment!(:points, 2)
+        result[:tokensEarned] = 2
         notification = Notification.new(owner: self.user, user: user, question: self, message: "You've earned +2 tokens", category: "tokens_positive", source: "#{Rails.application.routes.url_helpers.question_path(self.id)}")
         notification.save
       end
