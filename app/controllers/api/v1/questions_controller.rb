@@ -13,7 +13,7 @@ class Api::V1::QuestionsController < ApplicationController
 	end
 
 	# GET /cards/:id
-	def show
+	def edit
 		card = Question.where(id: params[:id]).select(:id, :state).take 
 		
 		if card.present? && card.activated?
@@ -33,6 +33,7 @@ class Api::V1::QuestionsController < ApplicationController
 		end
 	end
 
+	# POST /cards
 	def create
 		card = Question.new(card_params)
 		card.user = current_user
@@ -70,6 +71,7 @@ class Api::V1::QuestionsController < ApplicationController
 		end
 	end
 
+	# PUT cards/:id
 	def update
 		card = Question.find(params[:id])
 		if card.activated?
@@ -138,37 +140,38 @@ class Api::V1::QuestionsController < ApplicationController
 	end
 
 	# PUT /cards/:id/verify
-	# def verify
-	# 	comments = @question.comments.order("created_at desc")
-	# 	state    = @question.evaluators_for(:votes).include?(current_user)
-	# 	votes    = @question.reputation_for(:votes).to_i
+	def verify
+		comments = @question.comments.order("created_at desc")
+		state    = @question.evaluators_for(:votes).include?(current_user)
+		votes    = @question.reputation_for(:votes).to_i
 
-	# 	result = @question.verify?(
-	# 							answer_ids: params[:answerIds], 
-	# 							answer_text: params[:answerText],
-	# 							card_time: cookies[:time],
-	# 							user_id: current_user.id
-	# 						)
-	# 	cookies.delete(:time)
+		result = @question.verify?(
+								answer_ids: params[:answerIds], 
+								answer_text: params[:answerText],
+								card_time: cookies[:time],
+								user_id: current_user.id
+							)
+		cookies.delete(:time)
 
-	# 	# total_answers_count   = Card.question_cards(@question.id).select(:user_id).distinct.count
-	# 	# correct_answers_count = Card.questions_right(@question.id).select(:user_id).distinct.count
-	# 	# percentage_people     = ((correct_answers_count.to_f / total_answers_count) * 100).round(2)
+		# total_answers_count   = Card.question_cards(@question.id).select(:user_id).distinct.count
+		# correct_answers_count = Card.questions_right(@question.id).select(:user_id).distinct.count
+		# percentage_people     = ((correct_answers_count.to_f / total_answers_count) * 100).round(2)
 
-	# 	answers = @question.answers.select(:id, :is_correct)
+		answers = @question.answers.select(:id, :is_correct)
 
-	# 	render json: {
-	# 		answers: answers,
-	# 		comments: comments,
-	# 		is_passed: result[:is_passed],
-	# 		state: state,
-	# 		streak: current_user.streak,
-	# 		time: result[:new_card_time],
-	# 		time_long: result[:time_long],
-	# 		votes: votes
-	# 	}
-	# end
+		render json: {
+			answers: answers,
+			comments: comments,
+			is_passed: result[:is_passed],
+			state: state,
+			streak: current_user.streak,
+			time: result[:new_card_time],
+			time_long: result[:time_long],
+			votes: votes
+		}
+	end
 
+	# DELETE /cards/:id
 	def destroy
 		card = Question.find(params[:id])
 
@@ -188,60 +191,60 @@ class Api::V1::QuestionsController < ApplicationController
 		end
 	end
 
-	def verify
-		user 	= current_user
-		answers = params[:answerIds]
-		card 	= Question.find params[:id]
-		tokens_earned = 0
+	# def verify
+	# 	user 	= current_user
+	# 	answers = params[:answerIds]
+	# 	card 	= Question.find params[:id]
+	# 	tokens_earned = 0
 	
-		if card.deleting?
-			render status: 404, json: {
-				errors: "Question not found"
-			}	
-		elsif card.present?
-			votes = card.reputation_for(:votes).to_i
+	# 	if card.deleting?
+	# 		render status: 404, json: {
+	# 			errors: "Question not found"
+	# 		}	
+	# 	elsif card.present?
+	# 		votes = card.reputation_for(:votes).to_i
 
-			if card.choice == "user input"
-				is_passed = card.answers.first.answer_markdown.eql? params[:answerText]
-			else
-				answers_correct = card.answers.select { |answer| answer.is_correct == true }
-				is_passed		= answers_correct.map(&:id) == answers.map(&:to_i)
-			end
-			if is_passed == true
-				user.update_attributes(streak: user.streak + 1)
-				if user.streak < 9 && user.streak >= 5
-					user.update_attributes(points: user.points + @one_token)
-					tokens_earned 	= @one_token
-					notification 	= Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +1 tokens", category: "tokens_positive", source: "#{question_path(card)}")
-					notification.save
-				elsif user.streak >= 9
-					user.update_attributes(points: user.points + @two_token)
-					tokens_earned	= @two_token
-					notification 	= Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +2 tokens", category: "tokens_positive", source: "#{question_path(card)}")
-					notification.save
-				end
-			else
-				user.update_attributes(streak: 0)
-			end
-			@card = Card.new(user_id: user.id, question_id: card.id, is_passed: is_passed)
-			@card.save
+	# 		if card.choice == "user input"
+	# 			is_passed = card.answers.first.answer_markdown.eql? params[:answerText]
+	# 		else
+	# 			answers_correct = card.answers.select { |answer| answer.is_correct == true }
+	# 			is_passed		= answers_correct.map(&:id) == answers.map(&:to_i)
+	# 		end
+	# 		if is_passed == true
+	# 			user.update_attributes(streak: user.streak + 1)
+	# 			if user.streak < 9 && user.streak >= 5
+	# 				user.update_attributes(points: user.points + @one_token)
+	# 				tokens_earned 	= @one_token
+	# 				notification 	= Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +1 tokens", category: "tokens_positive", source: "#{question_path(card)}")
+	# 				notification.save
+	# 			elsif user.streak >= 9
+	# 				user.update_attributes(points: user.points + @two_token)
+	# 				tokens_earned	= @two_token
+	# 				notification 	= Notification.new(owner: card.user, user: current_user, question: card, message: "You've earned +2 tokens", category: "tokens_positive", source: "#{question_path(card)}")
+	# 				notification.save
+	# 			end
+	# 		else
+	# 			user.update_attributes(streak: 0)
+	# 		end
+	# 		@card = Card.new(user_id: user.id, question_id: card.id, is_passed: is_passed)
+	# 		@card.save
 
-			render status: 200, json: {
-				message: "Successful operation",
-				result: is_passed,
-				answerIds: params[:answerIds],
-				answerText: params[:answerText],
-				explanationText: card.explanation_markdown,
-				voteResultPrevious: votes,
-				voteLock: 0,
-				tokensEarned: tokens_earned
-			}
-		else
-			render status: 400, json: {
-				errors: "Invalid ID supplied"
-			}		
-		end
-	end
+	# 		render status: 200, json: {
+	# 			message: "Successful operation",
+	# 			result: is_passed,
+	# 			answerIds: params[:answerIds],
+	# 			answerText: params[:answerText],
+	# 			explanationText: card.explanation_markdown,
+	# 			voteResultPrevious: votes,
+	# 			voteLock: 0,
+	# 			tokensEarned: tokens_earned
+	# 		}
+	# 	else
+	# 		render status: 400, json: {
+	# 			errors: "Invalid ID supplied"
+	# 		}		
+	# 	end
+	# end
 
 	def vote
 		value = params[:vote_direction] == "up" ? 1 : -1

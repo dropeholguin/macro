@@ -26,12 +26,12 @@ tags = ["SAS Programming", "SAS Macro", "DI Studio", "SAS Management Console", "
 question_array = []
 
 puts "Creating Questions"
-(1..10).each do |num|
+(1..100).each do |num|
 	user = users.shuffle.first
 	question = Question.new(user_id: user.id, title: Faker::Book.title, description_markdown: Faker::Lorem.paragraph(2, true), explanation_markdown: Faker::Lorem.paragraph(2, true), choice: "simple")
   question.tag_list = tags.sample(2)
 	question.save!
-	question_array << question    
+	question_array << question
 end
 
 puts "Creating Answers"
@@ -48,5 +48,23 @@ end
 puts "Creating Topics"
 
 Topic.create!([{ name: 'SAS Programming', desc: "Programming"}, {name: 'SAS Macro', desc: "Macro"},{name: 'DI Studio', desc: "Studio"},{name: 'SAS Management Console', desc: "Management Console"},{name: 'Enterprise Guide', desc: "Guide"},{name: 'Workspace Management', desc: "Management"}])
-                                
-   
+
+puts "Creating Sessions"
+(1..2000).each do |num|
+  user = users.shuffle.first
+  session = Session.new(user_id: user.id, title: Faker::Book.title, tag: tags.sample)
+  session.save!
+end
+
+sessions_array = Session.all
+questions_array = Question.all
+
+sessions_array.each do |session|
+  (1..10).each do |num|                  
+    question = questions_array.sample
+    if !Take.session_takes(session.id).map(&:question_id).include?(question.id)
+      take = Take.new(question_id: question.id, session_id: session.id)
+      take.save!
+    end
+  end
+end
