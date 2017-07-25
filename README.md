@@ -137,7 +137,8 @@ The swagger UI also allows APIs to be tested, using CURL.  Indeed, this is how A
 ###Manage permissions
 
 The Ability class is where all user permissions are defined
-
+    
+    # app/models/ability.rb
     class Ability
       include CanCan::Ability
 
