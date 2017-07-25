@@ -22,8 +22,6 @@ dom = React.DOM
 	componentDidMount: ->
 		$(@refs.timer).countdown({since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})  
 		$(@refs.showVotes).hide()
-		$(@refs.showComments).hide()
-		$(@refs.cardStats).hide()
 		$(document).foundation()
 		if(@state.state)
 			$(@refs.showVotes).hide()	
@@ -32,17 +30,26 @@ dom = React.DOM
 			type: 'GET'
 			success: (data) =>
 				@setState({ voteReasons: data })
-	infoUpdate: (data) ->	
-		console.log (data)		
-		@setState({title: data.question.title, description: data.description, explanation: data.explanation, card_id: data.question.id})
+	loadNextCard: (data) ->	
+		@setState({
+			title: data.question.title,
+			description: data.description,
+			explanation: data.explanation,
+			card_id: data.question.id
+		})
 		$(@refs.runCard).show()		
 		$(@refs.explanationDiv).hide()
 		$(@refs.nextCard).hide()	
 		$(@refs.flagButton).hide()	
-		$(@refs.votesDiv).hide()
 		$("input").prop('disabled', false)
+		$(@refs.votesShow).hide()
+		$(@refs.votesShow).find('button').prop('disabled', false)	# enables both voteUp/voteDown buttons
+		$(@refs.reasonCardHolder).hide()
+		$(@refs.statsHolder).hide()
+		$(@refs.statsButton).hide()
+		$(@refs.statsButton).find('a').hide()
+		$(@refs.statsButton).find('a:first').show()
 	answersUpdate: (data) ->
-		console.log ("Answers: "+data.answers[0])
 		@setState({answers: data.answers, choice: data.question.choice})
 	tagsUpdate: (data) ->
 		@setState({tag_list: data.tag_list})		
@@ -69,8 +76,6 @@ dom = React.DOM
 			success: (data) =>
 				@setState({ animate_tag: "none", timeLeft: 0 })
 				$(@refs.timer).countdown('toggle')
-				$(@refs.votesDiv).show()
-				$(@refs.votesDiv).addClass("small-12 text-center animated bounce")
 				$(@refs.flagButton).show()
 				$(@refs.flagButton).addClass('animated bounceIn')
 				document.getElementById('explanation-card').style.display = 'block'
@@ -89,8 +94,6 @@ dom = React.DOM
 				@setState({ state: data.state, streak: data.streak, votes: data.votes, is_passed: data.is_passed, time: data.time })
 				if(data.state == false and data.streak >=5)
 					$(@refs.showVotes).show()
-					$(@refs.cardStats).hide()
-					$(@refs.cardStats).removeClass('animated fadeInDown')
 				if (data.is_passed && data.time_long)
 					$.amaran content: {'title': 'Well done!', 'message': '', 'info': "You have answered right #{@state.title}", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 					if(@state.streak < 9 and @state.streak >=5)
@@ -103,9 +106,6 @@ dom = React.DOM
 					$.amaran content: {'title': 'Sorry!', 'message': '', 'info': "You have answered wrong #{@state.title}", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
 				if (data.state == true)
 					$(@refs.showVotes).hide()
-					$(@refs.showComments).show()
-					$(@refs.cardStats).show()
-				$(@refs.cardStats).addClass('animated fadeInDown')
 
 				$("input").prop('disabled', true)
 				$("#comment_comment_markdown").prop('disabled', false)
@@ -118,9 +118,6 @@ dom = React.DOM
 			window.location.replace("/")	
 		else
 			$(@refs.timer).countdown('destroy')
-			$(@refs.showComments).hide()
-			$(@refs.cardStats).removeClass('animated fadeInDown')
-			$(@refs.cardStats).hide()
 			@setState(animate_tag: "animated fadeInRight")
 			$(@refs.animateTitle).addClass('animated fadeInLeft')
 			$(@refs.animateDescription).addClass('animated fadeInRight')
@@ -134,12 +131,10 @@ dom = React.DOM
 				success: (data) =>
 				    @setState({ quest: data, timeLeft: +120 })
 		    		$(@refs.timer).countdown({ since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})
-				    @infoUpdate(data)
+				    @loadNextCard(data)
 				    @answersUpdate(data)
 				    @tagsUpdate(data)
 				    highlightAllCodes()
-				    $(@refs.votesShow).hide()
-						$(@refs.reasonCardHolder).hide()
 	statsClicked: (event) ->
 		$(@refs.reasonCardHolder).hide()
 		$(@refs.votesShow).find('button').prop('disabled', true)	# disables both voteUp/voteDown buttons
@@ -152,8 +147,6 @@ dom = React.DOM
 	voteUpClicked: (event) ->
 		$(@refs.reasonCardHolder).hide()
 		$(@refs.showVotes).hide()
-		$(@refs.cardStats).show()
-		$(@refs.cardStats).addClass('animated fadeInDown')
 		$(@refs.votesShow).find('button').prop('disabled', true)	# disables both voteUp/voteDown buttons
 		$.ajax
 			url: "api/v1/cards/#{@state.card_id}/vote"
@@ -163,11 +156,6 @@ dom = React.DOM
 			votes:  @state.votes + 1,
 			state: true
 		)
-		$(@refs.showComments).show()		
-		$(@refs.voteDown).hide()
-		$(@refs.voteUp).hide()
-		$(@refs.numVotesDiv).removeClass("small-6")
-		$(@refs.numVotesDiv).addClass("small-12 text-center animated bounce")
 		$(@refs.voteTitle).text("Currently Rating:")
 		$.amaran content: {'title': "You rated +1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-up'}, theme: 'awesome ok', delay: 10000
 	voteDownClicked: (event) ->
@@ -176,8 +164,6 @@ dom = React.DOM
 		if ($(@refs.reasonCard).val() == "0")
 			return
 		$(@refs.showVotes).hide()
-		$(@refs.cardStats).show()
-		$(@refs.cardStats).addClass('animated fadeInDown')
 		reasonValue = $(@refs.reasonCard).prop('disabled', true).val()
 		$(@refs.votesShow).find('button').prop('disabled', true)	# disables both voteUp/voteDown buttons
 		$.ajax
@@ -188,11 +174,6 @@ dom = React.DOM
 			votes:  @state.votes - 1
 			state: true
 		)
-		$(@refs.showComments).show()
-		$(@refs.voteDown).hide()
-		$(@refs.voteUp).hide()
-		$(@refs.numVotesDiv).removeClass("small-6")
-		$(@refs.numVotesDiv).addClass("small-12 text-center animated bounce")
 		$(@refs.voteTitle).text("Currently Rating:")
 		$.amaran content: {'title': "You rated -1 for #{@props.title}", 'message': "", 'info': "", 'icon': 'fa fa-thumbs-o-down'}, theme: 'awesome error', delay: 10000
 	render: ->	
