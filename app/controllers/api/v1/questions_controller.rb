@@ -94,57 +94,19 @@ class Api::V1::QuestionsController < ApplicationController
 
 	# GET /cards/count
 	def count
-		user = current_user
-		if user.present? && user.valid?
-			tags = ""
-			if params[:tags_all].present?
-		        params[:tags_all].each do |id_tag|
-		            tag = Topic.find(id_tag.to_i)
-		            tags = tags + tag.name + " "
-		            params[:tags_all] = tags
-		        end
-			elsif params[:tags_any].present?
-				params[:tags_any].each do |id_tag|
-		            tag = Topic.find(id_tag.to_i)
-		            tags = tags + tag.name + " "
-		            params[:tags_any] = tags
-		        end
-			end
-			
-			if params[:tags_all].present? || params[:tags_any].present?
-				questions = Question.search(params)
-				questions_sort = []
+		filter_type = {}
+		filter_type[:any] 			= true # default operator
+		filter_type[:match_all] = true if params[:tags_all]
+		filter_type[:exclude] 	= true if params[:tags_not] # precedent operator over any & all
 
-				cards = Card.number_cards_submitted(user.id).pluck(:question_id)
-				questions.each do |card|
-					if !cards.include?(card.id) && card.activated?
-						questions_sort << card
-					end
-				end
-				number_questions = questions_sort.count
+		tag_ids 	= params[:tags_not] || params[:tags_any] || params[:tags_all]
+		tag_names = Topic.where(id: tag_ids).collect(&:name)
 
-				if number_questions == 0
-					Question.all.each do |card|
-						if !cards.include?(card.id) && card.activated?
-							questions_sort << card
-						end
-					end
-					number_questions = questions_sort.count
-				end
-				render status: 200, json: {
-					message: "Available Cards",
-					tagCount: number_questions
-				}
-			else
-				render status: 400, json: {
-					errors: "Invalid tag value"
-				}
-		    end
-		else
-			render status: 400, json: {
-				errors: "Invalid user"
-			}
-		end
+		unanswered_questions = Question.tagged_with(tag_names, filter_type).where.not(id: Card.where(user_id: current_user.id))
+
+		render status: 200, json: {
+			count: unanswered_questions.count
+		}
 	end
 
 	# def verify

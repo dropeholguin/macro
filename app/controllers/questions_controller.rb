@@ -44,26 +44,7 @@ class QuestionsController < ApplicationController
 	end
 
 	def cards_run_filter
-		user = current_user
-		cookies.delete(:cards)
-		if params[:query].present? || params[:the_tag].present?
-			questions = Question.search(params)
-			questions_sort = []
-
-			cards = Card.number_cards_submitted(user.id).pluck(:question_id)
-			questions.each do |question|
-				if !cards.include?(question.id)
-					questions_sort << question
-				end
-			end
-			@number_questions = questions_sort.count
-			question_ids_array = questions_sort.pluck(:id).sort_by { rand }
-	        question_array_string = question_ids_array.join("-")
-	        cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
-		elsif params[:term]
-			@questions = Question.ac_search(params[:term]).map(&:title)
-    		render json: @questions
-		end
+		@topics = Topic.all
 	end
 
 	def questions_list
