@@ -134,4 +134,35 @@ Another benefit with the jasmine-rails gem is that it configures and mounts the 
 The API needs to be built with the knowledge that we will be separating the front end from the backend - so that the backend can service multiple domains.  All API definitions are to be kept up to date on swagger - https://app.swaggerhub.com/apis/rawsas/macro-cards/1.0.0
 The swagger UI also allows APIs to be tested, using CURL.  Indeed, this is how API definitions will be tested before they are accepted as 'done' in JIRA.  To test an API you need the user email address, and the auth token.  To get the auth token, first log into the application / launch console / Application tab / Local Storage, and extract the `authentication_token` key.
 
+###Manage permissions
 
+The Ability class is where all user permissions are defined
+
+    class Ability
+      include CanCan::Ability
+
+      def initialize(user)
+        if user.has_role? :admin
+            can :manage, :all
+        elsif user.has_role? :yellowBelt
+            can :vote, Question
+        else
+            can :read, :all
+        end
+      end
+    end
+
+The can method is used to define permissions and requires two arguments. The first one is the action you're setting the permission for, the second one is the class of object you're setting it on.
+
+    can :vote, Question
+
+To check if a user has a global role:
+
+    user.has_role? :yellowBelt
+    => true
+
+You can use the load_and_authorize_resource method in your controller to load the resource into an instance variable and authorize it automatically for every action in that controller.
+    
+    class QuestionsController < ApplicationController
+        load_and_authorize_resource
+    end
