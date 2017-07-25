@@ -123,6 +123,14 @@ class Api::V1::QuestionsController < ApplicationController
 				end
 				number_questions = questions_sort.count
 
+				if number_questions == 0
+					Question.all.each do |card|
+						if !cards.include?(card.id) && card.activated?
+							questions_sort << card
+						end
+					end
+					number_questions = questions_sort.count
+				end
 				render status: 200, json: {
 					message: "Available Cards",
 					tagCount: number_questions
