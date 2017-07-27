@@ -107,4 +107,8 @@ class Question < ApplicationRecord
     result[:new_card_time] = new_card.time_at.strftime("%M:%S")
     result
   end
+
+  def get_total_votes
+    ReputationSystem::Evaluation.where(reputation_name: :votes, target_id: self.id).count
+  end
 end
