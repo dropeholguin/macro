@@ -121,8 +121,9 @@ dom = React.DOM
 			@setState(animate_tag: "animated fadeInRight")
 			$(@refs.animateTitle).addClass('animated fadeInLeft')
 			$(@refs.animateDescription).addClass('animated fadeInRight')
+			next_card_path = @props.run_cards_path + window.location.search
 			$.ajax
-				url: @props.run_cards_path
+				url: next_card_path
 				type: 'GET'
 				dataType: 'json'
 				error: ->

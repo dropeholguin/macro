@@ -3,19 +3,26 @@ dom = React.DOM
 @RunCardFilterPage = React.createClass
 	displayName: 'RunCardFilter'
 	getInitialState: ->
+		selectedTags: {}
 		number_questions: 0
+		run_cards_path: @props.run_cards_path
 	getDefaultProps: ->
-		selectedTags: {},
 		buttons: [{title: "pick a topic", subtitle: "cards can be filtered for all or any topics."},
 			{title: "run cards", subtitle: "The Stimer grants 2 minutes to conquer the question"},
 			{title: "earn tokens", subtitle: "achieve 4 correct answers in a row to enter spde mode.", display: "none"}]
 	tagQuery: (tagName) ->
 		tagId = @props.topics.filter((obj) => obj.name == tagName)[0].id
-		@props.selectedTags[tagId] = 1
+		@state.selectedTags[tagId] = 1
+
+		queryParams = Object.keys(@state.selectedTags).map((id) => 'tags_any[]='+id).join('&')
+		newUrl = @props.questions_path + '?' + queryParams
+		window.history.pushState(null, null, newUrl);
+		@setState { run_cards_path: @props.run_cards_path + '?' + queryParams }
+
 		$.ajax
 			url: @props.count_cards_path
 			dataType: 'json'
-			data: tags_any: Object.keys(@props.selectedTags)
+			data: tags_any: Object.keys(@state.selectedTags)
 			success: (data) =>
 				@setState { number_questions: data.count }
 	render: ->
@@ -33,7 +40,7 @@ dom = React.DOM
 				dom.div 
 					className: "sasensei-title text-center uppercase"
 					"Number of Cards Available"	
-				React.createElement RunCardFilterCard, number_questions: @state.number_questions, run_cards_path: @props.run_cards_path
+				React.createElement RunCardFilterCard, number_questions: @state.number_questions, run_cards_path: @state.run_cards_path
 			dom.div
 				id: "explanation_run_card_filter"
 				className: "large-4 columns"
@@ -142,6 +149,8 @@ dom = React.DOM
 						'data-disable-with': "Search",
 
 @RunCardFilterCard = React.createClass
+	componentDidMount: ->
+		$(@refs.arrow).addClass('animated pulse infinite')
 	render: ->
 		dom.div
 			className: "root",

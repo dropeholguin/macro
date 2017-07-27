@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
 	before_action :authenticate_user!, except: [:suspend, :approve]
 	before_action :authenticate_admin_user!, only: [:suspend, :approve]
 	before_action :card_time
+	before_action :question_query_params, only: [:card, :next_card]
 	include ApplicationHelper
 	include ActionView::Helpers::DateHelper
 	include ActionView::Helpers::TextHelper
@@ -75,13 +76,7 @@ class QuestionsController < ApplicationController
   def card
     @user = current_user
     if @user.points > 0
-      question_ids_array = cookies[:cards].split("-")
-      first_question_id = question_ids_array.shift
-      question_array_string = question_ids_array.join("-")
-      cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
-      cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
-
-      @question = Question.find first_question_id.to_i
+      @question = @unanswered_questions.first
       if @question.present?
         @answers = @question.answers.select(:id, :answer_markdown)
         @comments = @question.comments.order("created_at desc")
@@ -103,13 +98,7 @@ class QuestionsController < ApplicationController
   end
 
   def next_card
-    question_ids_array = cookies[:cards].split("-")
-    question_id = question_ids_array.shift
-    question_array_string = question_ids_array.join("-")
-    cookies[:cards] = { value: question_array_string, expires: 23.hours.from_now }
-    cookies[:time] = { value: Time.now, expires: 1.hours.from_now }
-
-    @question = Question.find question_id.to_i
+    @question    = @unanswered_questions.first
     @description = markdown(@question.description_markdown)
     @explanation = markdown(@question.explanation_markdown)
     @answers = @question.answers.select(:id, :answer_markdown)
@@ -366,6 +355,20 @@ class QuestionsController < ApplicationController
 		def set_question
 		  @question = Question.find(params[:id])
 		end
+
+    def question_query_params
+      filter_type = {}
+      filter_type[:any]       = true # default operator
+      filter_type[:match_all] = true if params[:tags_all]
+      filter_type[:exclude]   = true if params[:tags_not] # precedent operator over any & all
+
+      tag_ids   = params[:tags_not] || params[:tags_any] || params[:tags_all]
+      tag_names = Topic.where(id: tag_ids).collect(&:name)
+
+      # TODO: randomize cards ?
+      @unanswered_questions = Question.activated.tagged_with(tag_names, filter_type)
+                                      .where.not(id: Card.where(user_id: current_user.id))
+    end
 
 		def question_params
 		  params.require(:question).permit(:description_markdown, :explanation_markdown, :choice, { tag_list: [] }, answers_attributes: [:id, :answer_markdown, :is_correct, :_destroy])
