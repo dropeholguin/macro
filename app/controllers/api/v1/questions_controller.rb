@@ -23,7 +23,6 @@ class Api::V1::QuestionsController < ApplicationController
 			times_taken = @question.cards.count
 			num_of_correctly_answered = @question.cards.where(is_passed: true).count
 			percent_correct = num_of_correctly_answered / times_taken * 100
-			total_votes = [0, @question.reputation_for(:votes).to_i].max
 
 			render status: 200, json: {
 				author_username: @question.user.name,
@@ -31,7 +30,7 @@ class Api::V1::QuestionsController < ApplicationController
 				times_taken: times_taken,
 				percent_correct: percent_correct,
 				average_time: "N/A", # pending todo
-				total_votes: total_votes,
+				total_votes: @question.get_total_votes,
 				create_date: @question.created_at,
 				edit_date: @question.updated_at,
 				editor_id: "string",	# pending due to MC-174
