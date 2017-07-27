@@ -77,6 +77,7 @@ gem 'faker'
 gem 'active_admin_editor', github: 'ejholmes/active_admin_editor'
 gem 'aasm'
 gem 'airborne'
+gem 'rest-client', '~> 1.7'
 
 gem 'rack-cors', require: 'rack/cors'
 
