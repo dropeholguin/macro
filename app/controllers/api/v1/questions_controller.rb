@@ -9,7 +9,7 @@ class Api::V1::QuestionsController < ApplicationController
 	
 	# GET /cards
 	def index
-		render json: @questions
+		render json: { questions: @questions }
 	end
 
 	# GET /cards/:id
@@ -213,7 +213,7 @@ class Api::V1::QuestionsController < ApplicationController
 
 	# DELETE /cards/:id
 	def destroy
-		card = Question.find(params[:id])
+		card = Question.find_by(id: params[:id])
 
 		if card.deleting?
 			render status: 404, json: {
@@ -224,10 +224,6 @@ class Api::V1::QuestionsController < ApplicationController
 			render status: 200, json: {
 				message: "Success",
 			}
-		else
-			render status: 400, json: {
-				errors: "Invalid ID supplied"
-			}		
 		end
 	end
 
