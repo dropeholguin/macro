@@ -367,7 +367,7 @@ class QuestionsController < ApplicationController
 
       # TODO: randomize cards ?
       @unanswered_questions = Question.activated.tagged_with(tag_names, filter_type)
-                                      .where.not(id: Card.where(user_id: current_user.id))
+                                      .where.not(id: Card.where(user_id: current_user.id).select(:question_id))
     end
 
 		def question_params

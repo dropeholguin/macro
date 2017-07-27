@@ -141,18 +141,26 @@ class Api::V1::QuestionsController < ApplicationController
 				errors: "Question not found"
 			}
 		elsif card.present?
-			votes    = card.reputation_for(:votes).to_i
+			votes  = card.reputation_for(:votes).to_i
 			result = card.verify?(
 								answer_ids: params[:answerIds], 
 								answer_text: params[:answerText],
 								user_id: current_user.id
 							)
 
+			answerIds  = []
+			answerText = ''
+			if card.choice == 'user input'
+				answerText = card.answers.first.answer_markdown
+			else
+				answerIds  = card.answers.where(is_correct: true).select(:id).collect(&:id)
+			end
+
 			render status: 200, json: {
 				message: "Successful operation",
 				result: result[:is_passed],
-				answerIds: params[:answerIds],
-				answerText: params[:answerText],
+				answerIds: answerIds,
+				answerText: answerText,
 				explanationText: card.explanation_markdown,
 				voteResultPrevious: votes,
 				voteLock: 0,
@@ -238,7 +246,7 @@ class Api::V1::QuestionsController < ApplicationController
 
       # TODO: randomize cards ?
       @unanswered_questions = Question.activated.tagged_with(tag_names, filter_type)
-                                     .where.not(id: Card.where(user_id: current_user.id))
+                                     .where.not(id: Card.where(user_id: current_user.id).select(:question_id))
     end
 
 		def card_params

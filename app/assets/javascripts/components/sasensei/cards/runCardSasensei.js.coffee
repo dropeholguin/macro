@@ -85,13 +85,11 @@ dom = React.DOM
 				$(@refs.animateDescription).removeClass('animated fadeInRight')
 				$(@refs.explanationDiv).addClass('animated fadeInDown')
 
-				data.answers.forEach (answer) ->
-					if answer.is_correct
-						$('#' + answer.id).siblings('label').addClass("this-ans correct-bg animated bounceIn")
-					else
-						$('#' + answer.id).siblings('label').addClass("this-ansn")
+				if data.answerIds.length > 0
+					data.answerIds.forEach (answerId) ->
+						$('#' + answerId).siblings('label').addClass("this-ans correct-bg animated bounceIn")
 
-				@setState({ state: data.state, streak: data.streak, votes: data.votes, is_passed: data.is_passed, time: data.time })
+				@setState({ state: data.state, streak: data.streak, votes: data.votes, is_passed: data.result, time: data.time })
 				if(data.state == false and data.streak >=5)
 					$(@refs.showVotes).show()
 				if (data.is_passed && data.time_long)
