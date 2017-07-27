@@ -39,6 +39,7 @@ Rails.application.routes.draw do
         member do
           put 'verify'
           put 'vote'
+          get 'statistics'
         end
         collection do
           get 'count'

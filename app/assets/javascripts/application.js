@@ -23,6 +23,7 @@
 //= require prism
 //= require prism-components/prism-sas
 //= require dropzone
+//= require moment.min
 //= require_tree .
 //= require jquery.countdown
 window.Components = {} 

@@ -14,6 +14,36 @@ class Api::V1::QuestionsController < ApplicationController
 		render json: @questions
 	end
 
+	# GET /cards/:id/statistics
+	def statistics
+		card = Card.find_by(question: @question, user: current_user)
+
+		if card.present?	# if current user has already answered the question or not.
+
+			times_taken = @question.cards.count
+			num_of_correctly_answered = @question.cards.where(is_passed: true).count
+			percent_correct = num_of_correctly_answered / times_taken * 100
+			total_votes = [0, @question.reputation_for(:votes).to_i].max
+
+			render status: 200, json: {
+				author_username: @question.user.name,
+				author_id: @question.user.id,
+				times_taken: times_taken,
+				percent_correct: percent_correct,
+				average_time: "N/A", # pending todo
+				total_votes: total_votes,
+				create_date: @question.created_at,
+				edit_date: @question.updated_at,
+				editor_id: "string",	# pending due to MC-174
+				editor_username: "Editor"	#pending due to MC-174
+			}
+		else 
+			render status: 405, json: {
+				errors: "User has not answered the question"
+			}
+		end
+	end
+
 	# GET /cards/:id
 	def edit
 		card = Question.where(id: params[:id]).select(:id, :state).take 

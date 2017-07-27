@@ -19,6 +19,7 @@ dom = React.DOM
 		timeLeft: +120000
 		streak: @props.streak
 		voteReasons: []
+		statistics: {}
 	componentDidMount: ->
 		$(@refs.timer).countdown({since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})  
 		$(@refs.showVotes).hide()
@@ -110,6 +111,11 @@ dom = React.DOM
 				$("#flag_form_input").prop('disabled', false)
 				$(@refs.votesShow).show()
 				$(@refs.statsButton).show()
+				$.ajax
+					url: "/api/v1/cards/#{@state.card_id}/statistics"
+					type: 'GET'
+					success: (data) =>
+						@setState({ statistics: data })
 
 	nextQuestionClicked: (event) ->	
 		if(@state.is_passed == false)
@@ -306,8 +312,72 @@ dom = React.DOM
 								"Hide stats"
 					dom.div
 						ref: "statsHolder",
-						className: "statsHolder",
+						className: "question-background",
 						style: {display: "none"}
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Submitted By:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.author_username
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Number of Votes:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.total_votes
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Number of times taken:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.times_taken
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Pass Rate %:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.percent_correct
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Average time to answer correctly:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.average_time
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"First Submitted:"
+							dom.div
+								className: "small-6 large-6 columns"
+								moment(@state.statistics.create_date).format('MMMM Do YYYY, h:mm:ss a')
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Last Edited:"
+							dom.div
+								className: "small-6 large-6 columns"
+								moment(@state.statistics.edit_date).format('MMMM Do YYYY, h:mm:ss a')
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Last Edited By:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.editor_username
 
 
 							
