@@ -19,6 +19,7 @@ dom = React.DOM
 		timeLeft: +120000
 		streak: @props.streak
 		voteReasons: []
+		statistics: {}
 	componentDidMount: ->
 		$(@refs.timer).countdown({since: new Date(), format: 'MS', layout: '{mn} {ml}, {sn} {sl}'})  
 		$(@refs.showVotes).hide()
@@ -85,13 +86,11 @@ dom = React.DOM
 				$(@refs.animateDescription).removeClass('animated fadeInRight')
 				$(@refs.explanationDiv).addClass('animated fadeInDown')
 
-				data.answers.forEach (answer) ->
-					if answer.is_correct
-						$('#' + answer.id).siblings('label').addClass("this-ans correct-bg animated bounceIn")
-					else
-						$('#' + answer.id).siblings('label').addClass("this-ansn")
+				if data.answerIds.length > 0
+					data.answerIds.forEach (answerId) ->
+						$('#' + answerId).siblings('label').addClass("this-ans correct-bg animated bounceIn")
 
-				@setState({ state: data.state, streak: data.streak, votes: data.votes, is_passed: data.is_passed, time: data.time })
+				@setState({ state: data.state, streak: data.streak, votes: data.votes, is_passed: data.result, time: data.time })
 				if(data.state == false and data.streak >=5)
 					$(@refs.showVotes).show()
 				if (data.is_passed && data.time_long)
@@ -112,6 +111,11 @@ dom = React.DOM
 				$("#flag_form_input").prop('disabled', false)
 				$(@refs.votesShow).show()
 				$(@refs.statsButton).show()
+				$.ajax
+					url: "/api/v1/cards/#{@state.card_id}/statistics"
+					type: 'GET'
+					success: (data) =>
+						@setState({ statistics: data })
 
 	nextQuestionClicked: (event) ->	
 		if(@state.is_passed == false)
@@ -121,8 +125,9 @@ dom = React.DOM
 			@setState(animate_tag: "animated fadeInRight")
 			$(@refs.animateTitle).addClass('animated fadeInLeft')
 			$(@refs.animateDescription).addClass('animated fadeInRight')
+			next_card_path = @props.run_cards_path + window.location.search
 			$.ajax
-				url: @props.run_cards_path
+				url: next_card_path
 				type: 'GET'
 				dataType: 'json'
 				error: ->
@@ -307,8 +312,72 @@ dom = React.DOM
 								"Hide stats"
 					dom.div
 						ref: "statsHolder",
-						className: "statsHolder",
+						className: "question-background",
 						style: {display: "none"}
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Submitted By:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.author_username
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Number of Votes:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.total_votes
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Number of times taken:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.times_taken
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Pass Rate %:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.percent_correct
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Average time to answer correctly:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.average_time
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"First Submitted:"
+							dom.div
+								className: "small-6 large-6 columns"
+								moment(@state.statistics.create_date).format('MMMM Do YYYY, h:mm:ss a')
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Last Edited:"
+							dom.div
+								className: "small-6 large-6 columns"
+								moment(@state.statistics.edit_date).format('MMMM Do YYYY, h:mm:ss a')
+						dom.div
+							className: "row"
+							dom.div
+								className: "small-6 large-4 large-offset-2 columns"
+								"Last Edited By:"
+							dom.div
+								className: "small-6 large-6 columns"
+								@state.statistics.editor_username
 
 
 							

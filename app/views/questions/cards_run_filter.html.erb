@@ -1,1 +1,9 @@
-<%= react_component 'RunCardFilterPage', {tag_path: request.url, questions_path: cards_run_filter_path, number_questions: @number_questions, total: @number_questions.to_i, run_cards_path: run_cards_path}%>
+<%=
+  react_component 'RunCardFilterPage', {
+    tag_path: request.url,
+    questions_path: cards_run_filter_path,
+    run_cards_path: run_cards_path,
+    topics: @topics,
+    count_cards_path: count_api_v1_cards_path
+  }
+%>

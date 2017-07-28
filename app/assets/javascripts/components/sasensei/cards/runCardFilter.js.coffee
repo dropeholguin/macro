@@ -2,10 +2,29 @@ dom = React.DOM
 
 @RunCardFilterPage = React.createClass
 	displayName: 'RunCardFilter'
+	getInitialState: ->
+		selectedTags: {}
+		number_questions: 0
+		run_cards_path: @props.run_cards_path
 	getDefaultProps: ->
 		buttons: [{title: "pick a topic", subtitle: "cards can be filtered for all or any topics."},
 			{title: "run cards", subtitle: "The Stimer grants 2 minutes to conquer the question"},
 			{title: "earn tokens", subtitle: "achieve 4 correct answers in a row to enter spde mode.", display: "none"}]
+	tagQuery: (tagName) ->
+		tagId = @props.topics.filter((obj) => obj.name == tagName)[0].id
+		@state.selectedTags[tagId] = 1
+
+		queryParams = Object.keys(@state.selectedTags).map((id) => 'tags_any[]='+id).join('&')
+		newUrl = @props.questions_path + '?' + queryParams
+		window.history.pushState(null, null, newUrl);
+		@setState { run_cards_path: @props.run_cards_path + '?' + queryParams }
+
+		$.ajax
+			url: @props.count_cards_path
+			dataType: 'json'
+			data: tags_any: Object.keys(@state.selectedTags)
+			success: (data) =>
+				@setState { number_questions: data.count }
 	render: ->
 		dom.div 
 			id: "run_card_filter"
@@ -13,7 +32,7 @@ dom = React.DOM
 			dom.div
 				id: "search_run_card_filter"
 				className: "large-4 columns"
-				React.createElement SearchTag, tag_path: @props.tag_path
+				React.createElement SearchTag, tag_path: @props.tag_path, tagQuery: @tagQuery
 			dom.div				
 				className: "large-4 columns"
 				React.createElement SearchCards, path: @props.questions_path, title: "Include cards with all these tags:"
@@ -21,7 +40,7 @@ dom = React.DOM
 				dom.div 
 					className: "sasensei-title text-center uppercase"
 					"Number of Cards Available"	
-				React.createElement RunCardFilterCard, number_questions: @props.number_questions, total: @props.total, run_cards_path: @props.run_cards_path
+				React.createElement RunCardFilterCard, number_questions: @state.number_questions, run_cards_path: @state.run_cards_path
 			dom.div
 				id: "explanation_run_card_filter"
 				className: "large-4 columns"
@@ -45,8 +64,8 @@ dom = React.DOM
 				dom.li 
 					className: "title-li btn-tag",
 					dom.a
-						href: "#{@props.tag_path}"+url_tag+"SAS+Management+Console",
 						className: "search-tag-sasensei uppercase",
+						onClick: () => @props.tagQuery('SAS Management Console'),
 						"SAS Management Console"
 			dom.div 
 				className: "margin-tag",
@@ -56,14 +75,14 @@ dom = React.DOM
 				dom.li 
 					className: "title-li btn-tag",
 					dom.a
-						href: "#{@props.tag_path}"+url_tag+"SAS+Macro",
 						className: "search-tag-sasensei uppercase",
+						onClick: () => @props.tagQuery('SAS Macro'),
 						"SAS Macro"
 				dom.li 
 					className: "title-li btn-tag",
 					dom.a
-						href: "#{@props.tag_path}"+url_tag+"DI+Studio",
 						className: "search-tag-sasensei uppercase",
+						onClick: () => @props.tagQuery('DI Studio'),
 						"DI Studio"
 			dom.div 
 				className: "margin-tag",
@@ -73,20 +92,20 @@ dom = React.DOM
 				dom.li 
 					className: "title-li btn-tag",
 					dom.a
-						href: "#{@props.tag_path}"+url_tag+"SAS+Programming",
 						className: "search-tag-sasensei uppercase",
+						onClick: () => @props.tagQuery('SAS Programming'),
 						"SAS Programming"
 				dom.li 
 					className: "title-li btn-tag",
 					dom.a
-						href: "#{@props.tag_path}"+url_tag+"Enterprise+Guide",
 						className: "search-tag-sasensei uppercase",
+						onClick: () => @props.tagQuery('Enterprise Guide'),
 						"Enterprise Guide"
 				dom.li 
 					className: "title-li btn-tag",
 					dom.a
-						href: "#{@props.tag_path}"+url_tag+"Workspace+Management",
 						className: "search-tag-sasensei uppercase",
+						onClick: () => @props.tagQuery('Workspace Management'),
 						"Workspace Management"
 
 
@@ -130,13 +149,7 @@ dom = React.DOM
 						'data-disable-with': "Search",
 
 @RunCardFilterCard = React.createClass
-	getDefaultProps: ->
-		number_questions: 0
-	getInitialState: ->
-		number_questions: @props.number_questions
 	componentDidMount: ->
-		if @props.number_questions == null
-			@setState(number_questions: 0)		
 		$(@refs.arrow).addClass('animated pulse infinite')
 	render: ->
 		dom.div
@@ -147,12 +160,12 @@ dom = React.DOM
 					className: "large-12 columns"
 					dom.h4 
 						className: "sasensei-title weight number text-center"
-						"#{@state.number_questions}"											
+						"#{@props.number_questions}"
 					dom.div
 						className: "large-12 columns text-center",
-						if @props.total > 0	
+						if @props.number_questions > 0	
 							dom.a
-								style: {width: "100%"}
+								style: { width: "100%" }
 								className: "button btn-run menu-title uppercase",
 								href: @props.run_cards_path,
 								"RUN"

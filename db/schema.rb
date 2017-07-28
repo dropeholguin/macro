@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170720204412) do
+ActiveRecord::Schema.define(version: 20170726080621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -338,8 +338,7 @@ ActiveRecord::Schema.define(version: 20170720204412) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "vote_reason_id"
-    t.index ["question_id"], name: "index_vote_reasons_on_question_id", using: :btree
-    t.index ["user_id"], name: "index_vote_reasons_on_user_id", using: :btree
+    t.index ["question_id", "user_id"], name: "index_vote_reasons_on_question_id_and_user_id", unique: true, using: :btree
   end
 
   add_foreign_key "vote_reasons", "questions"
