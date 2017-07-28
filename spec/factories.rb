@@ -16,5 +16,15 @@ FactoryGirl.define do
 		description_markdown "description_markdown"
 		explanation_markdown "explanation_markdown"
 		choice "simple"
+		tag_list "SAS Programming, SAS Macro"
+	end
+	factory :answer do
+		answer_markdown "answer_markdown"
+		is_correct "false"
+	end
+	factory :topic do
+		id 4
+		name 'DI Studio'
+		desc "Studio"
 	end
 end

@@ -75,6 +75,19 @@ class Api::V1::QuestionsController < ApplicationController
 	def update
 		card = Question.find(params[:id])
 		if card.activated?
+			if params[:answers].present?
+				params[:answers].each_with_index do |answer_attributes, index|
+          card.answers[index].update(answer_markdown: answer_attributes[:answer_markdown], is_correct: answer_attributes[:is_correct])
+	      end
+			end
+			if params[:tags].present?
+        params[:tags].each do |id_tag|
+          tag = Topic.find(id_tag.to_i)
+          if !card.tag_list.include?(tag.name)
+          	card.tag_list.add(tag.name)
+          end
+        end
+	    end
 			if card.update(card_params)
 				render status: 200, json: {
 					message: "Successfully updated Card.",
