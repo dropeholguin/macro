@@ -11,12 +11,12 @@ FactoryGirl.define do
 		password_confirmation "password"
 	end
 	factory :question do
-		id 1
 		title "A Catskill Eagle"
 		description_markdown "description_markdown"
 		explanation_markdown "explanation_markdown"
 		choice "simple"
-		tag_list "SAS Programming, SAS Macro"
+		tag_list "SAS Programming, DI Studio"
+		state "activated"
 	end
 	factory :answer do
 		answer_markdown "answer_markdown"

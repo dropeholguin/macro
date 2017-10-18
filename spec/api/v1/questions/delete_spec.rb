@@ -5,10 +5,14 @@ describe 'DELETE /cards/{questionId} destroy' do
   let(:user){ create(:user) }
   let!(:question){ create(:question) }
 
-  def delete_question_API
-    question.update_attribute(:user_id, user.id)
+  before do
+    question.update(id: 100) 
+  end
 
-    delete '/api/v1/cards/1.json', params: { }, headers: {
+  def delete_question_API
+    question.update(user_id: user.id)
+
+    delete '/api/v1/cards/100.json', params: { }, headers: {
         'X-User-Email' => user.email,
         'X-User-Token' => user.authentication_token
       }
@@ -24,7 +28,7 @@ describe 'DELETE /cards/{questionId} destroy' do
   it 'Delete question API question not found' do
     delete_question_API
 
-    delete '/api/v1/cards/1.json', params: { }, headers: {
+    delete '/api/v1/cards/100.json', params: { }, headers: {
         'X-User-Email' => user.email,
         'X-User-Token' => user.authentication_token
       }
@@ -42,7 +46,7 @@ describe 'DELETE /cards/{questionId} destroy' do
   end
 
   it 'Delete question API Access Denied' do
-    delete '/api/v1/cards/1.json', params: { }, headers: {
+    delete '/api/v1/cards/100.json', params: { }, headers: {
         'X-User-Email' => user.email,
         'X-User-Token' => user.authentication_token
       }

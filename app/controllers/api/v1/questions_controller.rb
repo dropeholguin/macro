@@ -69,20 +69,14 @@ class Api::V1::QuestionsController < ApplicationController
 		card = Question.new(card_params)
 		card.user = current_user
 		card.title = truncate(strip_tags(markdown(card.description_markdown)), length: 15)
-		tags = []
-		if params[:tags].present?
-	        params[:tags].each do |id_tag|
-	            tag = Topic.find(id_tag.to_i)
-	            tags << tag.name
-	        end
-	    end
-		card.tag_list = tags
+		
+		card.tag_list = Topic.where(id: params[:tags]).collect(&:name) if params[:tags].present?
 
 		if params[:answers].present?
 			params[:answers].each do |answer_attributes|
-	            answer = card.answers.new(answer_markdown: answer_attributes[:answer_markdown], is_correct: answer_attributes[:is_correct])
-	            answer.save
-	        end
+        answer = card.answers.new(answer_markdown: answer_attributes[:answer_markdown], is_correct: answer_attributes[:is_correct])
+        answer.save
+      end
 		end
 		if !params[:tags].empty?
 			if card.save
